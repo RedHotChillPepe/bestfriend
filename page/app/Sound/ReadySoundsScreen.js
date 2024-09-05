@@ -71,9 +71,9 @@ export default function ReadySoundsScreen({ navigation }) {
     };
 
     const cards = [
-        { text: 'Сказки', icon: <FontAwesome name="book" size={200} color="#a4ca79" style={styles.cardIcon} />, onPress: () => navigation.navigate('fairyTales', { audioData: getFilteredData('сказка') }) },
-        { text: 'Загадки', icon: <FontAwesome name="question" size={240} color="#a4ca79" style={styles.cardIcon} />, onPress: () => navigation.navigate('Riddles', { audioData: getFilteredData('загадка') }) },
-        { text: 'Фразы помощники', icon: <FontAwesome5 name="hands-helping" size={170} color="#a4ca79"  style={styles.cardIcon}/>, onPress: () => navigation.navigate('Help', { audioData: getFilteredData('помощь') }) },
+        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={200} color="#FFFFFF" style={styles.cardIcon} />, onPress: () => navigation.navigate('fairyTales', { audioData: getFilteredData('сказка') }) },
+        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={240} color="#FFFFFF" style={styles.cardIcon} />, onPress: () => navigation.navigate('Riddles', { audioData: getFilteredData('загадка') }) },
+        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>, onPress: () => navigation.navigate('Help', { audioData: getFilteredData('помощь') }) },
     ];
 
     return (
@@ -90,7 +90,7 @@ export default function ReadySoundsScreen({ navigation }) {
                                 onPressIn={() => handlePressIn(index)}
                                 onPressOut={handlePressOut}
                                 activeOpacity={1}
-                                style={[styles.card, pressedCard === index && styles.cardPressed]}
+                                style={[styles[card.name] , pressedCard === index && styles.cardPressed]}
                             >
                                 <Text style={styles.cardText}>
                                     {card.text}
@@ -103,12 +103,12 @@ export default function ReadySoundsScreen({ navigation }) {
                             onPressIn={handlePressIn}
                             onPressOut={handlePressOut}
                             activeOpacity={1}
-                            style={[styles.card, pressedCard === cards.length && styles.cardPressed]}
+                            style={[styles.card1, pressedCard === cards.length && styles.cardPressed]}
                         >
                                 <Text style={styles.cardText}>
                                     Остальные звуки
                                 </Text>
-                            <FontAwesome5 name="telegram-plane" size={200} color="#a4ca79"  style={styles.cardIcon}/>
+                            <FontAwesome5 name="telegram-plane" size={200} color="#FFFFFF"  style={styles.cardIcon}/>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -156,8 +156,34 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         justifyContent: 'center'
     },
-    card: {
-        backgroundColor: '#6f9c3d',
+    card0: {
+        backgroundColor: '#FEC513',
+        width: width * 0.90,
+        height: height * 0.22,
+        marginBottom: '4%',
+        borderRadius: 15,
+        paddingTop: '5%',
+        paddingLeft: '6%',
+        position: 'relative',
+        overflow: 'hidden',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    card1: {
+        backgroundColor:'#FF7427',
+        width: width * 0.90,
+        height: height * 0.22,
+        marginBottom: '4%',
+        borderRadius: 15,
+        paddingTop: '5%',
+        paddingLeft: '6%',
+        position: 'relative',
+        overflow: 'hidden',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    card2: {
+        backgroundColor: '#3C62DD',
         width: width * 0.90,
         height: height * 0.22,
         marginBottom: '4%',
@@ -188,6 +214,7 @@ const styles = StyleSheet.create({
         width: '80%'
     },
     cardIcon: {
+        opacity: 0.35,
         position: 'absolute',
         bottom: "-24%",
         right: '8%'
