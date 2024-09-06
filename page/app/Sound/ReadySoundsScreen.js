@@ -1,8 +1,9 @@
-import { Text, View, TouchableOpacity, StyleSheet, ScrollView, Dimensions, ActivityIndicator, Modal, Linking, Alert } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, ScrollView, Dimensions, ActivityIndicator, Modal, Linking, Alert, Pressable, TextInput } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Button } from 'react-native-paper';
 
 const { width, height } = Dimensions.get('window');
 
@@ -12,6 +13,9 @@ export default function ReadySoundsScreen({ navigation }) {
     const [loading, setLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalPlusVisible, setModalPlusVisible] = useState(false);
+
+    const [userFolders, setUserFolders] = useState([])// изменяется после рендера чтобы отображать новые папки
+    const [userFolderName, setUserFolderName] = useState('')
 
     useEffect(() => {
         fetch('https://mishka-l3tq.onrender.com/audio/all')
@@ -77,6 +81,20 @@ export default function ReadySoundsScreen({ navigation }) {
         { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>, onPress: () => navigation.navigate('Help', { audioData: getFilteredData('помощь') }) },
     ];
 
+    useEffect(() => {
+      setUserFolders(cards)// изначальное заполненеие State статичными картачками, чтобы они всегда были
+      return () => {
+      }
+    }, [])
+
+    function createUserFolder() {
+        setUserFolders([...userFolders, {
+            text:userFolderName, name: 'card1', icon:<FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>, onPress: () => alert('Its alive!')
+        }])
+        setModalPlusVisible(false)
+    }
+    
+
     return (
         <View style={styles.container}>
             {loading ? (
@@ -87,10 +105,12 @@ export default function ReadySoundsScreen({ navigation }) {
                         <Text style={styles.subtitleText}>
                             Библиотека
                         </Text>
-                        <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
+                        <Pressable onPress={()=>setModalPlusVisible(true)}>
+                            <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
+                        </Pressable>
                     </View>
                     <View style={{ marginVertical: '3%' }}>
-                        {cards.map((card, index) => (
+                        {userFolders.map((card, index) => (
                             <TouchableOpacity
                                 key={index}
                                 onPress={card.onPress}
@@ -169,12 +189,18 @@ export default function ReadySoundsScreen({ navigation }) {
             </Modal>
 
 
-            <Modal transparent={true} animationType="none" visible={modalPlusVisible}  onRequestClose={()=>{setModalPlusVisible(false)}} onDismiss={()=>{setModalPlusVisible(false)}}>
+            <Modal  transparent={true} animationType="slide" visible={modalPlusVisible}  onRequestClose={()=>{setModalPlusVisible(false)}} onDismiss={()=>{setModalPlusVisible(false)}}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalText}>
-                            ПРИВЕВЕВЕВЕВЕТЕТТЕТЕТЕ
+                        <Text style={styles.modalFolderText}>
+                            Создание Новой Папки {userFolderName}
                         </Text>
+                        <View style={{marginBottom:'10%', marginTop:'10%', borderWidth:1,}}>
+                            <TextInput onChangeText={setUserFolderName} style={{padding:'200px'}} autoFocus={true} placeholder='Название Папки'></TextInput>
+                        </View>
+                        <View>
+                            <Button onPress={()=>createUserFolder()} buttonColor='#00B232'  mode='contained'>Создать!</Button>
+                        </View>
                     </View>
                 </View>
             </Modal>
@@ -297,7 +323,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22
+        marginTop: 22,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
     },
     modalView: {
         margin: 20,
@@ -337,5 +364,13 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         textAlign: "center",
         fontFamily: 'Comfortaa_500Medium'
+    },
+    modalFolderText: {
+        color: "#5c5c5c",
+        fontSize: 14,
+        textAlign: "center",
+        fontFamily: 'Comfortaa_500Medium',
+        borderBottomWidth:1,
+
     }
 });
