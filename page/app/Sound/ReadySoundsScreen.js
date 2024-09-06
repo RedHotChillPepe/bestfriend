@@ -4,6 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -76,22 +77,57 @@ export default function ReadySoundsScreen({ navigation }) {
     };
 
     const cards = [
-        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={200} color="#FFFFFF" style={styles.cardIcon} />, onPress: () => navigation.navigate('fairyTales', { audioData: getFilteredData('сказка') }) },
-        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={240} color="#FFFFFF" style={styles.cardIcon} />, onPress: () => navigation.navigate('Riddles', { audioData: getFilteredData('загадка') }) },
-        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>, onPress: () => navigation.navigate('Help', { audioData: getFilteredData('помощь') }) },
+        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={200} color="#FFFFFF" style={styles.cardIcon} />, 'onPress': () => navigation.navigate('fairyTales', { audioData: getFilteredData('сказка') }) },
+        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={240} color="#FFFFFF" style={styles.cardIcon} />, 'onPress': () => navigation.navigate('Riddles', { audioData: getFilteredData('загадка') }) },
+        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>, 'onPress': () => navigation.navigate('Help', { audioData: getFilteredData('помощь') }) },
     ];
 
+    // AsyncStorage локальное хранилище на телефоне
+    const getFolderData = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem('userFolder');
+          return jsonValue != null ? JSON.parse(jsonValue) : null;
+        } catch (e) {
+          // error reading value
+        }
+      };
+
+      var storedFolders=getFolderData()
+
+      const storeFolderData = async (value) => {
+        try {
+            //console.log(value)
+            const jsonValue = JSON.stringify(value);
+            //console.log(jsonValue)
+            await AsyncStorage.setItem('userFolder', jsonValue);
+                    
+        } catch (e) {
+          // saving error
+        }
+      };
+      ///
+
     useEffect(() => {
-      setUserFolders(cards)// изначальное заполненеие State статичными картачками, чтобы они всегда были
+      const initialFillup = async () =>{
+        setUserFolders([...cards, await storedFolders ])// изначальное заполненеие State статичными картачками вперемешку с Local Storage папками
+      }
+        initialFillup();
       return () => {
       }
     }, [])
 
-    function createUserFolder() {
-        setUserFolders([...userFolders, {
-            text:userFolderName, name: 'card1', icon:<FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>, onPress: () => alert('Its alive!')
-        }])
+    
+
+    const createUserFolder = async() => {
+        
+        storeFolderData({
+           text:userFolderName, name: 'card1', 'onPress': "() => alert('Its alive!')"
+        })
+        console.log(await storedFolders)
+        setUserFolders([...userFolders, await storedFolders])
         setModalPlusVisible(false)
+        setUserFolderName('')
+        storedFolders=getFolderData
     }
     
 
@@ -113,7 +149,7 @@ export default function ReadySoundsScreen({ navigation }) {
                         {userFolders.map((card, index) => (
                             <TouchableOpacity
                                 key={index}
-                                onPress={card.onPress}
+                                onPress={eval(card.onPress)}
                                 onPressIn={() => handlePressIn(index)}
                                 onPressOut={handlePressOut}
                                 activeOpacity={1}
