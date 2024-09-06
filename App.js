@@ -16,6 +16,7 @@ import AboutUs from './page/app/Profile/AboutUs';
 import { Audio } from 'expo-av';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
+import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 const Stack = createStackNavigator();
@@ -40,15 +41,27 @@ const AppContent = () => {
     initialize();
   }, []);
 
+  SplashScreen.preventAutoHideAsync();
+
   let [fontsLoaded, error] = useFonts({
     Comfortaa_300Light,
     Comfortaa_400Regular,
     Comfortaa_500Medium,
     Comfortaa_600SemiBold,
     Comfortaa_700Bold,
+    'SF Pro Rounded Black':require('./assets/fonts/SFProRoundedBlack.otf'),
+    'SF Pro Rounded Semibold':require('./assets/fonts/SFProRoundedSemibold.otf')
   });
 
   useEffect(() => {
+    if (fontsLoaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, error]);
+
+  useEffect(() => {
+    
+
     const registerBackgroundFetchAsync = async () => {
       return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
         minimumInterval: 60 * 15, // 15 minutes

@@ -10,13 +10,15 @@ import FairyTales from './Sound/fairyTales';
 import MyRecordingScreen from './MyRecordingScreen';
 import Help from './Sound/Help';
 import Riddles from './Sound/Riddles';
-import { Pressable, StyleSheet, Text, View, VirtualizedList } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 
-function ReadySoundsStack() {
+/* function ReadySoundsStack() {
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <Stack.Navigator>
       <Stack.Screen name="Profile" component={ReadySoundsScreen} options={{ headerShown: false }} />
@@ -25,16 +27,40 @@ function ReadySoundsStack() {
       <Stack.Screen name="Riddles" component={Riddles} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
-}
+} */
 
 export default function AppLog() {
   
-  const [modalVisible, setModalVisible] = useState(false);
+ 
 
 
   return (
     <Provider>
-      <Tab.Navigator
+      <Stack.Navigator screenOptions={{
+        headerStyle:{
+          backgroundColor:"#3C62DD"
+        }
+      }}>
+        <Stack.Screen name="Лучший Друг" component={ReadySoundsScreen} options={{
+          headerTitleAlign: 'center',
+          headerTitleStyle:{
+            fontFamily:"SF Pro Rounded Black",
+            fontSize:32,
+            color:"#FFF",
+          },
+          headerStyle:{
+            backgroundColor:"#3C62DD",
+            borderBottomLeftRadius:48,
+            borderBottomRightRadius:48,
+          }
+        }}/>
+        <Stack.Screen name="fairyTales" component={FairyTales} options={{ headerShown: false }} />
+        <Stack.Screen name="Help" component={Help} options={{ headerShown: false }} />
+        <Stack.Screen name="Riddles" component={Riddles} options={{ headerShown: false }} />
+        <Stack.Screen name="MyRecording" component={MyRecordingScreen} options={{ headerShown: false }} />
+      </Stack.Navigator>
+
+      {/* <Tab.Navigator
         initialRouteName="Библиотека звуков" 
         screenOptions={{
           tabBarActiveTintColor: '#6f9c3d',
@@ -102,36 +128,13 @@ export default function AppLog() {
             ),
           }}
         />
-      </Tab.Navigator>
-
-      {
-        modalVisible ?
-
-        <Modal transparent={true} animationType={'none'} visible={modalVisible}  onRequestClose={()=>{setModalVisible(false)}} onDismiss={()=>{setModalVisible(false)}}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text>RRRR</Text>
-            </View>
-          </View>
-        </Modal>
-        : <View></View>
-      }
+      </Tab.Navigator>  */}
         
-
-      
-
-
     </Provider>
   );
 }
 
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-},
   modalView: {
     margin: 20,
     backgroundColor: 'white',
@@ -146,5 +149,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+    modalText: {
+      marginBottom: 15,
+      textAlign: 'center',
+      fontSize: 18,
+      color: '#3f3f3f',
+      fontFamily: 'Comfortaa_400Regular',
+    },
 })

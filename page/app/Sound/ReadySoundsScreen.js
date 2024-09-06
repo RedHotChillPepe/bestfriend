@@ -2,7 +2,7 @@ import { Text, View, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Activ
 import React, { useState, useEffect } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
 
@@ -11,6 +11,7 @@ export default function ReadySoundsScreen({ navigation }) {
     const [audioData, setAudioData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalPlusVisible, setModalPlusVisible] = useState(false);
 
     useEffect(() => {
         fetch('https://mishka-l3tq.onrender.com/audio/all')
@@ -82,6 +83,12 @@ export default function ReadySoundsScreen({ navigation }) {
                 <ActivityIndicator size="large" color="#a4ca79" />
             ) : (
                 <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
+                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center'}}>
+                        <Text style={styles.subtitleText}>
+                            Библиотека
+                        </Text>
+                        <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
+                    </View>
                     <View style={{ marginVertical: '3%' }}>
                         {cards.map((card, index) => (
                             <TouchableOpacity
@@ -98,17 +105,31 @@ export default function ReadySoundsScreen({ navigation }) {
                                 {card.icon}
                             </TouchableOpacity>
                         ))}
+
                         <TouchableOpacity
                             onPress={() => setModalVisible(true)}
-                            onPressIn={handlePressIn}
+                            onPressIn={() => handlePressIn(cards.length+1)}
                             onPressOut={handlePressOut}
                             activeOpacity={1}
-                            style={[styles.card1, pressedCard === cards.length && styles.cardPressed]}
+                            style={[styles.card1, pressedCard === cards.length+1 && styles.cardPressed]}
                         >
                                 <Text style={styles.cardText}>
                                     Остальные звуки
                                 </Text>
                             <FontAwesome5 name="telegram-plane" size={200} color="#FFFFFF"  style={styles.cardIcon}/>
+                        </TouchableOpacity>
+
+
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('MyRecording')}
+                            onPressIn={() => handlePressIn(cards.length)}
+                            onPressOut={handlePressOut}
+                            activeOpacity={1}
+                            style={[styles.card3, pressedCard === cards.length && styles.card3Pressed]}
+                        >
+                                <Text style={styles.card3Text}>
+                                    Мои Записи
+                                </Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -146,8 +167,20 @@ export default function ReadySoundsScreen({ navigation }) {
                     </View>
                 </View>
             </Modal>
+
+
+            <Modal transparent={true} animationType="none" visible={modalPlusVisible}  onRequestClose={()=>{setModalPlusVisible(false)}} onDismiss={()=>{setModalPlusVisible(false)}}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>
+                            ПРИВЕВЕВЕВЕВЕТЕТТЕТЕТЕ
+                        </Text>
+                    </View>
+                </View>
+            </Modal>
+            
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -195,14 +228,49 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
+    card3: {
+        backgroundColor: '#FFF',
+        width: width * 0.90,
+        height: height * 0.22,
+        marginBottom: '4%',
+        borderRadius: 15,
+        paddingTop: '5%',
+        paddingLeft: '6%',
+        position: 'relative',
+        overflow: 'hidden',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderWidth:1,
+        borderColor:"#656463"
+    },
     cardPressed: {
         backgroundColor: '#608c2f',
+    },
+    card3Pressed: {
+        backgroundColor: '#dbd7d7',
     },
     cardText: {
         position: 'absolute',
         fontFamily: 'Comfortaa_700Bold',
         fontSize: 20,
         color: "#fff",
+        // width: '80%',
+        left: '8%',
+        top: '8%'
+    },
+    subtitleText:{
+        fontFamily:"SF Pro Rounded Semibold",
+        fontSize:24,
+        color:"#070600",
+        opacity:0.61,
+        textAlign:'left',
+        marginRight:"43%"
+    },
+    card3Text: {
+        position: 'absolute',
+        fontFamily: 'Comfortaa_700Bold',
+        fontSize: 20,
+        color: "#656463",
         // width: '80%',
         left: '8%',
         top: '8%'
