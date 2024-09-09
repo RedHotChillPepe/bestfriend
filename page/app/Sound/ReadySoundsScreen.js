@@ -21,9 +21,9 @@ export default function ReadySoundsScreen({ navigation }) {
 
 
     const cards = [
-        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={200} color="#FFFFFF" style={styles.cardIcon} />, 'onPress': () => navigation.navigate('fairyTales', { audioData: getFilteredData('сказка') }) },
-        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={240} color="#FFFFFF" style={styles.cardIcon} />, 'onPress': () => navigation.navigate('Riddles', { audioData: getFilteredData('загадка') }) },
-        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>, 'onPress': () => navigation.navigate('Help', { audioData: getFilteredData('помощь') }) },
+        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={200} color="#FFFFFF" style={styles.cardIcon} />, 'onPressDestination': `fairyTales`,  'onPressPayload':`{ "audioData": "getFilteredData('сказка')" }` },
+        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={240} color="#FFFFFF" style={styles.cardIcon} />, 'onPressDestination': ``, 'onPressPayload':`{ "audioData": "getFilteredData('загадка')" }` },
+        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>, 'onPressDestination': 'Help', 'onPressPayload':`{ "audioData": "getFilteredData('помощь')"}` },
     ];
 
     /// AsyncStorage локальное хранилище на телефоне
@@ -80,8 +80,8 @@ export default function ReadySoundsScreen({ navigation }) {
     const createUserFolder = async() => {
         
         await storeFolderData({
-           text:userFolderName, name: 'card1', 'onPress': "() => alert('Its alive!')"
-        })
+           "text":`${userFolderName}`, "name": "card1", "onPressDestination": "DynamicFolder", "onPressPayload":`{"text": "${userFolderName}"}`
+        }) // темплейт для JSON файла
         console.log("Create User Folder:" + userFolderName)
         setUserFolders([...cards, ...await getFolderData()])
         setModalPlusVisible(false)
@@ -185,7 +185,7 @@ export default function ReadySoundsScreen({ navigation }) {
                         {userFolders.map((card, index) => (
                             <TouchableOpacity
                                 key={index}
-                                onPress={eval(card.onPress)}
+                                onPress={() => navigation.navigate(card.onPressDestination, JSON.parse([card.onPressPayload]))}
                                 onPressIn={() => handlePressIn(index)}
                                 onPressOut={handlePressOut}
                                 activeOpacity={1}

@@ -11,6 +11,7 @@ import MyRecordingScreen from './MyRecordingScreen';
 import Help from './Sound/Help';
 import Riddles from './Sound/Riddles';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import DynamicFolder from './Sound/dynamicFolder';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -58,6 +59,7 @@ export default function AppLog() {
         <Stack.Screen name="Help" component={Help} options={{ headerShown: false }} />
         <Stack.Screen name="Riddles" component={Riddles} options={{ headerShown: false }} />
         <Stack.Screen name="MyRecording" component={MyRecordingScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="DynamicFolder" component={DynamicFolder} options={{ headerShown: false }} />
       </Stack.Navigator>
 
       {/* <Tab.Navigator
