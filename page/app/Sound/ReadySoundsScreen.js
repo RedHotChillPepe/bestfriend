@@ -36,34 +36,72 @@ export default function ReadySoundsScreen({ navigation }) {
         }
       };
 
-      var storedFolders=getFolderData() // сериализация папок из AsyncStorage
 
-      const storeFolderData = async (value) => {
+
+    const storeFolderData = async (value) => {
         try {
-            //console.log(value)
+            
             const jsonValue = JSON.stringify(value);
-            //console.log(jsonValue)
-            await AsyncStorage.setItem('userFolder', jsonValue);
+            
+            console.log("jsonValue: " + jsonValue)
+            console.log(await getFolderData() != null)
+            if (await getFolderData() != null) {
+
+                const replacedFolderData =  JSON.stringify(await getFolderData()).replace("[","").replace("]","")
+                console.log("replacedFolderData: " + replacedFolderData)
+
+                const combinedString = "[" + replacedFolderData + ',' + jsonValue + "]"
+                await AsyncStorage.setItem('userFolder', combinedString)
+                
+               
+                console.log("Combined string:" +  combinedString)
+            } else {
+                await AsyncStorage.setItem('userFolder',  "[" + jsonValue + "]");
+                console.log("storeFolderData 1: " + "[" + jsonValue + "]")
+            }
+            
                     
         } catch (e) {
           // saving error
         }
-      };
+    };
+
+    clearAll = async () => {
+        try {
+          await AsyncStorage.clear()
+        } catch(e) {
+          // clear error
+        }
+        setUserFolders([...cards])
+      
+        console.log('Done.')
+    }
       ///
+    const createUserFolder = async() => {
+        
+        await storeFolderData({
+           text:userFolderName, name: 'card1', 'onPress': "() => alert('Its alive!')"
+        })
+        console.log("Create User Folder:" + userFolderName)
+        setUserFolders([...cards, ...await getFolderData()])
+        setModalPlusVisible(false)
+        setUserFolderName('')
+    }
 
     useEffect(() => {
         const initialFillup = async () =>{
-            if (await storedFolders != null) {
-                setUserFolders([...cards , await storedFolders ])// изначальное заполненеие State статичными картачками вперемешку с Local Storage папками
+            if (await getFolderData() != null) { // проверка на пустоту localstorage
+                setUserFolders([...cards , ...await getFolderData()])// изначальное заполненеие State статичными картачками вперемешку с Local Storage папками
+                
             } else {
                 setUserFolders([...cards])
             }
-          
+          console.log("initilafillup:" + JSON.stringify(await getFolderData()) )
         }
           initialFillup();
         return () => {
         }
-      }, [])
+    }, [])
 
     useEffect(() => {
         fetch('https://mishka-l3tq.onrender.com/audio/all')
@@ -124,20 +162,6 @@ export default function ReadySoundsScreen({ navigation }) {
     };
 
 
-
-    
-
-    const createUserFolder = async() => {
-        
-        storeFolderData({
-           text:userFolderName, name: 'card1', 'onPress': "() => alert('Its alive!')"
-        })
-        console.log(await storedFolders)
-        setUserFolders([...userFolders, await storedFolders])
-        setModalPlusVisible(false)
-        setUserFolderName('')
-        storedFolders=getFolderData
-    }
     
 
     return (
@@ -147,9 +171,12 @@ export default function ReadySoundsScreen({ navigation }) {
             ) : (
                 <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
                     <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center'}}>
-                        <Text style={styles.subtitleText}>
-                            Библиотека
-                        </Text>
+                        <Pressable onPress={()=> clearAll()}>
+                            <Text style={styles.subtitleText}>
+                                Библиотека
+                            </Text>
+                        </Pressable>
+                        
                         <Pressable onPress={()=>setModalPlusVisible(true)}>
                             <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
                         </Pressable>
