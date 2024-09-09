@@ -18,6 +18,53 @@ export default function ReadySoundsScreen({ navigation }) {
     const [userFolders, setUserFolders] = useState([])// изменяется после рендера чтобы отображать новые папки
     const [userFolderName, setUserFolderName] = useState('')
 
+
+
+    const cards = [
+        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={200} color="#FFFFFF" style={styles.cardIcon} />, 'onPress': () => navigation.navigate('fairyTales', { audioData: getFilteredData('сказка') }) },
+        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={240} color="#FFFFFF" style={styles.cardIcon} />, 'onPress': () => navigation.navigate('Riddles', { audioData: getFilteredData('загадка') }) },
+        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>, 'onPress': () => navigation.navigate('Help', { audioData: getFilteredData('помощь') }) },
+    ];
+
+    /// AsyncStorage локальное хранилище на телефоне
+    const getFolderData = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem('userFolder');
+          return jsonValue != null ? JSON.parse(jsonValue) : null;
+        } catch (e) {
+          // error reading value
+        }
+      };
+
+      var storedFolders=getFolderData() // сериализация папок из AsyncStorage
+
+      const storeFolderData = async (value) => {
+        try {
+            //console.log(value)
+            const jsonValue = JSON.stringify(value);
+            //console.log(jsonValue)
+            await AsyncStorage.setItem('userFolder', jsonValue);
+                    
+        } catch (e) {
+          // saving error
+        }
+      };
+      ///
+
+    useEffect(() => {
+        const initialFillup = async () =>{
+            if (await storedFolders != null) {
+                setUserFolders([...cards , await storedFolders ])// изначальное заполненеие State статичными картачками вперемешку с Local Storage папками
+            } else {
+                setUserFolders([...cards])
+            }
+          
+        }
+          initialFillup();
+        return () => {
+        }
+      }, [])
+
     useEffect(() => {
         fetch('https://mishka-l3tq.onrender.com/audio/all')
             .then(response => response.json())
@@ -76,45 +123,7 @@ export default function ReadySoundsScreen({ navigation }) {
         return audioData.filter(item => item.category === category);
     };
 
-    const cards = [
-        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={200} color="#FFFFFF" style={styles.cardIcon} />, 'onPress': () => navigation.navigate('fairyTales', { audioData: getFilteredData('сказка') }) },
-        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={240} color="#FFFFFF" style={styles.cardIcon} />, 'onPress': () => navigation.navigate('Riddles', { audioData: getFilteredData('загадка') }) },
-        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>, 'onPress': () => navigation.navigate('Help', { audioData: getFilteredData('помощь') }) },
-    ];
 
-    // AsyncStorage локальное хранилище на телефоне
-    const getFolderData = async () => {
-        try {
-          const jsonValue = await AsyncStorage.getItem('userFolder');
-          return jsonValue != null ? JSON.parse(jsonValue) : null;
-        } catch (e) {
-          // error reading value
-        }
-      };
-
-      var storedFolders=getFolderData()
-
-      const storeFolderData = async (value) => {
-        try {
-            //console.log(value)
-            const jsonValue = JSON.stringify(value);
-            //console.log(jsonValue)
-            await AsyncStorage.setItem('userFolder', jsonValue);
-                    
-        } catch (e) {
-          // saving error
-        }
-      };
-      ///
-
-    useEffect(() => {
-      const initialFillup = async () =>{
-        setUserFolders([...cards, await storedFolders ])// изначальное заполненеие State статичными картачками вперемешку с Local Storage папками
-      }
-        initialFillup();
-      return () => {
-      }
-    }, [])
 
     
 

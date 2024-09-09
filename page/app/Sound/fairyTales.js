@@ -71,8 +71,10 @@ export default function FairyTales({ route }) {
 
     return (
         <View style={styles.container}>
+           
             <ScrollView contentContainerStyle={{ width:"100%" }}>
                 <View style={{ width: '100%', alignItems: 'center' }}>
+                    
                     <View style={{ marginBottom: '3%', width: '100%' }}>
                         {audioData.map((item, index) => (
                             <View key={index} style={styles.card}>
