@@ -21,9 +21,9 @@ export default function ReadySoundsScreen({ navigation }) {
 
 
     const cards = [
-        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={200} color="#FFFFFF" style={styles.cardIcon} />, 'onPressDestination': `fairyTales`,  'onPressPayload':`{ "audioData": "getFilteredData('сказка')" }` },
-        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={240} color="#FFFFFF" style={styles.cardIcon} />, 'onPressDestination': ``, 'onPressPayload':`{ "audioData": "getFilteredData('загадка')" }` },
-        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>, 'onPressDestination': 'Help', 'onPressPayload':`{ "audioData": "getFilteredData('помощь')"}` },
+        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={200} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': `fairyTales`,  'onPressPayload':`{ "audioData": "getFilteredData('сказка')" }` },
+        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={240} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': ``, 'onPressPayload':`{ "audioData": "getFilteredData('загадка')" }` },
+        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': 'Help', 'onPressPayload':`{ "audioData": "getFilteredData('помощь')"}` },
     ];
 
     /// AsyncStorage локальное хранилище на телефоне
@@ -80,7 +80,7 @@ export default function ReadySoundsScreen({ navigation }) {
     const createUserFolder = async() => {
         
         await storeFolderData({
-           "text":`${userFolderName}`, "name": "card1", "onPressDestination": "DynamicFolder", "onPressPayload":`{"text": "${userFolderName}"}`
+           "text":`${userFolderName}`, "name": "card3", "cardTextStyle":"card3Text" , "cardTextPressedStyle":"card3Pressed","onPressDestination": "DynamicFolder", "onPressPayload":`{"text": "${userFolderName}"}`
         }) // темплейт для JSON файла
         console.log("Create User Folder:" + userFolderName)
         setUserFolders([...cards, ...await getFolderData()])
@@ -189,9 +189,9 @@ export default function ReadySoundsScreen({ navigation }) {
                                 onPressIn={() => handlePressIn(index)}
                                 onPressOut={handlePressOut}
                                 activeOpacity={1}
-                                style={[styles[card.name] , pressedCard === index && styles.cardPressed]}
+                                style={[styles[card.name] , pressedCard === index && styles[card.cardTextPressedStyle]]}
                             >
-                                <Text style={styles.cardText}>
+                                <Text style={styles[card.cardTextStyle]}>
                                     {card.text}
                                 </Text>
                                 {card.icon}
@@ -200,10 +200,10 @@ export default function ReadySoundsScreen({ navigation }) {
 
                         <TouchableOpacity
                             onPress={() => setModalVisible(true)}
-                            onPressIn={() => handlePressIn(cards.length+1)}
+                            onPressIn={() => handlePressIn(userFolders.length)}
                             onPressOut={handlePressOut}
                             activeOpacity={1}
-                            style={[styles.card1, pressedCard === cards.length+1 && styles.cardPressed]}
+                            style={[styles.card1, pressedCard === userFolders.length && styles.cardPressed]}
                         >
                                 <Text style={styles.cardText}>
                                     Остальные звуки
@@ -214,10 +214,10 @@ export default function ReadySoundsScreen({ navigation }) {
 
                         <TouchableOpacity
                             onPress={() => navigation.navigate('MyRecording')}
-                            onPressIn={() => handlePressIn(cards.length)}
+                            onPressIn={() => handlePressIn(userFolders.length+1)}
                             onPressOut={handlePressOut}
                             activeOpacity={1}
-                            style={[styles.card3, pressedCard === cards.length && styles.card3Pressed]}
+                            style={[styles.card3, pressedCard === userFolders.length+1 && styles.card3Pressed]}
                         >
                                 <Text style={styles.card3Text}>
                                     Мои Записи
