@@ -102,8 +102,8 @@ export default function ReadySoundsScreen() {
     }, [])
 
     useEffect(() => {
-        // async/await ожидание перед рендером
-             fetch('https://bestfriend-back.onrender.com/audio/all')
+        const fetchmedata = async () => {
+           await fetch('https://bestfriend-back.onrender.com/audio/all')
             .then(response => response.json())
             .then (data => {
                 setAudioData(data);
@@ -114,10 +114,11 @@ export default function ReadySoundsScreen() {
             .catch(error => {
                 console.error('Error fetching data:', error);
                 setLoading(false);
-            });
-            
-        
-        
+            }); 
+        }
+
+        fetchmedata()
+
     }, []);
     
 
@@ -163,12 +164,12 @@ export default function ReadySoundsScreen() {
     };
 
     const getFilteredData = (category) => {
-        //console.log(audioData.filter(item => item.category === category))
         return audioData.filter(item => item.category === category);
     };
 
-    const handlePayload = (payload) => {
-        if (payload.audioData != undefined) {
+    // функция вызывается во время рендера чтобы передавать data между страницами
+    const handlePayload = (payload) => { 
+        if (payload.audioData != undefined) { // проверка на статичные cards которые получают data с сервера
             return {audioData: getFilteredData(payload.audioData)} 
         } else {
             return payload

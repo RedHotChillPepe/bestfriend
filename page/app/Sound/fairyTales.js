@@ -1,7 +1,12 @@
-import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Pressable, Dimensions } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
+const { width, height } = Dimensions.get('window');
 
 export default function FairyTales({ route }) {
     const { audioData } = route.params;
@@ -11,6 +16,8 @@ export default function FairyTales({ route }) {
     const [positionMillis, setPositionMillis] = useState({});
     const [pausedPosition, setPausedPosition] = useState({});
     const currentIndex = useRef(null);
+
+    const navigation = useNavigation();
 
     const playAudio = async (uri, index) => {
         if (sounds.current[index]) {
@@ -40,7 +47,6 @@ export default function FairyTales({ route }) {
     };
     
     useEffect(() => {
-        console.log(route.params)
         const interval = setInterval(async () => {
             const index = currentIndex.current;
             if (isPlaying[index]) {
@@ -73,8 +79,30 @@ export default function FairyTales({ route }) {
 
     return (
         <View style={styles.container}>
-           
             <ScrollView contentContainerStyle={{ width:"100%" }}>
+                <View style={{padding:'4%'}}>
+                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center'}}>
+                        <Pressable onPress={()=> navigation.goBack()}>
+                            <Text style={styles.subtitleText}>
+                                Назад
+                            </Text>
+                        </Pressable>
+                        
+                        <Pressable>
+                            <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
+                        </Pressable>
+                    </View>
+                    <View style={{alignContent:"center"}}>
+                        <View style={[styles.card0]}>
+                            <Text style={styles.cardFairyText}>
+                                Сказки
+                            </Text>
+                            <FontAwesome name="book" size={80} color="#FFFFFF"  style={styles.cardIcon}/>                    
+                        </View>
+                    </View>
+                
+                </View>
+                
                 <View style={{ width: '100%', alignItems: 'center' }}>
                     <View style={{ marginBottom: '3%', width: '100%' }}>
                         {audioData.map((item, index) => (
@@ -113,8 +141,29 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
         borderBottomWidth: 1
     },
+    card0: {
+        backgroundColor: '#FEC513',
+        width: width * 0.90,
+        height: height * 0.17,
+        marginBottom: '4%',
+        borderRadius: 15,
+        paddingTop: '5%',
+        position: 'relative',
+        overflow: 'hidden',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
     cardText: {
         gap: 10
+    },
+    cardFairyText: {
+        position: 'absolute',
+        fontFamily: 'Comfortaa_700Bold',
+        fontSize: 20,
+        color: "#fff",
+        // width: '80%',
+        left: '8%',
+        top: '8%'
     },
     cardTextTitle: {
         fontFamily: 'Comfortaa_700Bold',
@@ -125,5 +174,18 @@ const styles = StyleSheet.create({
         fontFamily: 'Comfortaa_700Bold',
         fontSize: 12,
         color: "#bbb"
-    }
+    },
+    cardIcon: {
+        opacity: 0.35,
+        position: 'absolute',
+        right: '8%'
+    },
+    subtitleText:{
+        fontFamily:"SF Pro Rounded Semibold",
+        fontSize:24,
+        color:"#070600",
+        opacity:0.61,
+        textAlign:'left',
+        marginRight:"43%"
+    },
 });

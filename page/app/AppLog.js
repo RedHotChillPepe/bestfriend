@@ -47,7 +47,17 @@ function ReadySoundsStack() {
           </Pressable>
         )
       }}/>
-      <Stack.Screen name="fairyTales" component={FairyTales} options={{ headerShown: false }} />
+      <Stack.Screen name="fairyTales" component={FairyTales} options={{ 
+        title:"",
+        headerStyle:{
+          backgroundColor:"#3C62DD"
+        },
+        headerLeft:()=>(
+          <Pressable onPress={()=>navigation.toggleDrawer()}>
+            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:25, paddingTop:5}}/>
+          </Pressable>
+        )
+      }} />
       <Stack.Screen name="Riddles" component={Riddles} options={{ headerShown: false }} />
       <Stack.Screen name="MyRecording" component={MyRecordingScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Help" component={Help} options={{ headerShown: false }}/>
