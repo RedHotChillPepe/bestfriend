@@ -46,7 +46,7 @@ export default function ConfirmationPage({ navigation, route }) {
     const codeString = getCodeString();
     setIsLoading(true);
     try {
-      const response = await fetch('https://mishka-l3tq.onrender.com/auth/verify-code', {
+      const response = await fetch('https://bestfriend-back.onrender.com/auth/verify-code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

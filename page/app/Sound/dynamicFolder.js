@@ -5,10 +5,13 @@ import React, { useState, useEffect } from 'react';
 export default function DynamicFolder({route, navigation}) {
     
     const route_params = route.params
+    const { text } = route.params
 
     useEffect(() => {
         //const {text} = route.params;
-        console.log(route.params)
+        const route_params = route.params
+        console.log(route_params)
+        navigation.setOptions({title:`${route_params.text}`})
     
       return () => {
         

@@ -13,6 +13,7 @@ import Help from './Sound/Help';
 import Riddles from './Sound/Riddles';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import DynamicFolder from './Sound/dynamicFolder';
+import { NavigationContainer } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -23,13 +24,10 @@ function ReadySoundsStack({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <Stack.Navigator screenOptions={{
-      headerStyle:{
-        backgroundColor:"#3C62DD"
-      }
-    }}>
+    <Stack.Navigator>
       <Stack.Screen name="Лучший Друг" component={ReadySoundsScreen} options={{
         headerTitleAlign: 'center',
+
         headerTitleStyle:{
           fontFamily:"SF Pro Rounded Black",
           fontSize:32,
@@ -49,13 +47,19 @@ function ReadySoundsStack({navigation}) {
       <Stack.Screen name="fairyTales" component={FairyTales} options={{ headerShown: false }} />
       <Stack.Screen name="Riddles" component={Riddles} options={{ headerShown: false }} />
       <Stack.Screen name="MyRecording" component={MyRecordingScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="DynamicFolder" component={DynamicFolder} options={{ headerShown: false }} />
+      <Stack.Screen name="DynamicFolder" component={DynamicFolder} options={{
+        headerTintColor:"#FFF", 
+        headerTitleAlign:"center",
+        headerStyle:{
+          backgroundColor:"#3C62DD",
+        } 
+        }} />
     </Stack.Navigator>
   );
 } 
 
 export default function AppLog({navigation}) {
-  
+  const Drawer = createDrawerNavigator();
  
 
 
@@ -64,7 +68,12 @@ export default function AppLog({navigation}) {
       
       <Drawer.Navigator>
         <Drawer.Screen name="Библиотека Звуков" component={ReadySoundsStack} options={{ headerShown: false }}/>
-        <Drawer.Screen name="Профиль" component={ProfileScreen} options={{ headerShown: false }} />
+        <Drawer.Screen name="Профиль" component={ProfileScreen} options={{
+          headerLeft:()=>(
+            <Pressable onPress={()=>navigation.toggleDrawer()}>
+              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:25, paddingTop:5}}/>
+            </Pressable>
+          )}} />
       </Drawer.Navigator>
 
       {/* <Tab.Navigator

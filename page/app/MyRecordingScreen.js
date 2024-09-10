@@ -38,7 +38,7 @@ export default function MyRecordingScreen({ navigation }) {
     const fetchUserRecords = async () => {
         try {
             setIsLoading(true);
-            const response = await fetch('https://mishka-l3tq.onrender.com/record/user-records', {
+            const response = await fetch('https://bestfriend-back.onrender.com/record/user-records', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -151,7 +151,7 @@ export default function MyRecordingScreen({ navigation }) {
         });
         setIsLoading(true);
         try {
-            const uploadResponse = await fetch('https://mishka-l3tq.onrender.com/audio/upload', {
+            const uploadResponse = await fetch('https://bestfriend-back.onrender.com/audio/upload', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -167,7 +167,7 @@ export default function MyRecordingScreen({ navigation }) {
             const uploadData = await uploadResponse.json();
             const { audioFile } = uploadData;
 
-            const createResponse = await fetch('https://mishka-l3tq.onrender.com/record/create', {
+            const createResponse = await fetch('https://bestfriend-back.onrender.com/record/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -270,7 +270,7 @@ export default function MyRecordingScreen({ navigation }) {
     const deleteRecording = async () => {
         if (recordingToDelete !== null && recordings[recordingToDelete]?._id) {
             try {
-                const response = await fetch(`https://mishka-l3tq.onrender.com/record/delete/${recordings[recordingToDelete]._id}`, {
+                const response = await fetch(`https://bestfriend-back.onrender.com/record/delete/${recordings[recordingToDelete]._id}`, {
                     method: 'DELETE'
                 });
 

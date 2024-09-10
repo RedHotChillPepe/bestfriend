@@ -20,11 +20,7 @@ export default function ReadySoundsScreen({ navigation }) {
 
 
 
-    const cards = [
-        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={200} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': `fairyTales`,  'onPressPayload':`{ "audioData": "getFilteredData('сказка')" }` },
-        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={240} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': ``, 'onPressPayload':`{ "audioData": "getFilteredData('загадка')" }` },
-        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': 'Help', 'onPressPayload':`{ "audioData": "getFilteredData('помощь')"}` },
-    ];
+    
 
     /// AsyncStorage локальное хранилище на телефоне
     const getFolderData = async () => {
@@ -104,7 +100,8 @@ export default function ReadySoundsScreen({ navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch('https://mishka-l3tq.onrender.com/audio/all')
+        const fetchmedata = async () => {
+            await fetch('https://bestfriend-back.onrender.com/audio/all')
             .then(response => response.json())
             .then(data => {
                 setAudioData(data);
@@ -114,6 +111,8 @@ export default function ReadySoundsScreen({ navigation }) {
                 console.error('Error fetching data:', error);
                 setLoading(false);
             });
+        }
+        fetchmedata()
     }, []);
 
     const pressTelegram = async () => {
@@ -161,8 +160,11 @@ export default function ReadySoundsScreen({ navigation }) {
         return audioData.filter(item => item.category === category);
     };
 
-
-    
+    const cards = [
+        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={200} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': `fairyTales`,  'onPressPayload':{ audioData: getFilteredData('сказка') } },
+        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={240} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': `Riddles`, 'onPressPayload':{ audioData: getFilteredData('загадка') } },
+        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': 'Help', 'onPressPayload':{ audioData: getFilteredData('помощь')} },
+    ];
 
     return (
         <View style={styles.container}>
@@ -185,7 +187,7 @@ export default function ReadySoundsScreen({ navigation }) {
                         {userFolders.map((card, index) => (
                             <TouchableOpacity
                                 key={index}
-                                onPress={() => navigation.navigate(card.onPressDestination, JSON.parse([card.onPressPayload]))}
+                                onPress={() => navigation.navigate(card.onPressDestination, card.onPressPayload)}
                                 onPressIn={() => handlePressIn(index)}
                                 onPressOut={handlePressOut}
                                 activeOpacity={1}

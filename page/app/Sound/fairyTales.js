@@ -5,6 +5,7 @@ import { Audio } from 'expo-av';
 
 export default function FairyTales({ route }) {
     const { audioData } = route.params;
+    
     const sounds = useRef([]);
     const [isPlaying, setIsPlaying] = useState({});
     const [positionMillis, setPositionMillis] = useState({});

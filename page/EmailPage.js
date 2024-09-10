@@ -26,7 +26,7 @@ export default function EmailPage({ navigation }) {
   const sendEmailToServer = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://mishka-l3tq.onrender.com/auth/generate-code', {
+      const response = await fetch('https://bestfriend-back.onrender.com/auth/generate-code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
