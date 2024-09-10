@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Modal, Provider } from 'react-native-paper';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import ProfileScreen from './ProfileScreen';
@@ -15,52 +16,56 @@ import DynamicFolder from './Sound/dynamicFolder';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
 
-/* function ReadySoundsStack() {
+function ReadySoundsStack({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Profile" component={ReadySoundsScreen} options={{ headerShown: false }} />
+    <Stack.Navigator screenOptions={{
+      headerStyle:{
+        backgroundColor:"#3C62DD"
+      }
+    }}>
+      <Stack.Screen name="Лучший Друг" component={ReadySoundsScreen} options={{
+        headerTitleAlign: 'center',
+        headerTitleStyle:{
+          fontFamily:"SF Pro Rounded Black",
+          fontSize:32,
+          color:"#FFF",
+        },
+        headerStyle:{
+          backgroundColor:"#3C62DD",
+          borderBottomLeftRadius:48,
+          borderBottomRightRadius:48,
+        },
+       headerLeft:()=>(
+          <Pressable onPress={()=>navigation.toggleDrawer()}>
+            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:25, paddingTop:5}}/>
+          </Pressable>
+        )
+      }}/>
       <Stack.Screen name="fairyTales" component={FairyTales} options={{ headerShown: false }} />
-      <Stack.Screen name="Help" component={Help} options={{ headerShown: false }} />
       <Stack.Screen name="Riddles" component={Riddles} options={{ headerShown: false }} />
+      <Stack.Screen name="MyRecording" component={MyRecordingScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="DynamicFolder" component={DynamicFolder} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
-} */
+} 
 
-export default function AppLog() {
+export default function AppLog({navigation}) {
   
  
 
 
   return (
     <Provider>
-      <Stack.Navigator screenOptions={{
-        headerStyle:{
-          backgroundColor:"#3C62DD"
-        }
-      }}>
-        <Stack.Screen name="Лучший Друг" component={ReadySoundsScreen} options={{
-          headerTitleAlign: 'center',
-          headerTitleStyle:{
-            fontFamily:"SF Pro Rounded Black",
-            fontSize:32,
-            color:"#FFF",
-          },
-          headerStyle:{
-            backgroundColor:"#3C62DD",
-            borderBottomLeftRadius:48,
-            borderBottomRightRadius:48,
-          }
-        }}/>
-        <Stack.Screen name="fairyTales" component={FairyTales} options={{ headerShown: false }} />
-        <Stack.Screen name="Help" component={Help} options={{ headerShown: false }} />
-        <Stack.Screen name="Riddles" component={Riddles} options={{ headerShown: false }} />
-        <Stack.Screen name="MyRecording" component={MyRecordingScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="DynamicFolder" component={DynamicFolder} options={{ headerShown: false }} />
-      </Stack.Navigator>
+      
+      <Drawer.Navigator>
+        <Drawer.Screen name="Библиотека Звуков" component={ReadySoundsStack} options={{ headerShown: false }}/>
+        <Drawer.Screen name="Профиль" component={ProfileScreen} options={{ headerShown: false }} />
+      </Drawer.Navigator>
 
       {/* <Tab.Navigator
         initialRouteName="Библиотека звуков" 
