@@ -9,9 +9,9 @@ export default function DynamicFolder({route, navigation}) {
 
     useEffect(() => {
         //const {text} = route.params;
-        const route_params = route.params
+        const route_params = JSON.parse(route.params)
         console.log(route_params)
-        navigation.setOptions({title:`${route_params.text}`})
+        //navigation.setOptions({title:`${route_params.text}`})
     
       return () => {
         
@@ -21,7 +21,7 @@ export default function DynamicFolder({route, navigation}) {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-                <Text>{JSON.stringify(route_params)}</Text>
+                <Text>{route_params}</Text>
             </ScrollView>        
         </View>
     )

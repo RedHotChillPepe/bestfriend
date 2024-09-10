@@ -13,15 +13,18 @@ import Help from './Sound/Help';
 import Riddles from './Sound/Riddles';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import DynamicFolder from './Sound/dynamicFolder';
-import { NavigationContainer } from '@react-navigation/native';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 
-function ReadySoundsStack({navigation}) {
+
+function ReadySoundsStack() {
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation()
+
 
   return (
     <Stack.Navigator>
@@ -47,7 +50,9 @@ function ReadySoundsStack({navigation}) {
       <Stack.Screen name="fairyTales" component={FairyTales} options={{ headerShown: false }} />
       <Stack.Screen name="Riddles" component={Riddles} options={{ headerShown: false }} />
       <Stack.Screen name="MyRecording" component={MyRecordingScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Help" component={Help} options={{ headerShown: false }}/>
       <Stack.Screen name="DynamicFolder" component={DynamicFolder} options={{
+        title:"",
         headerTintColor:"#FFF", 
         headerTitleAlign:"center",
         headerStyle:{
@@ -58,9 +63,8 @@ function ReadySoundsStack({navigation}) {
   );
 } 
 
-export default function AppLog({navigation}) {
-  const Drawer = createDrawerNavigator();
- 
+export default function AppLog() {
+  const navigation = useNavigation()
 
 
   return (
@@ -70,10 +74,17 @@ export default function AppLog({navigation}) {
         <Drawer.Screen name="Библиотека Звуков" component={ReadySoundsStack} options={{ headerShown: false }}/>
         <Drawer.Screen name="Профиль" component={ProfileScreen} options={{
           headerLeft:()=>(
-            <Pressable onPress={()=>navigation.toggleDrawer()}>
+            <Pressable onPress={()=>navigation.dispatch(DrawerActions.toggleDrawer())}>
               <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:25, paddingTop:5}}/>
             </Pressable>
-          )}} />
+          ),
+          headerStyle:{
+            backgroundColor:"#3C62DD"
+          },
+          headerTitleAlign:"center",
+          headerTitleStyle:{
+            color:"#FFF"
+          }}} />
       </Drawer.Navigator>
 
       {/* <Tab.Navigator

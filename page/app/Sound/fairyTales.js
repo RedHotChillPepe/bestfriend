@@ -40,6 +40,7 @@ export default function FairyTales({ route }) {
     };
     
     useEffect(() => {
+        console.log(route.params)
         const interval = setInterval(async () => {
             const index = currentIndex.current;
             if (isPlaying[index]) {
@@ -75,7 +76,6 @@ export default function FairyTales({ route }) {
            
             <ScrollView contentContainerStyle={{ width:"100%" }}>
                 <View style={{ width: '100%', alignItems: 'center' }}>
-                    
                     <View style={{ marginBottom: '3%', width: '100%' }}>
                         {audioData.map((item, index) => (
                             <View key={index} style={styles.card}>
