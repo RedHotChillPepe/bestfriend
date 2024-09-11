@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput, Modal, ScrollView } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, TextInput, Modal, ScrollView, Pressable } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { AntDesign } from '@expo/vector-icons';
@@ -30,6 +30,8 @@ export default function MyRecordingScreen({ navigation }) {
     const [recordingToDelete, setRecordingToDelete] = useState(null);
     const { user } = useAuth();
     const [shouldFetchRecords, setShouldFetchRecords] = useState(true);
+
+    
 
     useEffect(() => {
         fetchUserRecords();
@@ -314,6 +316,15 @@ export default function MyRecordingScreen({ navigation }) {
         <View style={styles.container}>
 
             <ScrollView contentContainerStyle={{ width: "100%" }}>
+                <View style={{paddingHorizontal:'4%', alignItems:'left'}}>
+                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row"}}>
+                        <Pressable onPress={()=> navigation.goBack()}>
+                            <Text style={styles.subtitleText}>
+                                Назад
+                            </Text>
+                        </Pressable>
+                    </View>
+                </View>
                 <Spinner
                     visible={isLoading}
                     textContent={''}
@@ -587,5 +598,13 @@ const styles = StyleSheet.create({
         color: '#5c5c5c',
         marginLeft: 10,
         fontFamily: 'Comfortaa_400Regular',
+    },
+    subtitleText:{
+        fontFamily:"SF Pro Rounded Semibold",
+        fontSize:24,
+        color:"#070600",
+        opacity:0.61,
+        textAlign:'left',
+        marginRight:"78%"
     },
 });
