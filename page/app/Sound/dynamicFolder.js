@@ -4,8 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function DynamicFolder({route, navigation}) {
     
-    const route_params = route.params
-    const { text } = route.params
+    var route_params = route.params
 
     useEffect(() => {
         //const {text} = route.params;
