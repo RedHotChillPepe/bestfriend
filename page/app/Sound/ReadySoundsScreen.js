@@ -248,10 +248,10 @@ export default function ReadySoundsScreen() {
                             <TouchableOpacity
                                 key={index}
                                 onPress={() => navigation.navigate(card.onPressDestination, handlePayload(card.onPressPayload))}
-                                onPressIn={() => handlePressIn(index)}
+                                onPressIn={() => handlePressIn(index + cards.length+2)}
                                 onPressOut={handlePressOut}
                                 activeOpacity={1}
-                                style={[styles[card.name] , pressedCard === index && styles[card.cardTextPressedStyle]]}
+                                style={[styles[card.name] , pressedCard === (index + cards.length+2)  && styles[card.cardTextPressedStyle]]}
                             >
                                 <Text style={styles[card.cardTextStyle]}>
                                     {card.text}

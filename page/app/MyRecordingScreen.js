@@ -315,8 +315,9 @@ export default function MyRecordingScreen({ navigation }) {
     return (
         <View style={styles.container}>
 
+            
             <ScrollView contentContainerStyle={{ width: "100%" }}>
-                <View style={{paddingHorizontal:'4%', alignItems:'left'}}>
+                <View style={{alignItems:'left', width:'100%'}}>
                     <View style={{flex:1, justifyContent:'space-between', flexDirection:"row"}}>
                         <Pressable onPress={()=> navigation.goBack()}>
                             <Text style={styles.subtitleText}>
@@ -468,7 +469,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
         justifyContent: 'flex-end',
         paddingBottom: 20,
     },
@@ -480,6 +480,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '100%',
+        
     },
     button: {
         marginHorizontal: 5,
@@ -526,6 +527,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
         bottom: 20,
+        paddingLeft:'38%'
     },
     card: {
         flexDirection: 'row',
@@ -605,6 +607,6 @@ const styles = StyleSheet.create({
         color:"#070600",
         opacity:0.61,
         textAlign:'left',
-        marginRight:"78%"
+        paddingLeft:'4%'
     },
 });

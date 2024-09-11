@@ -93,8 +93,7 @@ function ReadySoundsStack() {
       }}/>
       <Stack.Screen name="DynamicFolder" component={DynamicFolder} options={{
         title:"",
-        headerTintColor:"#FFF", 
-        headerTitleAlign:"center",
+        headerTintColor:"#FFF",
         headerStyle:{
           backgroundColor:"#3C62DD",
         },

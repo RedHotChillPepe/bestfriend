@@ -1,6 +1,7 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import React, { useState, useEffect } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import * as DocumentPicker from 'expo-document-picker'
 
 
 export default function DynamicFolder({route, navigation}) {
@@ -19,17 +20,15 @@ export default function DynamicFolder({route, navigation}) {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-                <View style={{borderBottomWidth:1, width:'100%', borderColor:'#656463'}} >
+                <View style={{ width:'100%'}} >
                     <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center'}}>
                         <Pressable style={{paddingLeft:'4%'}} onPress={()=> navigation.goBack()}>
                             <Text style={styles.subtitleText}>
                                 Назад
                             </Text>
                         </Pressable >
-                        <Text style={[styles.subtitleText]}>
-                           {routeParams.text}
-                        </Text>
-                        <Pressable style={{paddingRight:'4%'}}>
+                        
+                        <Pressable onPress={async () => (await DocumentPicker.getDocumentAsync({type:"audio/*"}))} style={{paddingRight:'4%'}}>
                             <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
                         </Pressable>
                     </View>                
