@@ -54,7 +54,7 @@ function ReadySoundsStack() {
         },
         headerLeft:()=>(
           <Pressable onPress={()=>navigation.toggleDrawer()}>
-            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:25, paddingTop:5}}/>
+            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:"4%", paddingTop:5}}/>
           </Pressable>
         )
       }} />
@@ -67,7 +67,12 @@ function ReadySoundsStack() {
         headerTitleAlign:"center",
         headerStyle:{
           backgroundColor:"#3C62DD",
-        } 
+        },
+        headerLeft:()=>(
+          <Pressable onPress={()=>navigation.toggleDrawer()}>
+            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:"4%", paddingTop:5}}/>
+          </Pressable>
+        ) 
         }} />
     </Stack.Navigator>
   );

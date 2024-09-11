@@ -180,9 +180,9 @@ export default function ReadySoundsScreen() {
 
 
     const cards = [
-        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={200} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': `fairyTales`,  'onPressPayload':{ "audioData": 'сказка' } },
-        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={240} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': `Riddles`, 'onPressPayload':{ "audioData": 'загадка' } },
-        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={170} color="#FFFFFF"  style={styles.cardIcon}/>,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': 'Help', 'onPressPayload':{ "audioData": 'помощь'} },
+        { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={130} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': `fairyTales`,  'onPressPayload':{ "audioData": 'сказка' } },
+        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={170} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': `Riddles`, 'onPressPayload':{ "audioData": 'загадка' } },
+        { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={110} color="#FFFFFF"  style={styles.cardIcon}/>,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': 'Help', 'onPressPayload':{ "audioData": 'помощь'} },
     ];
 
 
@@ -203,7 +203,7 @@ export default function ReadySoundsScreen() {
                             <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
                         </Pressable>
                     </View>
-                    <View style={{ marginVertical: '3%' }}>
+                    <View >
                         {userFolders.map((card, index) => (
                             <TouchableOpacity
                                 key={index}
@@ -230,7 +230,7 @@ export default function ReadySoundsScreen() {
                                 <Text style={styles.cardText}>
                                     Остальные звуки
                                 </Text>
-                            <FontAwesome5 name="telegram-plane" size={200} color="#FFFFFF"  style={styles.cardIcon}/>
+                            <FontAwesome5 name="telegram-plane" size={130} color="#FFFFFF"  style={styles.cardIcon}/>
                         </TouchableOpacity>
 
 
@@ -312,8 +312,8 @@ const styles = StyleSheet.create({
     card0: {
         backgroundColor: '#FEC513',
         width: width * 0.90,
-        height: height * 0.22,
-        marginBottom: '4%',
+        height: height * 0.15,
+        marginBottom: '2%',
         borderRadius: 15,
         paddingTop: '5%',
         paddingLeft: '6%',
@@ -325,8 +325,8 @@ const styles = StyleSheet.create({
     card1: {
         backgroundColor:'#FF7427',
         width: width * 0.90,
-        height: height * 0.22,
-        marginBottom: '4%',
+        height: height * 0.15,
+        marginBottom: '2%',
         borderRadius: 15,
         paddingTop: '5%',
         paddingLeft: '6%',
@@ -338,8 +338,8 @@ const styles = StyleSheet.create({
     card2: {
         backgroundColor: '#3C62DD',
         width: width * 0.90,
-        height: height * 0.22,
-        marginBottom: '4%',
+        height: height * 0.15,
+        marginBottom: '2%',
         borderRadius: 15,
         paddingTop: '5%',
         paddingLeft: '6%',
@@ -351,8 +351,8 @@ const styles = StyleSheet.create({
     card3: {
         backgroundColor: '#FFF',
         width: width * 0.90,
-        height: height * 0.22,
-        marginBottom: '4%',
+        height: height * 0.15,
+        marginBottom: '2%',
         borderRadius: 15,
         paddingTop: '5%',
         paddingLeft: '6%',
@@ -371,12 +371,12 @@ const styles = StyleSheet.create({
     },
     cardText: {
         position: 'absolute',
-        fontFamily: 'Comfortaa_700Bold',
-        fontSize: 20,
+        fontFamily: 'SF Pro Rounded Bold',
+        fontSize: 28,
         color: "#fff",
         // width: '80%',
-        left: '8%',
-        top: '8%'
+        left: '2%',
+        top: '65%'
     },
     subtitleText:{
         fontFamily:"SF Pro Rounded Semibold",
@@ -388,12 +388,12 @@ const styles = StyleSheet.create({
     },
     card3Text: {
         position: 'absolute',
-        fontFamily: 'Comfortaa_700Bold',
-        fontSize: 20,
+        fontFamily: 'SF Pro Rounded Bold',
+        fontSize: 28,
         color: "#656463",
         // width: '80%',
-        left: '8%',
-        top: '8%'
+        left: '2%',
+        top: '65%'
     },
     cardTextBot: {
         fontFamily: 'Comfortaa_500Medium',

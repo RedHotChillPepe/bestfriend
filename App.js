@@ -1,6 +1,6 @@
 // App.js
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, StatusBar } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Comfortaa_300Light, Comfortaa_400Regular, Comfortaa_500Medium, Comfortaa_600SemiBold, Comfortaa_700Bold } from '@expo-google-fonts/comfortaa';
 import { NavigationContainer } from '@react-navigation/native';
@@ -50,7 +50,8 @@ const AppContent = () => {
     Comfortaa_600SemiBold,
     Comfortaa_700Bold,
     'SF Pro Rounded Black':require('./assets/fonts/SFProRoundedBlack.otf'),
-    'SF Pro Rounded Semibold':require('./assets/fonts/SFProRoundedSemibold.otf')
+    'SF Pro Rounded Semibold':require('./assets/fonts/SFProRoundedSemibold.otf'),
+    'SF Pro Rounded Bold':require('./assets/fonts/SFProRoundedBold.otf'),
   });
 
   useEffect(() => {
@@ -134,6 +135,7 @@ const AppContent = () => {
 export default function App() {
   return (
     <AuthProvider>
+      <StatusBar backgroundColor="#3C62DD" hidden={false} barStyle={'light-content'}/>
       <AppContent />
     </AuthProvider>
   );

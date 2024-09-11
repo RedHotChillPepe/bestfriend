@@ -80,8 +80,8 @@ export default function FairyTales({ route }) {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ width:"100%" }}>
-                <View style={{padding:'4%'}}>
-                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center'}}>
+                <View style={{paddingHorizontal:'4%', alignItems:'center'}}>
+                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', gap:80}}>
                         <Pressable onPress={()=> navigation.goBack()}>
                             <Text style={styles.subtitleText}>
                                 Назад
@@ -97,14 +97,14 @@ export default function FairyTales({ route }) {
                             <Text style={styles.cardFairyText}>
                                 Сказки
                             </Text>
-                            <FontAwesome name="book" size={80} color="#FFFFFF"  style={styles.cardIcon}/>                    
+                            <FontAwesome name="book" size={100} color="#FFFFFF"  style={styles.cardIcon}/>                    
                         </View>
                     </View>
                 
                 </View>
                 
                 <View style={{ width: '100%', alignItems: 'center' }}>
-                    <View style={{ marginBottom: '3%', width: '100%' }}>
+                    <View style={{  width: '90%' }}>
                         {audioData.map((item, index) => (
                             <View key={index} style={styles.card}>
                                 <View style={styles.cardText}>
@@ -135,18 +135,20 @@ const styles = StyleSheet.create({
     card: {
         height: 60,
         paddingHorizontal: '4%',
+        marginTop:8,
+        
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
-        borderBottomColor: '#ccc',
-        borderBottomWidth: 1
+        borderColor: '#656463',
+        borderWidth: 1,
+        borderRadius:16
     },
     card0: {
         backgroundColor: '#FEC513',
         width: width * 0.90,
         height: height * 0.17,
-        marginBottom: '4%',
-        borderRadius: 15,
+        borderRadius: 16,
         paddingTop: '5%',
         position: 'relative',
         overflow: 'hidden',
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     cardText: {
-        gap: 10
+        gap: 6
     },
     cardFairyText: {
         position: 'absolute',
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
     cardTime: {
         fontFamily: 'Comfortaa_700Bold',
         fontSize: 12,
-        color: "#bbb"
+        color: "#656463"
     },
     cardIcon: {
         opacity: 0.35,

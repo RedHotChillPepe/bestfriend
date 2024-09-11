@@ -18,7 +18,7 @@ export default function TitlePage({ navigation }) {
         </Text>
       </View>
       <View style={{ width: '100%', alignItems: 'center', marginTop: '30%' }}>
-       <View style={{ marginBottom: '5%', width: '90%' }}>
+       {/* <View style={{ marginBottom: '5%', width: '90%' }}>
           <TouchableOpacity onPress={() => navigation.navigate('User')} style={{ height: 60, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', borderBottomColor: '#888', borderBottomWidth: 1 }}>
             <Text style={{ fontFamily: 'Comfortaa_700Bold', fontSize: 14, color: "#888" }}>
               Пользовательское соглашение
@@ -31,7 +31,7 @@ export default function TitlePage({ navigation }) {
             </Text>
             <FontAwesome5 name="arrow-right" size={16} color="#888" />
           </TouchableOpacity>
-        </View> 
+        </View>  */}
         <PaperButton
           mode="outlined"
           style={[styles.button, { backgroundColor: "#6f9c3d", borderWidth: 0, marginBottom: '15%' }]}
