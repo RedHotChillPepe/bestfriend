@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     card0: {
         backgroundColor: '#FEC513',
         width: width * 0.90,
-        height: height * 0.17,
+        height: height * 0.15,
         borderRadius: 16,
         paddingTop: '5%',
         position: 'relative',
@@ -160,12 +160,12 @@ const styles = StyleSheet.create({
     },
     cardFairyText: {
         position: 'absolute',
-        fontFamily: 'Comfortaa_700Bold',
-        fontSize: 20,
+        fontFamily: 'SF Pro Rounded Bold',
+        fontSize: 28,
         color: "#fff",
         // width: '80%',
-        left: '8%',
-        top: '8%'
+        left: '2%',
+        top: '65%'
     },
     cardTextTitle: {
         fontFamily: 'Comfortaa_700Bold',

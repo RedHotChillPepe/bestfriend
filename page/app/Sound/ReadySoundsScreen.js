@@ -70,7 +70,7 @@ export default function ReadySoundsScreen() {
         } catch(e) {
           // clear error
         }
-        setUserFolders([...cards])
+        setUserFolders([])
       
         console.log('Done.')
     }
@@ -81,7 +81,7 @@ export default function ReadySoundsScreen() {
            "text":`${userFolderName}`, "name": "card3", "cardTextStyle":"card3Text" , "cardTextPressedStyle":"card3Pressed","onPressDestination": "DynamicFolder", "onPressPayload":`{"text": "${userFolderName}"}`
         }) // темплейт для JSON файла пользовательской папки
         console.log("Create User Folder:" + userFolderName)
-        setUserFolders([...cards, ...await getFolderData()])
+        setUserFolders([...await getFolderData()])
         setModalPlusVisible(false)
         setUserFolderName('')
     }
@@ -89,11 +89,9 @@ export default function ReadySoundsScreen() {
     useEffect(() => {
         const initialFillup = async () =>{
             if (await getFolderData() != null) { // проверка на пустоту localstorage
-                setUserFolders([...cards , ...await getFolderData()])// изначальное заполненеие State статичными картачками вперемешку с Local Storage папками
+                setUserFolders([...await getFolderData()])// изначальное заполненеие State статичными картачками вперемешку с Local Storage папками
                 
-            } else {
-                setUserFolders([...cards])
-            }
+            } 
           //console.log("initilafillup:" + JSON.stringify(await getFolderData()) )
         }
           initialFillup();
@@ -181,7 +179,7 @@ export default function ReadySoundsScreen() {
 
     const cards = [
         { text: 'Сказки', name:'card0', icon: <FontAwesome name="book" size={130} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': `fairyTales`,  'onPressPayload':{ "audioData": 'сказка' } },
-        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={170} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': `Riddles`, 'onPressPayload':{ "audioData": 'загадка' } },
+        { text: 'Загадки', name:'card1', icon: <FontAwesome name="question" size={150} color="#FFFFFF" style={styles.cardIcon} />,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': `Riddles`, 'onPressPayload':{ "audioData": 'загадка' } },
         { text: 'Фразы помощники', name:'card2', icon: <FontAwesome5 name="hands-helping" size={110} color="#FFFFFF"  style={styles.cardIcon}/>,"cardTextStyle":"cardText" , "cardTextPressedStyle":"cardPressed", 'onPressDestination': 'Help', 'onPressPayload':{ "audioData": 'помощь'} },
     ];
 
@@ -204,7 +202,7 @@ export default function ReadySoundsScreen() {
                         </Pressable>
                     </View>
                     <View >
-                        {userFolders.map((card, index) => (
+                        {cards.map((card, index) => (
                             <TouchableOpacity
                                 key={index}
                                 onPress={() => navigation.navigate(card.onPressDestination, handlePayload(card.onPressPayload))}
@@ -222,10 +220,10 @@ export default function ReadySoundsScreen() {
 
                         <TouchableOpacity
                             onPress={() => setModalVisible(true)}
-                            onPressIn={() => handlePressIn(userFolders.length)}
+                            onPressIn={() => handlePressIn(cards.length)}
                             onPressOut={handlePressOut}
                             activeOpacity={1}
-                            style={[styles.card1, pressedCard === userFolders.length && styles.cardPressed]}
+                            style={[styles.card4, pressedCard === cards.length && styles.cardPressed]}
                         >
                                 <Text style={styles.cardText}>
                                     Остальные звуки
@@ -236,15 +234,31 @@ export default function ReadySoundsScreen() {
 
                         <TouchableOpacity
                             onPress={() => navigation.navigate('MyRecording')}
-                            onPressIn={() => handlePressIn(userFolders.length+1)}
+                            onPressIn={() => handlePressIn(cards.length+1)}
                             onPressOut={handlePressOut}
                             activeOpacity={1}
-                            style={[styles.card3, pressedCard === userFolders.length+1 && styles.card3Pressed]}
+                            style={[styles.card3, pressedCard === cards.length+1 && styles.card3Pressed]}
                         >
                                 <Text style={styles.card3Text}>
                                     Мои Записи
                                 </Text>
                         </TouchableOpacity>
+
+                        {userFolders.map((card, index) => (
+                            <TouchableOpacity
+                                key={index}
+                                onPress={() => navigation.navigate(card.onPressDestination, handlePayload(card.onPressPayload))}
+                                onPressIn={() => handlePressIn(index)}
+                                onPressOut={handlePressOut}
+                                activeOpacity={1}
+                                style={[styles[card.name] , pressedCard === index && styles[card.cardTextPressedStyle]]}
+                            >
+                                <Text style={styles[card.cardTextStyle]}>
+                                    {card.text}
+                                </Text>
+                                {card.icon}
+                            </TouchableOpacity>
+                        ))}
                     </View>
                 </ScrollView>
             )}
@@ -362,6 +376,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         borderWidth:1,
         borderColor:"#656463"
+    },
+    card4: {
+        backgroundColor: '#00B232',
+        width: width * 0.90,
+        height: height * 0.15,
+        marginBottom: '2%',
+        borderRadius: 15,
+        paddingTop: '5%',
+        paddingLeft: '6%',
+        position: 'relative',
+        overflow: 'hidden',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     cardPressed: {
         backgroundColor: '#608c2f',
