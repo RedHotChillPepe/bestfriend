@@ -89,7 +89,7 @@ export default function ReadySoundsScreen() {
     useEffect(() => {
         const initialFillup = async () =>{
             if (await getFolderData() != null) { // проверка на пустоту localstorage
-                setUserFolders([...await getFolderData()])// изначальное заполненеие State статичными картачками вперемешку с Local Storage папками
+                setUserFolders([...await getFolderData()])// изначальное заполненеие State с Local Storage папками
                 
             } 
           //console.log("initilafillup:" + JSON.stringify(await getFolderData()) )
