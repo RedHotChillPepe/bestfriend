@@ -97,7 +97,7 @@ export default function ReadySoundsScreen() {
           initialFillup();
         return () => {
         }
-    }, [])
+    }, [userFolders])
 
     useEffect(() => {
         const fetchmedata = async () => {
@@ -118,6 +118,9 @@ export default function ReadySoundsScreen() {
         fetchmedata()
 
     }, []);
+
+    
+    
     
 
     const pressTelegram = async () => {

@@ -6,7 +6,7 @@ export default function TitlePage({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={{ alignItems: 'center' }}>
-        <Image
+       {/*  <Image
           source={require('../assets/mishka.png')}
           style={{ width: 250, height: 250, resizeMode: 'contain' }}
         />
@@ -15,7 +15,7 @@ export default function TitlePage({ navigation }) {
         </Text>
         <Text style={{ fontFamily: 'Comfortaa_500Medium', fontSize: 14, color: "#5c5c5c", textAlign: 'center' }}>
           Создай новую учётную запись или войди в существующую,чтобы использовать Лучшего друга
-        </Text>
+        </Text> */}
       </View>
       <View style={{ width: '100%', alignItems: 'center', marginTop: '30%' }}>
        {/* <View style={{ marginBottom: '5%', width: '90%' }}>

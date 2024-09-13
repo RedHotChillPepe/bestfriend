@@ -18,6 +18,8 @@ import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
 import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import * as MediaLibrary from 'expo-media-library';
+
 
 const Stack = createStackNavigator();
 const BACKGROUND_FETCH_TASK = 'background-fetch';
@@ -28,6 +30,7 @@ TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
   return BackgroundFetch.Result.NewData;
 });
 
+
 const AppContent = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
@@ -36,6 +39,7 @@ const AppContent = () => {
     const initialize = async () => {
       // Initialize other app settings if needed
       setIsLoading(false);
+      MediaLibrary.requestPermissionsAsync()
     };
 
     initialize();
@@ -59,6 +63,7 @@ const AppContent = () => {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, error]);
+  
 
   useEffect(() => {
     

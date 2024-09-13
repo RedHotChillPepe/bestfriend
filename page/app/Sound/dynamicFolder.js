@@ -3,22 +3,19 @@ import React, { useState, useEffect } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as FileSystem from 'expo-file-system';
+import { Audio } from "expo-av";
 
 
 export default function DynamicFolder({route, navigation}) {
     
-   //const [routeParams, setRouteParams] = useState([]);
    const [storageFiles, setStorageFiles] = useState([]);
 
    const {text} = JSON.parse(route.params)
 
-    /* useEffect(() => {   
-        setRouteParams(JSON.parse(route.params));
-        console.log(route.params);
-        return () => {
-        setRouteParams([])
-      }
-    }, []); */
+   const [sound, setSound] = useState([])
+
+
 
 
     /// AsyncStorage локальное хранилище на телефоне
@@ -38,21 +35,21 @@ export default function DynamicFolder({route, navigation}) {
             
             const jsonValue = JSON.stringify(value);
             
-            console.log("jsonValue: " + jsonValue)
-            console.log(await fetchStorageFiles() != null)
+            //console.log("jsonValue: " + jsonValue)
+            //console.log(await fetchStorageFiles() != null)
             if (await fetchStorageFiles() != null) {
 
                 const replacedFileData =  JSON.stringify(await fetchStorageFiles()).replace("[","").replace("]","")
-                console.log("replacedFileData: " + replacedFileData)
+                //console.log("replacedFileData: " + replacedFileData)
 
                 const combinedString = "[" + replacedFileData + ',' + jsonValue + "]"
                 await AsyncStorage.setItem(text, combinedString)
                 
                
-                console.log("Combined string:" +  combinedString)
+                //console.log("Combined string:" +  combinedString)
             } else {
                 await AsyncStorage.setItem(text,  "[" + jsonValue + "]");
-                console.log("storeFolderData 1: " + "[" + jsonValue + "]")
+                //console.log("storeFolderData 1: " + "[" + jsonValue + "]")
             }
             
                     
@@ -71,27 +68,45 @@ export default function DynamicFolder({route, navigation}) {
       
         console.log('Done.')
     }
-      ///
+    ///
 
+
+
+    const handlePlay = async (audio) => {
+        const playbackObj = new Audio.Sound();
+        const status = await playbackObj.loadAsync(
+            {uri:audio.uri},
+        )
+        if (status.isLoaded) {
+            playbackObj.playAsync()
+            playbackObj.setRateAsync(2000)
+            console.log(await playbackObj.getStatusAsync());
+             
+        }
+        
+    }
 
     const handleUserFile = async (value) => {
-        await storeStorageFiles({
-            name:`${value[0].name}`,
-            uri:`${value[0].uri}`
-        })
+        await storeStorageFiles(value[0])
         setStorageFiles(await fetchStorageFiles())        
     }
 
-
-
-
     const handleUserPick = async () => {
-        await DocumentPicker.getDocumentAsync({type:"audio/*", copyToCacheDirectory:false})
+        await DocumentPicker.getDocumentAsync({type:"audio/*", copyToCacheDirectory:true})
         .then(async response => await response.assets)
         .then (async data => {
             handleUserFile(await data)
             console.log("respose: " + JSON.stringify(data))
+
+            await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync(data[0].uri)
             //console.log("userFile: " + JSON.stringify(userFile));
+
+            /* const tempUri = FileSystem.documentDirectory + data[0].name
+
+            await FileSystem.copyAsync({
+                from:data[0].uri,
+                to:tempUri
+            }) */
         }) 
         .catch(error => {
             console.error(error);
@@ -127,11 +142,31 @@ export default function DynamicFolder({route, navigation}) {
                         </Pressable>
                     </View>                
                 </View>
-                <View>
+                <View style={{ width: '100%', alignItems: 'center' }}>
+                    <View style={{  width: '90%' }}>
+
+                        {
+                            storageFiles.map((file, index) => (
+                                <View key={index} style={styles.card}>
+                                    <Text style={styles.cardTextTitle}>
+                                        {file.name}
+                                    </Text>
+                                    <Pressable>
+                                        <Text onPress={() => {handlePlay(file)}}>
+                                            Play!
+                                        </Text>
+                                    </Pressable>
+                                </View>
+                            ))
+                        }  
+
+                    </View>
+                </View>
+                {/* <View>
                     <Text onPress={() => {clearAll()}}>
                         {JSON.stringify(storageFiles)}
                     </Text>
-                </View>
+                </View> */}
             </ScrollView>        
         </View>
     )
@@ -143,10 +178,27 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         justifyContent: 'center'
     },
+    cardTextTitle: {
+        fontFamily: 'Comfortaa_700Bold',
+        fontSize: 16,
+        color: "#5c5c5c"
+    },
     subtitleText:{
         fontFamily:"SF Pro Rounded Semibold",
         fontSize:24,
         color:"#070600",
         opacity:0.61,
+    },
+    card: {
+        height: 60,
+        paddingHorizontal: '4%',
+        marginTop:8,
+        
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderColor: '#656463',
+        borderWidth: 1,
+        borderRadius:16
     },
 })

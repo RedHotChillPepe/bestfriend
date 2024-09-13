@@ -28,10 +28,12 @@
       "permissions": [
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",
+        "ACTION_OPEN_DOCUMENT",
         "FOREGROUND_SERVICE",
         "WAKE_LOCK",
         "INTERNET",
-        "ACCESS_NETWORK_STATE"
+        "ACCESS_NETWORK_STATE",
+        "RECORD_AUDIO"
       ],
       "package": "com.ner7yn.native_mishka"
     },
@@ -40,7 +42,9 @@
     },
     "plugins": [
       "expo-font",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-av",
+      "expo-asset"
     ],
     "extra": {
       "eas": {
