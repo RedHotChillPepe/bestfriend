@@ -19,6 +19,8 @@ import * as TaskManager from 'expo-task-manager';
 import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import * as MediaLibrary from 'expo-media-library';
+import { SoundProvider } from './context/SoundProvider';
+
 
 
 const Stack = createStackNavigator();
@@ -139,10 +141,13 @@ const AppContent = () => {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <StatusBar backgroundColor="#3C62DD" hidden={false} barStyle={'light-content'}/>
-      <AppContent />
-    </AuthProvider>
+    <SoundProvider>
+      <AuthProvider>
+        <StatusBar backgroundColor="#3C62DD" hidden={false} barStyle={'light-content'}/>
+        <AppContent />
+      </AuthProvider>
+    </SoundProvider>
+    
   );
 }
 

@@ -5,6 +5,7 @@ import * as DocumentPicker from 'expo-document-picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
 import { Audio } from "expo-av";
+import {useSound} from '../../../context/SoundProvider.js'
 
 
 export default function DynamicFolder({route, navigation}) {
@@ -14,7 +15,9 @@ export default function DynamicFolder({route, navigation}) {
    const {text} = JSON.parse(route.params)
 
    const [sound, setSound] = useState([])
+   const [isPlaying, setIsPlaying] = useState(false)
 
+   const {handlePlay} = useSound()
 
 
 
@@ -34,22 +37,12 @@ export default function DynamicFolder({route, navigation}) {
         try {
             
             const jsonValue = JSON.stringify(value);
-            
-            //console.log("jsonValue: " + jsonValue)
-            //console.log(await fetchStorageFiles() != null)
             if (await fetchStorageFiles() != null) {
-
                 const replacedFileData =  JSON.stringify(await fetchStorageFiles()).replace("[","").replace("]","")
-                //console.log("replacedFileData: " + replacedFileData)
-
                 const combinedString = "[" + replacedFileData + ',' + jsonValue + "]"
                 await AsyncStorage.setItem(text, combinedString)
-                
-               
-                //console.log("Combined string:" +  combinedString)
             } else {
                 await AsyncStorage.setItem(text,  "[" + jsonValue + "]");
-                //console.log("storeFolderData 1: " + "[" + jsonValue + "]")
             }
             
                     
@@ -70,49 +63,34 @@ export default function DynamicFolder({route, navigation}) {
     }
     ///
 
+    /// Single Audio File Handling
+    const handleUserFile = async (value) => {     
+        await FileSystem.copyAsync({from:value[0].uri, to:`${FileSystem.documentDirectory + value[0].name}`}) // Копирует файл в хранилище приложения для быстрого доступа
+        const result = await FileSystem.getInfoAsync(
+                        FileSystem.documentDirectory + value[0].name
+                    )
 
-
-    const handlePlay = async (audio) => {
-        const playbackObj = new Audio.Sound();
-        const status = await playbackObj.loadAsync(
-            {uri:audio.uri},
-        )
-        if (status.isLoaded) {
-            playbackObj.playAsync()
-            playbackObj.setRateAsync(2000)
-            console.log(await playbackObj.getStatusAsync());
-             
-        }
-        
-    }
-
-    const handleUserFile = async (value) => {
-        await storeStorageFiles(value[0])
+        await storeStorageFiles( // Сохраняет ссылку *НА КОПИЮ* файла в AsyncStorage 
+            {
+                name:value[0].name,
+                uri:result.uri
+            })
+            
         setStorageFiles(await fetchStorageFiles())        
     }
 
     const handleUserPick = async () => {
-        await DocumentPicker.getDocumentAsync({type:"audio/*", copyToCacheDirectory:true})
+        await DocumentPicker.getDocumentAsync({type:"audio/*"}) //Вызывает file picker системы пользователя. Возвращает один файл
         .then(async response => await response.assets)
         .then (async data => {
             handleUserFile(await data)
-            console.log("respose: " + JSON.stringify(data))
-
-            await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync(data[0].uri)
-            //console.log("userFile: " + JSON.stringify(userFile));
-
-            /* const tempUri = FileSystem.documentDirectory + data[0].name
-
-            await FileSystem.copyAsync({
-                from:data[0].uri,
-                to:tempUri
-            }) */
         }) 
         .catch(error => {
             console.error(error);
         })       
         
     }
+    ///
 
     useEffect(() => {
         const initialfillup = async () => {
@@ -152,7 +130,7 @@ export default function DynamicFolder({route, navigation}) {
                                         {file.name}
                                     </Text>
                                     <Pressable>
-                                        <Text onPress={() => {handlePlay(file)}}>
+                                        <Text onPress={() => handlePlay(file)}>
                                             Play!
                                         </Text>
                                     </Pressable>
