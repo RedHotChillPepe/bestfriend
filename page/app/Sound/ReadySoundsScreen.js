@@ -193,7 +193,7 @@ export default function ReadySoundsScreen() {
                 <ActivityIndicator size="large" color="#a4ca79" />
             ) : (
                 <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center'}}>
+                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingTop:"25%"}}>
                         <Pressable onPress={()=> clearAll()}>
                             <Text style={styles.subtitleText}>
                                 Библиотека
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     card0: {
         backgroundColor: '#FEC513',

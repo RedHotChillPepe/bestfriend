@@ -14,6 +14,7 @@ import Riddles from './Sound/Riddles';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import DynamicFolder from './Sound/dynamicFolder';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
+import FriendHeaderComponent from '../components/FriendHeaderComponent';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -28,23 +29,13 @@ function ReadySoundsStack() {
 
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Лучший Друг" component={ReadySoundsScreen} options={{
-        headerTitleAlign: 'center',
-
-        headerTitleStyle:{
-          fontFamily:"SF Pro Rounded Black",
-          fontSize:32,
-          color:"#FFF",
-        },
+      <Stack.Screen name='ЛУЧШИЙ ДРУГ' component={ReadySoundsScreen} options={{
+        headerTransparent:true,
         headerStyle:{
-          backgroundColor:"#3C62DD",
-          borderBottomLeftRadius:48,
-          borderBottomRightRadius:48,
+          backgroundColor:'transparent'
         },
-       headerLeft:()=>(
-          <Pressable onPress={()=>navigation.toggleDrawer()}>
-            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:25, paddingTop:5}}/>
-          </Pressable>
+        header:()=>(
+          <FriendHeaderComponent/>
         )
       }}/>
       <Stack.Screen name="fairyTales" component={FairyTales} options={{ 
