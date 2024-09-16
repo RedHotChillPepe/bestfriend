@@ -105,7 +105,7 @@ export default function AppLog() {
   return (
     <Provider>
       
-      <Drawer.Navigator>
+      <Drawer.Navigator >
         <Drawer.Screen name="Библиотека Звуков" component={ReadySoundsStack} options={{ headerShown: false }}/>
         <Drawer.Screen name="Профиль" component={ProfileScreen} options={{
           headerLeft:()=>(

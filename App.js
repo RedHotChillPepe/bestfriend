@@ -20,6 +20,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import * as MediaLibrary from 'expo-media-library';
 import { SoundProvider } from './context/SoundProvider';
+import { SoundControlProvider } from './context/SoundControlContext';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 
@@ -141,12 +143,18 @@ const AppContent = () => {
 
 export default function App() {
   return (
-    <SoundProvider>
-      <AuthProvider>
-        <StatusBar backgroundColor="#3C62DD" hidden={false} barStyle={'light-content'}/>
-        <AppContent />
-      </AuthProvider>
-    </SoundProvider>
+      <GestureHandlerRootView style={{flex:1}}>
+        <SoundProvider>
+          <SoundControlProvider>
+            <AuthProvider>
+              <StatusBar backgroundColor="#3C62DD" hidden={false} barStyle={'light-content'}/>
+              <AppContent />
+            </AuthProvider>
+          </SoundControlProvider> 
+        </SoundProvider>  
+      </GestureHandlerRootView>
+        
+   
     
   );
 }

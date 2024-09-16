@@ -5,27 +5,12 @@ import * as FileSystem from 'expo-file-system';
 const SoundContext = createContext()
 
 export const SoundProvider = ({children}) => {
-    const [sound, setSound] = useState([])
     const sounds = useRef([])
-    const playbackObj = new Audio.Sound()
     const [isPlaying, setIsPlaying] = useState({})
     const [audioData, setAudioData] = useState({})
     const [positionMillis, setPositionMillis] = useState({});
     const [pausedPosition, setPausedPosition] = useState({});
     const currentIndex = useRef(null); 
-
-    const handlePlay = async (audio) => {
-        const status = await playbackObj.loadAsync(
-            {uri:`${FileSystem.documentDirectory + audio.name}`},
-        )
-        if (Object.keys(sound).length === 0) {
-            if (status.isLoaded) {
-                await playbackObj.playAsync()
-                setSound(playbackObj)
-                console.log(await playbackObj.getStatusAsync());
-            }
-        }
-    }
 
     const playAudio = async (uri, index) => {
         if (sounds.current[index]) {
@@ -89,8 +74,8 @@ export const SoundProvider = ({children}) => {
     return (
         <SoundContext.Provider value={
             {
-                sound, sounds, isPlaying, positionMillis, currentIndex, pausedPosition, 
-                setPausedPosition, setIsPlaying, setPositionMillis, handlePlay, playAudio, pauseAudio, formatTime
+                sounds, isPlaying, positionMillis, currentIndex, pausedPosition, 
+                setPausedPosition, setIsPlaying, setPositionMillis, playAudio, pauseAudio, formatTime
         }}>
             {children}
         </SoundContext.Provider>

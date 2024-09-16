@@ -6,6 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { useSoundPanel } from '../../../context/SoundControlContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,6 +22,7 @@ export default function ReadySoundsScreen() {
     
     const navigation = useNavigation();
 
+    const {SoundControlPanel} = useSoundPanel()
 
     
 
@@ -265,6 +267,9 @@ export default function ReadySoundsScreen() {
                     </View>
                 </ScrollView>
             )}
+
+            <SoundControlPanel />
+
 
             <Modal
                 animationType="slide"

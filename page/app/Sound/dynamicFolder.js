@@ -14,10 +14,10 @@ export default function DynamicFolder({route, navigation}) {
 
    const {text} = JSON.parse(route.params)
 
-   const [sound, setSound] = useState([])
-   const [isPlaying, setIsPlaying] = useState(false)
+   /* const [sound, setSound] = useState([])
+   const [isPlaying, setIsPlaying] = useState(false) */
 
-   const {handlePlay} = useSound()
+   const {playAudio, pauseAudio, isPlaying} = useSound()
 
 
 
@@ -130,7 +130,7 @@ export default function DynamicFolder({route, navigation}) {
                                         {file.name}
                                     </Text>
                                     <Pressable>
-                                        <Text onPress={() => handlePlay(file)}>
+                                        <Text onPress={() => isPlaying[index] ? pauseAudio(index) : playAudio(`${FileSystem.documentDirectory + file.name}`, index)}>
                                             Play!
                                         </Text>
                                     </Pressable>
