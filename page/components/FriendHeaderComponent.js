@@ -9,11 +9,11 @@ function FriendHeaderComponent() {
   return (
     <View style={styles.headerBase}>
         <View style={styles.headerInsides}>
-            <Pressable onPress={()=>navigation.toggleDrawer()}>
-                <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:25, paddingTop:5}}/>
+            <Pressable style={styles.headerModalButton} onPress={()=>navigation.toggleDrawer()}>
+                <MaterialCommunityIcons name="menu" color="#FFF" size={35} style={{paddingLeft:25, paddingTop:5}}/>
             </Pressable>
             <View style={styles.headerTextView}>
-                <Text style={styles.headerText}>ЛУЧШИЙ {'\n'} ДРУГ</Text>
+                <Text style={styles.headerText}>ЛУЧШИЙ{'\n'}ДРУГ</Text>
             </View>
         </View>
     </View>
@@ -28,14 +28,16 @@ const styles = StyleSheet.create({
     },
     headerInsides:{
         display:'flex',
-        flexDirection:'row',
-        alignItems:'center'
+        flexDirection:'row'
+    },
+    headerModalButton:{
+        paddingTop:8
     },
     headerTextView:{
         width:'100%'
     },
     headerText:{
-        paddingRight:'25%',
+        paddingRight:'27%',
         textAlign:'center',
         fontSize:32,
         fontFamily:'SF Pro Rounded Black',
