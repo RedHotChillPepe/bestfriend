@@ -5,26 +5,27 @@ import * as DocumentPicker from 'expo-document-picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
 import { Audio } from "expo-av";
-import {useSound} from '../../../context/SoundProvider.js'
+import {useSound} from '../../../context/SoundProvider.js';
+import uuid from 'react-native-uuid';
 
 
 export default function DynamicFolder({route, navigation}) {
     
    const [storageFiles, setStorageFiles] = useState([]);
 
-   const {text} = JSON.parse(route.params)
+   const {text, Fileuuid} = JSON.parse(route.params)
 
    /* const [sound, setSound] = useState([])
    const [isPlaying, setIsPlaying] = useState(false) */
 
-   const {playAudio, pauseAudio, isPlaying} = useSound()
+   const {playAudio, pauseAudio, isPlaying, currentIndex} = useSound()
 
 
 
     /// AsyncStorage локальное хранилище на телефоне
     const fetchStorageFiles = async () => {
         try {
-          const jsonValue = await AsyncStorage.getItem(text);
+          const jsonValue = await AsyncStorage.getItem(Fileuuid);
           return jsonValue != null ? JSON.parse(jsonValue) : null;
         } catch (e) {
           // error reading value
@@ -40,9 +41,9 @@ export default function DynamicFolder({route, navigation}) {
             if (await fetchStorageFiles() != null) {
                 const replacedFileData =  JSON.stringify(await fetchStorageFiles()).replace("[","").replace("]","")
                 const combinedString = "[" + replacedFileData + ',' + jsonValue + "]"
-                await AsyncStorage.setItem(text, combinedString)
+                await AsyncStorage.setItem(Fileuuid, combinedString)
             } else {
-                await AsyncStorage.setItem(text,  "[" + jsonValue + "]");
+                await AsyncStorage.setItem(Fileuuid,  "[" + jsonValue + "]");
             }
             
                     
@@ -69,11 +70,13 @@ export default function DynamicFolder({route, navigation}) {
         const result = await FileSystem.getInfoAsync(
                         FileSystem.documentDirectory + value[0].name
                     )
+        const newUUID = uuid.v4()
 
         await storeStorageFiles( // Сохраняет ссылку *НА КОПИЮ* файла в AsyncStorage 
             {
                 name:value[0].name,
-                uri:result.uri
+                uri:result.uri,
+                uuid:`${newUUID}`
             })
             
         setStorageFiles(await fetchStorageFiles())        
@@ -124,13 +127,13 @@ export default function DynamicFolder({route, navigation}) {
                     <View style={{  width: '90%' }}>
 
                         {
-                            storageFiles.map((file, index) => (
-                                <View key={index} style={styles.card}>
+                            storageFiles.map((file) => (
+                                <View key={file.uuid} style={styles.card}>
                                     <Text style={styles.cardTextTitle}>
                                         {file.name}
                                     </Text>
                                     <Pressable>
-                                        <Text onPress={() => isPlaying[index] ? pauseAudio(index) : playAudio(`${FileSystem.documentDirectory + file.name}`, index)}>
+                                        <Text onPress={() => isPlaying && currentIndex == file.uuid ? pauseAudio(file.uuid) : playAudio(`${FileSystem.documentDirectory + file.name}`, file.uuid)}>
                                             Play!
                                         </Text>
                                     </Pressable>

@@ -7,6 +7,7 @@ import { Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useSoundPanel } from '../../../context/SoundControlContext';
+import uuid from 'react-native-uuid';
 
 const { width, height } = Dimensions.get('window');
 
@@ -78,9 +79,16 @@ export default function ReadySoundsScreen() {
     }
       ///
     const createUserFolder = async() => {
-        
+        const newUUID = uuid.v4()
+
         await storeFolderData({
-           "text":`${userFolderName}`, "name": "card3", "cardTextStyle":"card3Text" , "cardTextPressedStyle":"card3Pressed","onPressDestination": "DynamicFolder", "onPressPayload":`{"text": "${userFolderName}"}`
+           "text":`${userFolderName}`,
+           "Fileuuid":`${newUUID}`, 
+           "name": "card3", 
+           "cardTextStyle":"card3Text" , 
+           "cardTextPressedStyle":"card3Pressed",
+           "onPressDestination": "DynamicFolder", 
+           "onPressPayload":`{"text": "${userFolderName}", "Fileuuid":"${newUUID}"}`
         }) // темплейт для JSON файла пользовательской папки
         console.log("Create User Folder:" + userFolderName)
         setUserFolders([...await getFolderData()])
@@ -194,7 +202,7 @@ export default function ReadySoundsScreen() {
             {loading ? (
                 <ActivityIndicator size="large" color="#a4ca79" />
             ) : (
-                <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
+                <ScrollView  contentContainerStyle={{ alignItems: 'center' }}>
                     <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingTop:"25%"}}>
                         <Pressable onPress={()=> clearAll()}>
                             <Text style={styles.subtitleText}>
@@ -206,7 +214,7 @@ export default function ReadySoundsScreen() {
                             <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
                         </Pressable>
                     </View>
-                    <View >
+                    <View style={styles.userFoldersBumper}>
                         {cards.map((card, index) => (
                             <TouchableOpacity
                                 key={index}
@@ -249,21 +257,24 @@ export default function ReadySoundsScreen() {
                                 </Text>
                         </TouchableOpacity>
 
-                        {userFolders.map((card, index) => (
-                            <TouchableOpacity
-                                key={index}
-                                onPress={() => navigation.navigate(card.onPressDestination, handlePayload(card.onPressPayload))}
-                                onPressIn={() => handlePressIn(index + cards.length+2)}
-                                onPressOut={handlePressOut}
-                                activeOpacity={1}
-                                style={[styles[card.name] , pressedCard === (index + cards.length+2)  && styles[card.cardTextPressedStyle]]}
-                            >
-                                <Text style={styles[card.cardTextStyle]}>
-                                    {card.text}
-                                </Text>
-                                {card.icon}
-                            </TouchableOpacity>
-                        ))}
+                        
+                            {userFolders.map((card, index) => (
+                                <TouchableOpacity
+                                    key={index}
+                                    onPress={() => navigation.navigate(card.onPressDestination, handlePayload(card.onPressPayload))}
+                                    onPressIn={() => handlePressIn(index + cards.length+2)}
+                                    onPressOut={handlePressOut}
+                                    activeOpacity={1}
+                                    style={[styles[card.name] , pressedCard === (index + cards.length+2)  && styles[card.cardTextPressedStyle]]}
+                                    >
+                                        <Text style={styles[card.cardTextStyle]}>
+                                            {card.text}
+                                        </Text>
+                                    {card.icon}
+                                </TouchableOpacity>
+                            ))}
+                       
+                        
                     </View>
                 </ScrollView>
             )}
@@ -486,6 +497,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: "center",
         fontFamily: 'Comfortaa_700Bold'
+    },
+    userFoldersBumper:{
+        paddingBottom:'18%'
     },
     modalText: {
         color: "#5c5c5c",

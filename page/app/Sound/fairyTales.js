@@ -11,10 +11,14 @@ const { width, height } = Dimensions.get('window');
 
 export default function FairyTales({ route }) {
     const { audioData } = route.params;
-
-    const {isPlaying, positionMillis, pausedPosition, currentIndex, setIsPlaying, setPositionMillis, setPausedPosition, playAudio, pauseAudio, formatTime} = useSound()
-
     const navigation = useNavigation();
+
+    const { sound,  isPlaying, positionMillis, pausedPosition, 
+        currentIndex, setIsPlaying, setPositionMillis, setPausedPosition, 
+        playAudio, pauseAudio, formatTime 
+        } = useSound()
+    
+    
 
     return (
         <View style={styles.container}>
@@ -51,11 +55,11 @@ export default function FairyTales({ route }) {
                                         {item.name}
                                     </Text>
                                     <Text style={styles.cardTime}>
-                                        {formatTime(isPlaying[index] ? positionMillis[index] || 0 : pausedPosition[index] || 0)} / {item.duration}
+                                        {/* {formatTime(isPlaying ? positionMillis[item._id] || 0 : pausedPosition[item._id] || 0)} / {item.duration} */}
                                     </Text>
                                 </View>
-                                <TouchableOpacity onPress={() => isPlaying[index] ? pauseAudio(index) : playAudio(item.audioFile, index)}>
-                                    <AntDesign name={isPlaying[index] ? "pausecircle" : "play"} size={30} color="#777" />
+                                <TouchableOpacity onPress={() => isPlaying && currentIndex === item._id ? pauseAudio(item._id) : playAudio(item.audioFile, item._id)}>
+                                    <AntDesign name={(isPlaying && currentIndex === item._id) ? "pausecircle" : "play"} size={30} color="#777" />
                                 </TouchableOpacity>
                             </View>
                         ))}

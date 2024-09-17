@@ -14,7 +14,9 @@ export default function Riddles({ route }) {
 
     const navigation = useNavigation();
 
-    const {isPlaying, positionMillis, pausedPosition, currentIndex, setIsPlaying, setPositionMillis, setPausedPosition, playAudio, pauseAudio, formatTime} = useSound()
+    const {isPlaying, positionMillis, pausedPosition, 
+        currentIndex, setIsPlaying, setPositionMillis, 
+        setPausedPosition, playAudio, pauseAudio, formatTime} = useSound()
 
 
     return (
@@ -51,11 +53,11 @@ export default function Riddles({ route }) {
                                         {item.name}
                                     </Text>
                                     <Text style={styles.cardTime}>
-                                        {formatTime(isPlaying[index] ? positionMillis[index] || 0 : pausedPosition[index] || 0)} / {item.duration}
+                                        {formatTime(isPlaying[item._id] ? positionMillis[item._id] || 0 : pausedPosition[item._id] || 0)} / {item.duration}
                                     </Text>
                                 </View>
-                                <TouchableOpacity onPress={() => isPlaying[index] ? pauseAudio(index) : playAudio(item.audioFile, index)}>
-                                    <AntDesign name={isPlaying[index] ? "pausecircle" : "play"} size={30} color="#777" />
+                                <TouchableOpacity onPress={() => isPlaying[item._id] ? pauseAudio(item._id) : playAudio(item.audioFile, item._id)}>
+                                    <AntDesign name={isPlaying[item._id] ? "pausecircle" : "play"} size={30} color="#777" />
                                 </TouchableOpacity>
                             </View>
                         ))}

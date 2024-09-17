@@ -5,62 +5,102 @@ import * as FileSystem from 'expo-file-system';
 const SoundContext = createContext()
 
 export const SoundProvider = ({children}) => {
-    const sounds = useRef([])
-    const [isPlaying, setIsPlaying] = useState({})
-    const [audioData, setAudioData] = useState({})
-    const [positionMillis, setPositionMillis] = useState({});
-    const [pausedPosition, setPausedPosition] = useState({});
-    const currentIndex = useRef(null); 
+    const sound = useRef(new Audio.Sound())
+    const [isPlaying, setIsPlaying] = useState(false)
+    const [audioData, setAudioData] = useState([])
+    const [currentIndex, setCurrentIndex] = useState('')
+
+    const [positionMillis, setPositionMillis] = useState(0)
+
+
 
     const playAudio = async (uri, index) => {
-        if (sounds.current[index]) {
-            await sounds.current[index].unloadAsync();
+        // Первая загрузка Sound
+        const initialStatus = await sound.current.getStatusAsync()
+        
+        if (initialStatus.isLoaded != true) {
+            try {
+                await sound.current.loadAsync({uri:uri})
+            } catch (error) {
+                console.error('Error loading sound file:', error);
+            }
+
+            setIsPlaying(true)
+            setCurrentIndex(index)
+            await sound.current.playAsync()
+            
+            sound.current.setOnPlaybackStatusUpdate((status) => {
+                handleSoundStatus(status)
+            })
+
         }
-        try {
-            const { sound } = await Audio.Sound.createAsync({ uri: uri }, { shouldPlay: false }, status => onPlaybackStatusUpdate(status, index));
-            sounds.current[index] = sound;
-            setIsPlaying(prev => ({ ...prev, [index]: true }));
-            await sound.playFromPositionAsync(pausedPosition[index] || 0);
-            console.log(`Playing audio at index ${index}, starting from position ${pausedPosition[index] || 0}`);
-            currentIndex.current = index; // Обновляем текущий индекс
-        } catch (error) {
-            console.error('Error playing audio:', error);
+
+        const status = await sound.current.getStatusAsync()
+        const replacedUri = uri.replace("https://mishka-l3tq.onrender.com", "") // приведение uri к одному виду для сравнения
+        
+
+        // Нажатие на новый Sound
+        if (isPlaying && status.uri != replacedUri) {
+            await sound.current.unloadAsync()
+
+            try {
+                await sound.current.loadAsync({uri:uri})
+                
+            } catch (error) {
+                console.error('Error loading sound file:', error);
+            }
+
+                setIsPlaying(true)
+                setCurrentIndex(index)
+                await sound.current.playAsync()
+
+                sound.current.setOnPlaybackStatusUpdate((status) => {
+                    handleSoundStatus(status)
+                })
+        }
+
+        // Нажатие на тот же Sound
+        if (!isPlaying && status.uri == replacedUri) {         
+            await sound.current.playAsync()
+            setIsPlaying(true)
+            setCurrentIndex(index)
+        }
+
+        // Нажатие на Sound из паузы
+        if (!isPlaying && status.uri != replacedUri) {
+            await sound.current.unloadAsync()
+            try {
+                await sound.current.loadAsync({uri:uri})
+                console.log('should have loaded again!');
+                
+            } catch (error) {
+                console.error('Error loading sound file:', error);
+            }
+
+                setIsPlaying(true)
+                setCurrentIndex(index)
+                await sound.current.playAsync()
+
+                sound.current.setOnPlaybackStatusUpdate((status) => {
+                    handleSoundStatus(status)
+                })
         }
     };
+
+
 
     const pauseAudio = async (index) => {
-        if (sounds.current[index]) {
-            await sounds.current[index].pauseAsync();
-            const status = await sounds.current[index].getStatusAsync();
-            setPausedPosition(prev => ({ ...prev, [index]: status.positionMillis }));
-            setIsPlaying(prev => ({ ...prev, [index]: false }));
-            console.log(`Paused audio at index ${index}, position saved: ${status.positionMillis}`);
-            currentIndex.current = index; // Обновляем текущий индекс
-        }
+        await sound.current.pauseAsync()
+        setIsPlaying(false)
+        setCurrentIndex('')
     };
 
-    useEffect(() => {
-        const interval = setInterval(async () => {
-            const index = currentIndex.current;
-            if (isPlaying[index]) {
-                const status = await sounds.current[index].getStatusAsync();
-                onPlaybackStatusUpdate(status, index);
-                setPositionMillis((prev => ({ ...prev, [index]: status.positionMillis })));
-            }
-        }, 1000);
+
+    const handleSoundStatus = async (status) => {
+        console.log("current sound status: ", status);
+    }
     
-        return () => clearInterval(interval);
-    }, [isPlaying]);
-    
-    const onPlaybackStatusUpdate = (status, index) => {
-        console.log(`onPlaybackStatusUpdate called for index ${index} with status:`, status);
-        if (status.durationMillis === status.positionMillis) {
-            console.log(`Audio at index ${index} finished playing`);
-            setIsPlaying(prev => ({ ...prev, [index]: false }));
-            setPausedPosition(prev => ({ ...prev, [index]: 0 }));
-            setPositionMillis((prev => ({ ...prev, [index]: 0 })));
-        }
-    };
+
 
     const formatTime = (millis) => {
         if (isNaN(millis)) {
@@ -71,12 +111,15 @@ export const SoundProvider = ({children}) => {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
+
+
     return (
         <SoundContext.Provider value={
             {
-                sounds, isPlaying, positionMillis, currentIndex, pausedPosition, 
-                setPausedPosition, setIsPlaying, setPositionMillis, playAudio, pauseAudio, formatTime
-        }}>
+                sound, isPlaying, currentIndex, 
+                setIsPlaying, playAudio, pauseAudio, formatTime
+            }
+        }>
             {children}
         </SoundContext.Provider>
     );
