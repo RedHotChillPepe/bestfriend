@@ -15,6 +15,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import DynamicFolder from './Sound/dynamicFolder';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import FriendHeaderComponent from '../components/FriendHeaderComponent';
+import { useSoundPanel } from '../../context/SoundControlContext';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -100,10 +101,10 @@ function ReadySoundsStack() {
 
 export default function AppLog() {
   const navigation = useNavigation()
-
+  const {SoundControlPanel} = useSoundPanel()
 
   return (
-    <Provider>
+    <Provider style={{backgroundColor:'transparent'}}>
       
       <Drawer.Navigator >
         <Drawer.Screen name="Библиотека Звуков" component={ReadySoundsStack} options={{ headerShown: false }}/>
@@ -122,76 +123,7 @@ export default function AppLog() {
           }}} />
       </Drawer.Navigator>
 
-      {/* <Tab.Navigator
-        initialRouteName="Библиотека звуков" 
-        screenOptions={{
-          tabBarActiveTintColor: '#6f9c3d',
-          tabBarInactiveTintColor: '#5c5c5c',
-          tabBarStyle: { backgroundColor: '#fff', paddingBottom: 15, paddingTop: 10, height: 75},
-          headerShown: true,
-          tabBarLabelStyle: { fontSize: 12, fontFamily: 'Comfortaa_600SemiBold' },
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontFamily: 'Comfortaa_600SemiBold',
-            fontSize: 18,
-            color: '#FFF'
-          },
-          headerStyle:{
-              borderBottomWidth:1,
-              borderBottomColor:'#d9d9d9'
-          },
-          headerRight:()=>(
-            <Pressable onPress={()=>setModalVisible(true)}>
-              <MaterialCommunityIcons name='plus-circle-outline' color="#FFF" size={45} style={{paddingRight:25}}/>
-            </Pressable>
-          ),
-
-          
-        }}
-      >
-        <Tab.Screen
-          name="Библиотека звуков"
-          component={ReadySoundsStack}
-          options={{
-            tabBarLabel: 'Библиотека',
-            headerStyle:{
-              borderBottomLeftRadius:48,
-              borderBottomRightRadius:48,
-              backgroundColor:"#3C62DD"
-            },
-            tabBarIcon: ({ color }) => (
-              <Ionicons name="library" size={30} color={color} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Свои записи"
-          component={MyRecordingScreen}
-          options={{
-            headerStyle:{
-              backgroundColor:"#3C62DD"
-            },
-            tabBarLabel: 'Свои записи',
-            tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name="microphone" color={color} size={30} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Ваш профиль"
-          component={ProfileScreen}
-          options={{
-            tabBarLabel: 'Профиль',
-            headerStyle:{
-              backgroundColor:"#3C62DD"
-            },
-            tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name="account" color={color} size={30} />
-            ),
-          }}
-        />
-      </Tab.Navigator>  */}
-        
+      <SoundControlPanel />         
     </Provider>
   );
 }

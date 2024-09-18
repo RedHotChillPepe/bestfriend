@@ -279,7 +279,7 @@ export default function ReadySoundsScreen() {
                 </ScrollView>
             )}
 
-            <SoundControlPanel />
+            
 
 
             <Modal
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Comfortaa_700Bold'
     },
     userFoldersBumper:{
-        paddingBottom:'18%'
+        
     },
     modalText: {
         color: "#5c5c5c",

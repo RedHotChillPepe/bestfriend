@@ -63,7 +63,7 @@ export default function Training({ route }) {
                                         } / {item.duration}
                                     </Text>
                                 </View>
-                                <TouchableOpacity onPress={() => isPlaying && currentIndex === item._id ? pauseAudio() : playAudio(item.audioFile, item._id)}>
+                                <TouchableOpacity onPress={() => isPlaying && currentIndex === item._id ? pauseAudio() : playAudio(item.audioFile, item._id, item.name)}>
                                     <AntDesign name={isPlaying && currentIndex === item._id ? "pausecircle" : "play"} size={30} color="#777" />
                                 </TouchableOpacity>
                             </View>
@@ -71,7 +71,7 @@ export default function Training({ route }) {
                     </View>
                 </View>
             </ScrollView>
-            <SoundControlPanel />
+            
         </View>
     );
 }

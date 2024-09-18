@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View, Animated } from "react-native";
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { Directions } from 'react-native-gesture-handler';
@@ -10,21 +10,33 @@ const SoundControlContext = createContext();
 
 export const SoundControlProvider = ({children}) => {
 
-    const {sound, isPlaying, currentIndex, positionMillis, pausedPosition} = useSound()
+    const {sound, soundName, soundDuration, isPlaying, isLoaded, currentIndex, positionMillis, pausedPosition} = useSound()
 
     function SoundControlPanel (){
 
         const flingUp = Gesture.Fling().direction(Directions.UP).onEnd(()=>{animUp()}).runOnJS(true);
         const flingDown = Gesture.Fling().direction(Directions.DOWN).onEnd(()=>{animDown()}).runOnJS(true);
 
+
+        const [isRaised, setIsRaised] = useState(false)
+
+        
+
+
+        /// Анимация подъема
         const heightAnim = useRef(new Animated.Value(70)).current
 
         const animUp = () => {
             console.log("Fling Up")
+
+
             Animated.timing(heightAnim, {
                 toValue:140,
                 useNativeDriver: false
-            }).start()
+            }).start(()=>{
+                setIsRaised(true)
+            })
+            
         }
         
         const animDown = () => {
@@ -32,32 +44,43 @@ export const SoundControlProvider = ({children}) => {
             Animated.timing(heightAnim, {
                 toValue:70,
                 useNativeDriver: false
-            }).start()
+            }).start(()=> {
+                setIsRaised(false)
+            })
+            
         }
-
+        
+        ///
 
         return (
             <View style={styles.container}>
-                {
-                    sound.current._loaded
-                    ?   <GestureDetector gesture={flingUp}>
+                {isLoaded
+                ?   <GestureDetector gesture={flingUp}>
                             <GestureDetector gesture={flingDown}>
-                                <Animated.View style={[styles.soundPlayerBase, {height:heightAnim, marginBottom:heightAnim}]} >
-                                    <View style={styles.viewTopRow}>
+                                <Animated.View style={[styles.soundPlayerBase, {height:heightAnim}]} >
 
-                                    </View>
-                                    <View style={styles.viewMiddleRow}>
-                                        <Text>
-                                            {JSON.stringify(sound.current)}
-                                        </Text>
-                                    </View>
-                                    <View style={styles.viewBottomRow}>
+                                    {isRaised
+                                    ? <View>
+                                            <View style={styles.viewTopRow}>
 
-                                    </View>
+                                            </View>
+                                            <View style={styles.viewMiddleRow}>
+                                                <Text>
+                                                    {soundName}
+                                                </Text>
+                                            </View>
+                                            <View style={styles.viewBottomRow}>
+
+                                            </View>
+                                        </View>
+                                    : <Text>Not Raised</Text>
+                                    }
+
+                                    
                                 </Animated.View>                        
                             </GestureDetector>
                         </GestureDetector>
-                    : <></> 
+                : <></> 
                 }
                 
             </View>
@@ -75,12 +98,12 @@ export const SoundControlProvider = ({children}) => {
 
 const styles = StyleSheet.create({
     container:{
-        flex:1,
+        backgroundColor:'transparent',
         justifyContent:'center',
         alignItems:'center',      
     },
     soundPlayerBase:{
-        display:'flex',
+
         backgroundColor:"#3C62DD",
         width:'90%',
         borderRadius:24,

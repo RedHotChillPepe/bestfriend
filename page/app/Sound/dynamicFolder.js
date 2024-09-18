@@ -155,7 +155,7 @@ export default function DynamicFolder({route, navigation}) {
                                             } / {formatTime(file.duration)}
                                         </Text>
                                     </View>
-                                    <Pressable onPress={() => isPlaying && currentIndex == file.uuid ? pauseAudio() : playAudio(`${FileSystem.documentDirectory + file.name}`, file.uuid)}>
+                                    <Pressable onPress={() => isPlaying && currentIndex == file.uuid ? pauseAudio() : playAudio(`${FileSystem.documentDirectory + file.name}`, file.uuid, file.name)}>
                                         <AntDesign name={(isPlaying && currentIndex === file.uuid) ? "pausecircle" : "play"} size={30} color="#777" />
                                     </Pressable>
                                 </View>
@@ -165,7 +165,7 @@ export default function DynamicFolder({route, navigation}) {
                     </View>
                 </View>
             </ScrollView>
-            <SoundControlPanel />        
+                  
         </View>
     )
    

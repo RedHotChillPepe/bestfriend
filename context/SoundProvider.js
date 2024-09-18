@@ -11,12 +11,14 @@ export const SoundProvider = ({children}) => {
 
     const [positionMillis, setPositionMillis] = useState(0);
     const [pausedPosition, setPausedPosition] = useState(0);
-    
-    
+
+    const [isLoaded, setIsLoaded] = useState(false);            // используется для выгрузки
+    const [soundName, setSoundName] = useState('')              // в контекст панели проигрывателя
+    const [soundDuration, setSoundDuration] = useState(0) // (SoundControlContext)
 
 
 
-    const playAudio = async (uri, index) => {
+    const playAudio = async (uri, index, name) => {
         const initialStatus = await sound.current.getStatusAsync()
         
         // Первая загрузка Sound
@@ -28,6 +30,7 @@ export const SoundProvider = ({children}) => {
             }
 
             setIsPlaying(true)
+            setIsLoaded(true)
             setCurrentIndex(index)
             await sound.current.playAsync()
             
@@ -41,6 +44,9 @@ export const SoundProvider = ({children}) => {
 
         // приведение uri к одному виду для сравнения
         const replacedUri = uri.replace("https://mishka-l3tq.onrender.com", "").replace("file://", "") 
+
+        setSoundDuration(status.durationMillis); // присваивание значений для 
+        setSoundName(name);                                // панели контроля звука
         
 
         // Нажатие на новый Sound
@@ -130,7 +136,7 @@ export const SoundProvider = ({children}) => {
     return (
         <SoundContext.Provider value={
             {
-                sound, isPlaying, currentIndex, positionMillis, pausedPosition,
+                sound, isPlaying, isLoaded, currentIndex, positionMillis, pausedPosition, soundName, soundDuration,
                 setIsPlaying, playAudio, pauseAudio, formatTime
             }
         }>
