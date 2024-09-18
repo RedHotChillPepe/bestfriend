@@ -7,11 +7,11 @@ const SoundContext = createContext()
 export const SoundProvider = ({children}) => {
     const sound = useRef(new Audio.Sound())
     const [isPlaying, setIsPlaying] = useState(false)
-    const [audioData, setAudioData] = useState([])
     const [currentIndex, setCurrentIndex] = useState('')
 
     const [positionMillis, setPositionMillis] = useState(0);
     const [pausedPosition, setPausedPosition] = useState(0);
+    
     
 
 
@@ -100,15 +100,14 @@ export const SoundProvider = ({children}) => {
 
 
 
-    const pauseAudio = async (index) => {
+    const pauseAudio = async () => {
         await sound.current.pauseAsync()
         setIsPlaying(false)
     };
 
 
     const handleSoundStatus = async (status) => {
-        console.log("current sound status: ", status);
-
+       
         setPositionMillis(status.positionMillis)
         if (status.shouldPlay != true) {
             setPausedPosition(status.positionMillis)

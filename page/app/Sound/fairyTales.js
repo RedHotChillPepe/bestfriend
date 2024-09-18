@@ -6,6 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import {useSound} from '../../../context/SoundProvider.js'
+import { useSoundPanel } from '../../../context/SoundControlContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,8 +17,9 @@ export default function FairyTales({ route }) {
     const { sound,  isPlaying, positionMillis, pausedPosition, 
         currentIndex, setIsPlaying, setPositionMillis, setPausedPosition, 
         playAudio, pauseAudio, formatTime 
-        } = useSound()
+    } = useSound()
     
+    const {SoundControlPanel} = useSoundPanel()
     
 
     return (
@@ -62,7 +64,7 @@ export default function FairyTales({ route }) {
                                         } / {item.duration}
                                     </Text>
                                 </View>
-                                <TouchableOpacity onPress={() => isPlaying && currentIndex === item._id ? pauseAudio(item._id) : playAudio(item.audioFile, item._id)}>
+                                <TouchableOpacity onPress={() => isPlaying && currentIndex === item._id ? pauseAudio() : playAudio(item.audioFile, item._id)}>
                                     <AntDesign name={(isPlaying && currentIndex === item._id) ? "pausecircle" : "play"} size={30} color="#777" />
                                 </TouchableOpacity>
                             </View>
@@ -70,6 +72,7 @@ export default function FairyTales({ route }) {
                     </View>
                 </View>
             </ScrollView>
+            <SoundControlPanel />
         </View>
     );
 }

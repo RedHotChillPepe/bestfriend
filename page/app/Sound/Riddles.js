@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { useSound } from '../../../context/SoundProvider';
+import { useSoundPanel } from '../../../context/SoundControlContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,7 +17,9 @@ export default function Riddles({ route }) {
 
     const {isPlaying, positionMillis, pausedPosition, 
         currentIndex, setIsPlaying, setPositionMillis, 
-        setPausedPosition, playAudio, pauseAudio, formatTime} = useSound()
+    setPausedPosition, playAudio, pauseAudio, formatTime} = useSound()
+
+    const {SoundControlPanel} = useSoundPanel()
 
 
     return (
@@ -60,7 +63,7 @@ export default function Riddles({ route }) {
                                     } / {item.duration}
                                     </Text>
                                 </View>
-                                <TouchableOpacity onPress={() => isPlaying && currentIndex === item._id ? pauseAudio(item._id) : playAudio(item.audioFile, item._id)}>
+                                <TouchableOpacity onPress={() => isPlaying && currentIndex === item._id ? pauseAudio() : playAudio(item.audioFile, item._id)}>
                                     <AntDesign name={isPlaying && currentIndex === item._id ? "pausecircle" : "play"} size={30} color="#777" />
                                 </TouchableOpacity>
                             </View>
@@ -68,6 +71,7 @@ export default function Riddles({ route }) {
                     </View>
                 </View>
             </ScrollView>
+            <SoundControlPanel />
         </View>
     );
 }

@@ -2,13 +2,15 @@ import { createContext, useContext, useRef } from "react";
 import { StyleSheet, Text, View, Animated } from "react-native";
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { Directions } from 'react-native-gesture-handler';
+import { useSound } from './SoundProvider.js';
+import { Audio } from "expo-av";
 
 
 const SoundControlContext = createContext();
 
 export const SoundControlProvider = ({children}) => {
 
-
+    const {sound, isPlaying, currentIndex, positionMillis, pausedPosition} = useSound()
 
     function SoundControlPanel (){
 
@@ -36,21 +38,27 @@ export const SoundControlProvider = ({children}) => {
 
         return (
             <View style={styles.container}>
-                <GestureDetector gesture={flingUp}>
-                    <GestureDetector gesture={flingDown}>
-                            <Animated.View style={[styles.soundPlayerBase, {height:heightAnim, marginBottom:heightAnim}]} >
-                                <View style={styles.viewTopRow}>
+                {
+                    sound.current._loaded
+                    ?   <GestureDetector gesture={flingUp}>
+                            <GestureDetector gesture={flingDown}>
+                                <Animated.View style={[styles.soundPlayerBase, {height:heightAnim, marginBottom:heightAnim}]} >
+                                    <View style={styles.viewTopRow}>
 
-                                </View>
-                                <View style={styles.viewMiddleRow}>
+                                    </View>
+                                    <View style={styles.viewMiddleRow}>
+                                        <Text>
+                                            {JSON.stringify(sound.current)}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.viewBottomRow}>
 
-                                </View>
-                                <View style={styles.viewBottomRow}>
-
-                                </View>
-                            </Animated.View>                        
-                    </GestureDetector>
-                </GestureDetector>
+                                    </View>
+                                </Animated.View>                        
+                            </GestureDetector>
+                        </GestureDetector>
+                    : <></> 
+                }
                 
             </View>
         )

@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
 import { Audio } from "expo-av";
 import {useSound} from '../../../context/SoundProvider.js';
+import { useSoundPanel } from '../../../context/SoundControlContext';
 import uuid from 'react-native-uuid';
 
 
@@ -17,6 +18,7 @@ export default function DynamicFolder({route, navigation}) {
    const {text, Fileuuid} = JSON.parse(route.params)
 
    const {playAudio, pauseAudio, isPlaying, currentIndex, positionMillis, pausedPosition, formatTime} = useSound()
+   const {SoundControlPanel} = useSoundPanel()
 
 
 
@@ -153,7 +155,7 @@ export default function DynamicFolder({route, navigation}) {
                                             } / {formatTime(file.duration)}
                                         </Text>
                                     </View>
-                                    <Pressable onPress={() => isPlaying && currentIndex == file.uuid ? pauseAudio(file.uuid) : playAudio(`${FileSystem.documentDirectory + file.name}`, file.uuid)}>
+                                    <Pressable onPress={() => isPlaying && currentIndex == file.uuid ? pauseAudio() : playAudio(`${FileSystem.documentDirectory + file.name}`, file.uuid)}>
                                         <AntDesign name={(isPlaying && currentIndex === file.uuid) ? "pausecircle" : "play"} size={30} color="#777" />
                                     </Pressable>
                                 </View>
@@ -162,7 +164,8 @@ export default function DynamicFolder({route, navigation}) {
 
                     </View>
                 </View>
-            </ScrollView>        
+            </ScrollView>
+            <SoundControlPanel />        
         </View>
     )
    
