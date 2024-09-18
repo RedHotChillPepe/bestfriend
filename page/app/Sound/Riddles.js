@@ -53,11 +53,15 @@ export default function Riddles({ route }) {
                                         {item.name}
                                     </Text>
                                     <Text style={styles.cardTime}>
-                                        {formatTime(isPlaying[item._id] ? positionMillis[item._id] || 0 : pausedPosition[item._id] || 0)} / {item.duration}
+                                    {
+                                        isPlaying 
+                                        ? formatTime( currentIndex === item._id ? positionMillis : 0)
+                                        : formatTime(currentIndex === item._id ? pausedPosition : 0)
+                                    } / {item.duration}
                                     </Text>
                                 </View>
-                                <TouchableOpacity onPress={() => isPlaying[item._id] ? pauseAudio(item._id) : playAudio(item.audioFile, item._id)}>
-                                    <AntDesign name={isPlaying[item._id] ? "pausecircle" : "play"} size={30} color="#777" />
+                                <TouchableOpacity onPress={() => isPlaying && currentIndex === item._id ? pauseAudio(item._id) : playAudio(item.audioFile, item._id)}>
+                                    <AntDesign name={isPlaying && currentIndex === item._id ? "pausecircle" : "play"} size={30} color="#777" />
                                 </TouchableOpacity>
                             </View>
                         ))}
