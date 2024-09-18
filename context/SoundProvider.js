@@ -13,8 +13,9 @@ export const SoundProvider = ({children}) => {
     const [pausedPosition, setPausedPosition] = useState(0);
 
     const [isLoaded, setIsLoaded] = useState(false);            // используется для выгрузки
-    const [soundName, setSoundName] = useState('')              // в контекст панели проигрывателя
-    const [soundDuration, setSoundDuration] = useState(0) // (SoundControlContext)
+    const [soundName, setSoundName] = useState('')              // в контекст панели 
+    const [soundDuration, setSoundDuration] = useState(0) // проигрывателя
+    const [soundUri, setSoundUri] = useState('')                    // (SoundControlContext)
 
 
 
@@ -45,15 +46,16 @@ export const SoundProvider = ({children}) => {
         // приведение uri к одному виду для сравнения
         const replacedUri = uri.replace("https://mishka-l3tq.onrender.com", "").replace("file://", "") 
 
-        setSoundDuration(status.durationMillis); // присваивание значений для 
-        setSoundName(name);                                // панели контроля звука
-        
+        setSoundDuration(status.durationMillis); // присваивание значений 
+        setSoundName(name);                                // для панели 
+        setSoundUri(uri)                                        // контроля звука
 
         // Нажатие на новый Sound
         if (isPlaying && status.uri != replacedUri) {
             await sound.current.unloadAsync()
             setPausedPosition(0)
             setPositionMillis(0)
+            setSoundDuration(status.durationMillis);
 
             try {
                 await sound.current.loadAsync({uri:uri})
@@ -84,11 +86,10 @@ export const SoundProvider = ({children}) => {
             await sound.current.unloadAsync()
             setPausedPosition(0)
             setPositionMillis(0)
-
+            setSoundDuration(status.durationMillis);
 
             try {
                 await sound.current.loadAsync({uri:uri})
-                console.log('should have loaded again!');
                 
             } catch (error) {
                 console.error('Error loading sound file:', error);
@@ -113,6 +114,7 @@ export const SoundProvider = ({children}) => {
 
 
     const handleSoundStatus = async (status) => {
+        setSoundDuration(status.durationMillis) 
        
         setPositionMillis(status.positionMillis)
         if (status.shouldPlay != true) {
@@ -136,7 +138,7 @@ export const SoundProvider = ({children}) => {
     return (
         <SoundContext.Provider value={
             {
-                sound, isPlaying, isLoaded, currentIndex, positionMillis, pausedPosition, soundName, soundDuration,
+                sound, isPlaying, isLoaded, currentIndex, positionMillis, pausedPosition, soundName, soundDuration, soundUri,
                 setIsPlaying, playAudio, pauseAudio, formatTime
             }
         }>

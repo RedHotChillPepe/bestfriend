@@ -29,7 +29,7 @@ function ReadySoundsStack() {
 
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ detachPreviousScreen: true, presentation: 'transparentModal' }}>
       <Stack.Screen name='ЛУЧШИЙ ДРУГ' component={ReadySoundsScreen} options={{
         headerTransparent:true,
         headerStyle:{

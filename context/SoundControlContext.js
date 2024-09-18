@@ -1,79 +1,108 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View, Animated } from "react-native";
+import { StyleSheet, Text, View, Dimensions, Pressable } from "react-native";
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { Directions } from 'react-native-gesture-handler';
 import { useSound } from './SoundProvider.js';
 import { Audio } from "expo-av";
+import Animated from 'react-native-reanimated';
+import { useSharedValue } from 'react-native-reanimated';
+import { AntDesign } from '@expo/vector-icons';
+
+const { width, height } = Dimensions.get('window');
 
 
 const SoundControlContext = createContext();
 
 export const SoundControlProvider = ({children}) => {
 
-    const {sound, soundName, soundDuration, isPlaying, isLoaded, currentIndex, positionMillis, pausedPosition} = useSound()
+    const {sound, soundName, soundDuration, soundUri, isPlaying, isLoaded, currentIndex, positionMillis, pausedPosition, formatTime, pauseAudio, playAudio} = useSound()
+    const animHight = useSharedValue(70)
+    const [isRaised, setIsRaised] = useState(false)
+    const flingUp = Gesture.Fling().direction(Directions.UP).onEnd(()=>{animUp()}).runOnJS(true);
+    const flingDown = Gesture.Fling().direction(Directions.DOWN).onEnd(()=>{animDown()}).runOnJS(true);
+
+
+
+    function animUp() {
+        console.log('fling up');
+            
+        if (animHight.value == 70) {
+                animHight.value = animHight.value + 70
+                setIsRaised(true)
+        }
+    }
+
+    function animDown() {
+        console.log('fling down');
+            
+        if (animHight.value == 140) {
+                animHight.value = animHight.value - 70
+                setIsRaised(false)
+        }
+    }
 
     function SoundControlPanel (){
 
-        const flingUp = Gesture.Fling().direction(Directions.UP).onEnd(()=>{animUp()}).runOnJS(true);
-        const flingDown = Gesture.Fling().direction(Directions.DOWN).onEnd(()=>{animDown()}).runOnJS(true);
+       
 
-
-        const [isRaised, setIsRaised] = useState(false)
-
-        
-
-
-        /// Анимация подъема
-        const heightAnim = useRef(new Animated.Value(70)).current
-
-        const animUp = () => {
-            console.log("Fling Up")
-
-
-            Animated.timing(heightAnim, {
-                toValue:140,
-                useNativeDriver: false
-            }).start(()=>{
-                setIsRaised(true)
-            })
-            
-        }
-        
-        const animDown = () => {
-            console.log("Fling Down")
-            Animated.timing(heightAnim, {
-                toValue:70,
-                useNativeDriver: false
-            }).start(()=> {
-                setIsRaised(false)
-            })
-            
-        }
-        
-        ///
 
         return (
             <View style={styles.container}>
                 {isLoaded
                 ?   <GestureDetector gesture={flingUp}>
                             <GestureDetector gesture={flingDown}>
-                                <Animated.View style={[styles.soundPlayerBase, {height:heightAnim}]} >
+                                <Animated.View style={[styles.soundPlayerBase, {height:animHight}]} >
 
                                     {isRaised
                                     ? <View>
                                             <View style={styles.viewTopRow}>
+                                                <Pressable>
 
+                                                </Pressable>
+                                                <View>
+                                                    <Text>
+                                                        
+                                                    </Text>
+                                                    <Text>
+                                                    
+                                                    </Text>
+                                                </View>
+                                                <Pressable>
+
+                                                </Pressable>
                                             </View>
                                             <View style={styles.viewMiddleRow}>
                                                 <Text>
-                                                    {soundName}
+                                                    
+                                                </Text>
+                                                <Pressable>
+
+                                                </Pressable>
+                                                <Text>
+
                                                 </Text>
                                             </View>
                                             <View style={styles.viewBottomRow}>
 
                                             </View>
                                         </View>
-                                    : <Text>Not Raised</Text>
+                                    :   <View style={[styles.unRaised, {paddingTop:'2%'}]}>
+                                            <Pressable onPress={() => isPlaying ? pauseAudio() : playAudio(soundUri, currentIndex, soundName)}>
+                                                <AntDesign name={(isPlaying) ? "pausecircle" : "play"} size={45} color="#FFF" />
+                                            </Pressable>
+                                            <View style={{paddingLeft:'5%'}}>
+                                                <Text style={[styles.unRaisedText, {fontSize:16}]}>
+                                                    {soundName}
+                                                </Text>
+                                                <Text style={[styles.unRaisedText, {fontSize:12}]}>
+                                                    {
+                                                        isPlaying 
+                                                        ? formatTime(positionMillis || 0)
+                                                        : formatTime( pausedPosition || 0)
+                                                    } / {formatTime(soundDuration)}
+                                                </Text>
+                                            </View>
+                                        </View>    
                                     }
 
                                     
@@ -98,15 +127,16 @@ export const SoundControlProvider = ({children}) => {
 
 const styles = StyleSheet.create({
     container:{
-        backgroundColor:'transparent',
+        width:width,
+        backgroundColor:'#3C62DD',
+        borderRadius:24,
         justifyContent:'center',
         alignItems:'center',      
     },
     soundPlayerBase:{
-
+        display:'flex',
         backgroundColor:"#3C62DD",
         width:'90%',
-        borderRadius:24,
         height:70, 
     },
     viewTopRow:{
@@ -117,6 +147,15 @@ const styles = StyleSheet.create({
     },
     viewBottomRow:{
         
+    },
+    unRaised:{
+        display:'flex',
+        flexDirection:'row',
+        alignItems:'center'
+    },
+    unRaisedText:{
+        fontFamily:'SF Pro Rounded Regular',
+        color:'#FFF'
     }
 })
 

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, StatusBar } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Comfortaa_300Light, Comfortaa_400Regular, Comfortaa_500Medium, Comfortaa_600SemiBold, Comfortaa_700Bold } from '@expo-google-fonts/comfortaa';
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoadingPage from './page/LoadingPage';
 import TitlePage from './page/TitlePage';
@@ -34,6 +34,14 @@ TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
   return BackgroundFetch.Result.NewData;
 });
 
+const navTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'transparent',
+  },
+};
+
 
 const AppContent = () => {
   const { user } = useAuth();
@@ -60,6 +68,7 @@ const AppContent = () => {
     'SF Pro Rounded Black':require('./assets/fonts/SFProRoundedBlack.otf'),
     'SF Pro Rounded Semibold':require('./assets/fonts/SFProRoundedSemibold.otf'),
     'SF Pro Rounded Bold':require('./assets/fonts/SFProRoundedBold.otf'),
+    'SF Pro Rounded Regular':require('./assets/fonts/SFProRoundedRegular.otf')
   });
 
   useEffect(() => {
@@ -127,8 +136,8 @@ const AppContent = () => {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={user ? "AppLog" : "Title"}>
+    <NavigationContainer theme={navTheme}>
+      <Stack.Navigator screenOptions={{ detachPreviousScreen: true, presentation: 'transparentModal' }} initialRouteName={user ? "AppLog" : "Title"}>
         <Stack.Screen name="Title" component={TitlePage} options={{ headerShown: false }} />
         <Stack.Screen name="Email" component={EmailPage} options={{ headerShown: false }} />
         <Stack.Screen name="Confirm" component={ConfirmationPage} options={{ headerShown: false }} />
