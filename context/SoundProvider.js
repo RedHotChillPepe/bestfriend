@@ -10,14 +10,16 @@ export const SoundProvider = ({children}) => {
     const [audioData, setAudioData] = useState([])
     const [currentIndex, setCurrentIndex] = useState('')
 
-    const [positionMillis, setPositionMillis] = useState(0)
+    const [positionMillis, setPositionMillis] = useState(0);
+    const [pausedPosition, setPausedPosition] = useState(0);
+    
 
 
 
     const playAudio = async (uri, index) => {
-        // Первая загрузка Sound
         const initialStatus = await sound.current.getStatusAsync()
         
+        // Первая загрузка Sound
         if (initialStatus.isLoaded != true) {
             try {
                 await sound.current.loadAsync({uri:uri})
@@ -36,12 +38,16 @@ export const SoundProvider = ({children}) => {
         }
 
         const status = await sound.current.getStatusAsync()
-        const replacedUri = uri.replace("https://mishka-l3tq.onrender.com", "") // приведение uri к одному виду для сравнения
+
+        // приведение uri к одному виду для сравнения
+        const replacedUri = uri.replace("https://mishka-l3tq.onrender.com", "").replace("file://", "") 
         
 
         // Нажатие на новый Sound
         if (isPlaying && status.uri != replacedUri) {
             await sound.current.unloadAsync()
+            setPausedPosition(0)
+            setPositionMillis(0)
 
             try {
                 await sound.current.loadAsync({uri:uri})
@@ -58,7 +64,8 @@ export const SoundProvider = ({children}) => {
                     handleSoundStatus(status)
                 })
         }
-
+        
+        
         // Нажатие на тот же Sound
         if (!isPlaying && status.uri == replacedUri) {         
             await sound.current.playAsync()
@@ -66,9 +73,13 @@ export const SoundProvider = ({children}) => {
             setCurrentIndex(index)
         }
 
-        // Нажатие на Sound из паузы
+        // Нажатие на новый Sound из паузы
         if (!isPlaying && status.uri != replacedUri) {
             await sound.current.unloadAsync()
+            setPausedPosition(0)
+            setPositionMillis(0)
+
+
             try {
                 await sound.current.loadAsync({uri:uri})
                 console.log('should have loaded again!');
@@ -92,12 +103,16 @@ export const SoundProvider = ({children}) => {
     const pauseAudio = async (index) => {
         await sound.current.pauseAsync()
         setIsPlaying(false)
-        setCurrentIndex('')
     };
 
 
     const handleSoundStatus = async (status) => {
         console.log("current sound status: ", status);
+
+        setPositionMillis(status.positionMillis)
+        if (status.shouldPlay != true) {
+            setPausedPosition(status.positionMillis)
+        }
     }
     
 
@@ -116,7 +131,7 @@ export const SoundProvider = ({children}) => {
     return (
         <SoundContext.Provider value={
             {
-                sound, isPlaying, currentIndex, 
+                sound, isPlaying, currentIndex, positionMillis, pausedPosition,
                 setIsPlaying, playAudio, pauseAudio, formatTime
             }
         }>

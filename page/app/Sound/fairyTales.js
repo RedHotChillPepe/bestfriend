@@ -55,7 +55,11 @@ export default function FairyTales({ route }) {
                                         {item.name}
                                     </Text>
                                     <Text style={styles.cardTime}>
-                                        {/* {formatTime(isPlaying ? positionMillis[item._id] || 0 : pausedPosition[item._id] || 0)} / {item.duration} */}
+                                        {
+                                        isPlaying 
+                                        ? formatTime( currentIndex === item._id ? positionMillis : 0)
+                                        : formatTime(currentIndex === item._id ? pausedPosition : 0)
+                                        } / {item.duration}
                                     </Text>
                                 </View>
                                 <TouchableOpacity onPress={() => isPlaying && currentIndex === item._id ? pauseAudio(item._id) : playAudio(item.audioFile, item._id)}>

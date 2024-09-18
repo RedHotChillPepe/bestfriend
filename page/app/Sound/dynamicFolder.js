@@ -1,6 +1,7 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import React, { useState, useEffect } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
@@ -15,10 +16,7 @@ export default function DynamicFolder({route, navigation}) {
 
    const {text, Fileuuid} = JSON.parse(route.params)
 
-   /* const [sound, setSound] = useState([])
-   const [isPlaying, setIsPlaying] = useState(false) */
-
-   const {playAudio, pauseAudio, isPlaying, currentIndex} = useSound()
+   const {playAudio, pauseAudio, isPlaying, currentIndex, positionMillis, pausedPosition, formatTime} = useSound()
 
 
 
@@ -30,7 +28,7 @@ export default function DynamicFolder({route, navigation}) {
         } catch (e) {
           // error reading value
         }
-      };
+    };
 
 
 
@@ -65,28 +63,41 @@ export default function DynamicFolder({route, navigation}) {
     ///
 
     /// Single Audio File Handling
-    const handleUserFile = async (value) => {     
-        await FileSystem.copyAsync({from:value[0].uri, to:`${FileSystem.documentDirectory + value[0].name}`}) // Копирует файл в хранилище приложения для быстрого доступа
-        const result = await FileSystem.getInfoAsync(
-                        FileSystem.documentDirectory + value[0].name
-                    )
-        const newUUID = uuid.v4()
+    const handleUserFile = async (value) => {
+        // Проверка на отмену выбора пользователем
+        if (value != null) {
+            // Копирует файл в хранилище приложения для быстрого доступа
+            await FileSystem.copyAsync({from:value[0].uri, to:`${FileSystem.documentDirectory + value[0].name}`}) 
+            const result = await FileSystem.getInfoAsync(
+                            FileSystem.documentDirectory + value[0].name
+                        )
+            const newUUID = uuid.v4()
 
-        await storeStorageFiles( // Сохраняет ссылку *НА КОПИЮ* файла в AsyncStorage 
-            {
-                name:value[0].name,
-                uri:result.uri,
-                uuid:`${newUUID}`
-            })
-            
-        setStorageFiles(await fetchStorageFiles())        
+            const tempAudio = new Audio.Sound()                        // #FIXME
+            await tempAudio.loadAsync({uri:result.uri})             // Должен быть способ получать Duration из файла 
+            const status = await tempAudio.getStatusAsync()   // без загрузки его в переменную
+
+            await storeStorageFiles( // Сохраняет ссылку *НА КОПИЮ* файла в AsyncStorage 
+                {
+                    name:value[0].name,
+                    uri:result.uri,
+                    uuid:`${newUUID}`,
+                    duration: status.durationMillis
+                })
+                
+            setStorageFiles(await fetchStorageFiles())        
+            await tempAudio.unloadAsync() // Выгрузка из переменной для очистки памяти
+        }
+
+        
     }
 
     const handleUserPick = async () => {
-        await DocumentPicker.getDocumentAsync({type:"audio/*"}) //Вызывает file picker системы пользователя. Возвращает один файл
-        .then(async response => await response.assets)
+        // Вызывает file picker системы пользователя. Возвращает один файл
+        await DocumentPicker.getDocumentAsync({type:"audio/*"}) 
+        .then(async response => await response.assets) // возвращает null если запрос отменен
         .then (async data => {
-            handleUserFile(await data)
+            handleUserFile(data)
         }) 
         .catch(error => {
             console.error(error);
@@ -96,6 +107,7 @@ export default function DynamicFolder({route, navigation}) {
     ///
 
     useEffect(() => {
+        // Заполнение динамической папки из хранилища перед рендером
         const initialfillup = async () => {
             
             if (await fetchStorageFiles() != null) {
@@ -129,13 +141,20 @@ export default function DynamicFolder({route, navigation}) {
                         {
                             storageFiles.map((file) => (
                                 <View key={file.uuid} style={styles.card}>
-                                    <Text style={styles.cardTextTitle}>
-                                        {file.name}
-                                    </Text>
-                                    <Pressable>
-                                        <Text onPress={() => isPlaying && currentIndex == file.uuid ? pauseAudio(file.uuid) : playAudio(`${FileSystem.documentDirectory + file.name}`, file.uuid)}>
-                                            Play!
+                                    <View style={styles.cardText}>
+                                        <Text style={styles.cardTextTitle}>
+                                            {file.name}
                                         </Text>
+                                        <Text style={styles.cardTime}>
+                                            {
+                                                isPlaying 
+                                                ? formatTime( currentIndex === file.uuid ? positionMillis : 0)
+                                                : formatTime(currentIndex === file.uuid ? pausedPosition : 0)
+                                            } / {formatTime(file.duration)}
+                                        </Text>
+                                    </View>
+                                    <Pressable onPress={() => isPlaying && currentIndex == file.uuid ? pauseAudio(file.uuid) : playAudio(`${FileSystem.documentDirectory + file.name}`, file.uuid)}>
+                                        <AntDesign name={(isPlaying && currentIndex === file.uuid) ? "pausecircle" : "play"} size={30} color="#777" />
                                     </Pressable>
                                 </View>
                             ))
@@ -143,11 +162,6 @@ export default function DynamicFolder({route, navigation}) {
 
                     </View>
                 </View>
-                {/* <View>
-                    <Text onPress={() => {clearAll()}}>
-                        {JSON.stringify(storageFiles)}
-                    </Text>
-                </View> */}
             </ScrollView>        
         </View>
     )
@@ -158,6 +172,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         justifyContent: 'center'
+    },
+    cardText: {
+        gap: 6
     },
     cardTextTitle: {
         fontFamily: 'Comfortaa_700Bold',
@@ -181,5 +198,10 @@ const styles = StyleSheet.create({
         borderColor: '#656463',
         borderWidth: 1,
         borderRadius:16
+    },
+    cardTime: {
+        fontFamily: 'Comfortaa_700Bold',
+        fontSize: 12,
+        color: "#656463"
     },
 })
