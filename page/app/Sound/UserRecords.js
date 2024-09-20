@@ -148,7 +148,6 @@ function UserRecords({navigation}) {
             
         }
 
-        console.log(await recording.current.getStatusAsync())
         
         if ((await recording.current.getStatusAsync()).canRecord) {
             try {

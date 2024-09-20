@@ -18,6 +18,7 @@ import FriendHeaderComponent from '../components/FriendHeaderComponent';
 import { useSoundPanel } from '../../context/SoundControlContext';
 import AlarmPage from './Sound/alarmpage';
 import UserRecords from './Sound/UserRecords';
+import CustomDrawerComponent from '../components/CustomDrawerComponent.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -120,7 +121,12 @@ export default function AppLog() {
   return (
     <Provider style={{backgroundColor:'transparent'}}>
       
-      <Drawer.Navigator >
+      <Drawer.Navigator screenOptions={{
+       drawerStyle:{
+        backgroundColor:'transparent'
+       },
+       overlayColor:'transparent'
+      }} drawerContent={props => <CustomDrawerComponent {...props} />}>
         <Drawer.Screen name="Библиотека Звуков" component={ReadySoundsStack} options={{ headerShown: false }}/>
         <Drawer.Screen name="Профиль" component={ProfileScreen} options={{
           headerLeft:()=>(

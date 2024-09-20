@@ -79,21 +79,26 @@ export default function ReadySoundsScreen() {
     }
       ///
     const createUserFolder = async() => {
-        const newUUID = uuid.v4()
+        if (userFolderName == '') {
+            alert("Заполните Имя Папки")
+        } else {
+            const newUUID = uuid.v4()
 
-        await storeFolderData({
-           "text":`${userFolderName}`,
-           "Fileuuid":`${newUUID}`, 
-           "name": "card3", 
-           "cardTextStyle":"card3Text" , 
-           "cardTextPressedStyle":"card3Pressed",
-           "onPressDestination": "DynamicFolder", 
-           "onPressPayload":`{"text": "${userFolderName}", "Fileuuid":"${newUUID}"}`
-        }) // темплейт для JSON файла пользовательской папки
-        console.log("Create User Folder:" + userFolderName)
-        setUserFolders([...await getFolderData()])
-        setModalPlusVisible(false)
-        setUserFolderName('')
+            await storeFolderData({
+            "text":`${userFolderName}`,
+            "Fileuuid":`${newUUID}`, 
+            "name": "card3", 
+            "cardTextStyle":"card3Text" , 
+            "cardTextPressedStyle":"card3Pressed",
+            "onPressDestination": "DynamicFolder", 
+            "onPressPayload":`{"text": "${userFolderName}", "Fileuuid":"${newUUID}"}`
+            }) // темплейт для JSON файла пользовательской папки
+            console.log("Create User Folder:" + userFolderName)
+            setUserFolders([...await getFolderData()])
+            setModalPlusVisible(false)
+            setUserFolderName('')
+        }
+        
     }
 
     useEffect(() => {
@@ -320,13 +325,13 @@ export default function ReadySoundsScreen() {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalFolderText}>
-                            Создание Новой Папки {userFolderName}
+                            Введите название папки:
                         </Text>
-                        <View style={{marginBottom:'10%', marginTop:'10%', borderWidth:1,}}>
-                            <TextInput onChangeText={setUserFolderName} style={{padding:'200px'}} autoFocus={true} placeholder='Название Папки'></TextInput>
+                        <View style={{marginBottom:'10%', marginTop:'10%', backgroundColor:'#FFF', borderRadius:16}}>
+                            <TextInput placeholderTextColor={"#848484"} onChangeText={setUserFolderName} style={{fontSize:20, height:48, width:240, fontFamily:'SF Pro Rounded Regular', paddingLeft:15}} autoFocus={true} placeholder='Название'></TextInput>
                         </View>
                         <View>
-                            <Button onPress={()=>createUserFolder()} buttonColor='#00B232'  mode='contained'>Создать!</Button>
+                            <Button style={{borderRadius:8, width:115, fontSize:20}} textColor='#3C62DD' onPress={()=>createUserFolder()} buttonColor='#FFF' mode='contained'>Создать</Button>
                         </View>
                     </View>
                 </View>
@@ -468,7 +473,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
         margin: 20,
-        backgroundColor: "white",
+        backgroundColor: "#3C62DD",
         borderRadius: 20,
         padding: 35,
         alignItems: "center",
@@ -509,11 +514,10 @@ const styles = StyleSheet.create({
         fontFamily: 'Comfortaa_500Medium'
     },
     modalFolderText: {
-        color: "#5c5c5c",
-        fontSize: 14,
+        color: "#FFF",
+        fontSize: 20,
         textAlign: "center",
-        fontFamily: 'Comfortaa_500Medium',
-        borderBottomWidth:1,
+        fontFamily: 'SF Pro Rounded Regular',
 
     }
 });
