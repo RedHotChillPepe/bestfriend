@@ -22,6 +22,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { SoundProvider } from './context/SoundProvider';
 import { SoundControlProvider } from './context/SoundControlContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import * as Calendar from 'expo-calendar';
 
 
 
@@ -47,11 +48,18 @@ const AppContent = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
+  const [calendarStatus, requestCalendarPermission] = Calendar.useCalendarPermissions();
+
+   
+
   useEffect(() => {
     const initialize = async () => {
       // Initialize other app settings if needed
       setIsLoading(false);
       MediaLibrary.requestPermissionsAsync()
+      if (!calendarStatus.granted) {
+        requestCalendarPermission()
+      }
     };
 
     initialize();

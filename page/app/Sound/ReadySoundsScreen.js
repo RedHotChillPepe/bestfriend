@@ -232,16 +232,16 @@ export default function ReadySoundsScreen() {
                         ))}
 
                         <TouchableOpacity
-                            onPress={() => setModalVisible(true)}
+                            onPress={() => navigation.navigate('AlarmPage')}
                             onPressIn={() => handlePressIn(cards.length)}
                             onPressOut={handlePressOut}
                             activeOpacity={1}
                             style={[styles.card4, pressedCard === cards.length && styles.cardPressed]}
                         >
                                 <Text style={styles.cardText}>
-                                    Остальные звуки
+                                    Расписание
                                 </Text>
-                            <FontAwesome5 name="telegram-plane" size={130} color="#FFFFFF"  style={styles.cardIcon}/>
+                            <FontAwesome5 name="plus-square" size={120} color="#FFFFFF"  style={styles.cardIcon}/>
                         </TouchableOpacity>
 
 
@@ -450,7 +450,7 @@ const styles = StyleSheet.create({
     cardIcon: {
         opacity: 0.35,
         position: 'absolute',
-        bottom: "-24%",
+        bottom: "-22%",
         right: '8%'
     },
     modalBackground: {

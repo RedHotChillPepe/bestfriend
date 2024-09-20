@@ -65,7 +65,7 @@ export default function FairyTales({ route }) {
                                     </Text>
                                 </View>
                                 <TouchableOpacity onPress={() => isPlaying && currentIndex === item._id ? pauseAudio() : playAudio(item.audioFile, item._id, item.name)}>
-                                    <AntDesign name={(isPlaying && currentIndex === item._id) ? "pausecircle" : "play"} size={30} color="#777" />
+                                    <AntDesign name={(isPlaying && currentIndex === item._id) ? "pausecircle" : "play"} size={30} color="#3C62DD" />
                                 </TouchableOpacity>
                             </View>
                         ))}
