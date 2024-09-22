@@ -6,7 +6,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { useSoundPanel } from '../../../context/SoundControlContext';
 import uuid from 'react-native-uuid';
 
 const { width, height } = Dimensions.get('window');
@@ -15,15 +14,12 @@ export default function ReadySoundsScreen() {
     const [pressedCard, setPressedCard] = useState(null);
     const [audioData, setAudioData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [modalVisible, setModalVisible] = useState(false);
     const [modalPlusVisible, setModalPlusVisible] = useState(false);
 
     const [userFolders, setUserFolders] = useState([])// изменяется после рендера чтобы отображать новые папки
     const [userFolderName, setUserFolderName] = useState('')
     
     const navigation = useNavigation();
-
-    const {SoundControlPanel} = useSoundPanel()
 
     
 
@@ -134,42 +130,6 @@ export default function ReadySoundsScreen() {
 
     }, []);
 
-    
-    
-    
-
-    const pressTelegram = async () => {
-        const telegramUrl = 'https://t.me/';
-        const username = 'interactive_bear_bot'; // Замените на ваш username в Telegram
-
-        const url = `${telegramUrl}${username}`;
-
-        const supported = await Linking.canOpenURL(url);
-
-        if (supported) {
-            await Linking.openURL(url);
-        } else {
-            console.log("Не удалось открыть ссылку на Telegram");
-        }
-    };
-
-    const pressWhatsApp = async () => {
-        const whatsappUrl = 'https://chat.whatsapp.com/JLI5QLh1C5nD3g2rz8WW8T';
-        const phoneNumber = '';
-        const url = `${whatsappUrl}${phoneNumber}`;
-    
-        Alert.alert('WhatsApp URL:', url); // Добавьте эту строку для логирования URL
-    
-        const supported = await Linking.canOpenURL(url);
-        Alert.alert('Supported:', supported); // Добавьте эту строку для логирования поддержки URL
-    
-        if (supported) {
-            await Linking.openURL(url);
-        } else {
-            console.log("Не удалось открыть ссылку на WhatsApp");
-            Alert.alert('Ошибка', 'Не удалось открыть ссылку на WhatsApp');
-        }
-    };
 
     const handlePressIn = (index) => {
         setPressedCard(index);
@@ -208,7 +168,7 @@ export default function ReadySoundsScreen() {
                 <ActivityIndicator size="large" color="#a4ca79" />
             ) : (
                 <ScrollView  contentContainerStyle={{ alignItems: 'center' }}>
-                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingTop:"25%"}}>
+                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingTop:115}}>
                         <Pressable onPress={()=> clearAll()}>
                             <Text style={styles.subtitleText}>
                                 Библиотека
@@ -283,43 +243,6 @@ export default function ReadySoundsScreen() {
                     </View>
                 </ScrollView>
             )}
-
-            
-
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.modalBackground}>
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Выберите платформу:</Text>
-                            <View style={{ flexDirection: "row", width: 260, justifyContent: "space-between" }}>
-                                <TouchableOpacity
-                                    style={[styles.button, styles.buttonClose]}
-                                    onPress={pressTelegram}
-                                >
-                                    <FontAwesome5 name="telegram-plane" size={50} color="#6f9c3d" />
-                                    <Text style={styles.textStyle}>Telegram</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[styles.button, styles.buttonClose]}
-                                    onPress={pressWhatsApp}
-                                >
-                                    <FontAwesome5 name="whatsapp" size={50} color="#6f9c3d" />
-                                    <Text style={styles.textStyle}>WhatsApp</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-
 
             <Modal  transparent={true} animationType="slide" visible={modalPlusVisible}  onRequestClose={()=>{setModalPlusVisible(false)}} onDismiss={()=>{setModalPlusVisible(false)}}>
                 <View style={styles.centeredView}>

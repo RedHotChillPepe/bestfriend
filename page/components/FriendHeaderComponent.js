@@ -22,9 +22,7 @@ function FriendHeaderComponent() {
 
 const styles = StyleSheet.create({
     headerBase:{
-        backgroundColor:'#3C62DD',
-        borderBottomLeftRadius:48,
-        borderBottomRightRadius:48,
+        backgroundColor:'#3C62DD'
     },
     headerInsides:{
         display:'flex',

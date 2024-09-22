@@ -19,6 +19,7 @@ import { useSoundPanel } from '../../context/SoundControlContext';
 import AlarmPage from './Sound/alarmpage';
 import UserRecords from './Sound/UserRecords';
 import CustomDrawerComponent from '../components/CustomDrawerComponent.js';
+import AssitancePage from './AssitancePage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -141,6 +142,21 @@ export default function AppLog() {
           headerTitleStyle:{
             color:"#FFF"
           }}} />
+          <Drawer.Screen name="HelpPage" component={AssitancePage} options={{
+          headerLeft:()=>(
+            <Pressable onPress={()=>navigation.dispatch(DrawerActions.toggleDrawer())}>
+              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:25, paddingTop:5}}/>
+            </Pressable>
+          ),
+          title:"",
+          headerStyle:{
+            backgroundColor:"#3C62DD"
+          },
+          headerTitleAlign:"center",
+          headerTitleStyle:{
+            color:"#FFF"
+          }
+          }}/>
       </Drawer.Navigator>
 
       <SoundControlPanel />         

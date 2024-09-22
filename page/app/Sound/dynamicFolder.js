@@ -115,8 +115,10 @@ export default function DynamicFolder({route, navigation}) {
             if (await fetchStorageFiles() != null) {
                 setStorageFiles(await fetchStorageFiles())
             }
+            console.log(await fetchStorageFiles());
         }
         initialfillup()
+        
       return () => {        
       }
     }, [])

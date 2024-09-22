@@ -1,12 +1,10 @@
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Pressable, Dimensions } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import { AntDesign } from '@expo/vector-icons';
-import { Audio } from 'expo-av';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import {useSound} from '../../../context/SoundProvider.js'
-import { useSoundPanel } from '../../../context/SoundControlContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -18,8 +16,17 @@ export default function FairyTales({ route }) {
         currentIndex, setIsPlaying, setPositionMillis, setPausedPosition, 
         playAudio, pauseAudio, formatTime 
     } = useSound()
+
+    const [pressedIn, setPressedIn] = useState(null)
+
+
+    const handlePressIn = (index) => {
+        setPressedIn(index)
+    }
+    const handlePressOut = () => {
+        setPressedIn(null)
+    }
     
-    const {SoundControlPanel} = useSoundPanel()
     
 
     return (
@@ -51,7 +58,11 @@ export default function FairyTales({ route }) {
                 <View style={{ width: '100%', alignItems: 'center' }}>
                     <View style={{  width: '90%' }}>
                         {audioData.map((item, index) => (
-                            <View key={index} style={styles.card}>
+                            <Pressable 
+                            onPressIn={() => handlePressIn(index)}
+                            onPressOut={() => handlePressOut()}
+                            key={index} 
+                            style={[styles.card, pressedIn === index && styles.pressedCard]}>
                                 <View style={styles.cardText}>
                                     <Text style={styles.cardTextTitle}>
                                         {item.name}
@@ -67,7 +78,7 @@ export default function FairyTales({ route }) {
                                 <TouchableOpacity onPress={() => isPlaying && currentIndex === item._id ? pauseAudio() : playAudio(item.audioFile, item._id, item.name)}>
                                     <AntDesign name={(isPlaying && currentIndex === item._id) ? "pausecircle" : "play"} size={30} color="#3C62DD" />
                                 </TouchableOpacity>
-                            </View>
+                            </Pressable>
                         ))}
                     </View>
                 </View>
@@ -93,6 +104,9 @@ const styles = StyleSheet.create({
         borderColor: '#656463',
         borderWidth: 1,
         borderRadius:16
+    },
+    pressedCard:{
+        backgroundColor:'#dedede'
     },
     card0: {
         backgroundColor: '#FEC513',
