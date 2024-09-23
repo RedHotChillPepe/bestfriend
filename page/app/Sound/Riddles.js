@@ -28,7 +28,7 @@ export default function Riddles({ route }) {
     const [modalUri, setModalUri] = useState('')
     const [downloadPercent, setDownloadPercent] = useState(0)
 
-    const fileuuid = useRef()
+    const folderuuid = useRef("")
 
     /// AsyncStorage локальное хранилище на телефоне
     const getFolderData = async () => {
@@ -42,7 +42,7 @@ export default function Riddles({ route }) {
 
     const fetchStorageFiles = async () => {
         try {
-          const jsonValue = await AsyncStorage.getItem(fileuuid.current);
+          const jsonValue = await AsyncStorage.getItem(folderuuid.current);
           return jsonValue != null ? JSON.parse(jsonValue) : null;
         } catch (e) {
           // error reading value
@@ -55,21 +55,21 @@ export default function Riddles({ route }) {
         try {  
             const jsonValue = JSON.stringify(value);
                 
-            console.log("jsonValue: " + jsonValue)
+            //console.log("jsonValue: " + jsonValue)
             console.log(await getFolderData() != null)
             if (await getFolderData() != null) {
     
                 const replacedFolderData =  JSON.stringify(await getFolderData()).replace("[","").replace("]","")
-                console.log("replacedFolderData: " + replacedFolderData)
+                //console.log("replacedFolderData: " + replacedFolderData)
     
                 const combinedString = "[" + replacedFolderData + ',' + jsonValue + "]"
                 await AsyncStorage.setItem('userFolder', combinedString)
                     
                    
-                console.log("Combined string:" +  combinedString)
+                //console.log("Combined string:" +  combinedString)
             } else {
                 await AsyncStorage.setItem('userFolder',  "[" + jsonValue + "]");
-                console.log("storeFolderData 1: " + "[" + jsonValue + "]")
+                //console.log("storeFolderData 1: " + "[" + jsonValue + "]")
             }
                 
                         
@@ -83,15 +83,16 @@ export default function Riddles({ route }) {
         try {
             
             const jsonValue = JSON.stringify(value);
-            console.log("file data: ", jsonValue);
+            //console.log("file data: ", jsonValue);
             if (await fetchStorageFiles() != null) {
                 const replacedFileData =  JSON.stringify(await fetchStorageFiles()).replace("[","").replace("]","")
                 const combinedString = "[" + replacedFileData + ',' + jsonValue + "]"
-                await AsyncStorage.setItem(fileuuid.current, combinedString)
+                await AsyncStorage.setItem(folderuuid.current, combinedString).then((result) => {console.log("riddle result",result);
+                })
             } else {
-                await AsyncStorage.setItem(fileuuid.current,  "[" + jsonValue + "]");
+                await AsyncStorage.setItem(folderuuid.current,  "[" + jsonValue + "]");
             }
-            console.log("fileuuid: ",fileuuid.current);
+            console.log(" storeStorage folder uuid: ",folderuuid.current);
                     
         } catch (e) {
           // saving error
@@ -119,10 +120,12 @@ export default function Riddles({ route }) {
             "name": "card3", 
             "cardTextStyle":"card3Text" , 
             "cardTextPressedStyle":"card3Pressed",
-            "onPressDestination": "DynamicFolder", 
+            "onPressDestination": "StoragePage", 
             "onPressPayload":`{"text": "Скачанные Файлы", "Fileuuid":"${newUUID}"}`
-        }) // темплейт для JSON файла пользовательской папки
-        fileuuid.current=newUUID
+        })
+        folderuuid.current = newUUID
+        console.log("create folder current uuid:", folderuuid.current);
+        
     }
 
 
@@ -136,58 +139,55 @@ export default function Riddles({ route }) {
     const handleSaveToAsync = async (result) => {
         const folderData = await getFolderData()
         let isThereDownloadFolder = false
-        let downloadFolderUUID = ""
         if (folderData != null) {
             for (let index = 0; index < folderData.length; index++) {
                 const element = folderData[index].text;
                 if (element == 'Скачанные Файлы') {
                     isThereDownloadFolder = true
-                    downloadFolderUUID = folderData[index].Fileuuid
-                    fileuuid.current = downloadFolderUUID
-                    console.log(typeof(downloadFolderUUID));
+                    folderuuid.current = folderData[index].Fileuuid
                 }
             }
         }
 
         if (folderData == null || isThereDownloadFolder != true) {
-            await createUserFolder().then(async ()=>{
+            
+                await createUserFolder()
+
                 const newFolderData = await getFolderData()
                 for (let index = 0; index < newFolderData.length; index++) {
                     const element = newFolderData[index].text;
                     if (element == 'Скачанные Файлы') {
                         isThereDownloadFolder = true
-                        downloadFolderUUID = newFolderData[index].Fileuuid
-                        fileuuid.current = downloadFolderUUID
-                        console.log(typeof(downloadFolderUUID));
                     }
                 }
-            })
-            
-
-        }
+            }
 
         
         if (isThereDownloadFolder) {
             if (result.uri != undefined) {
-                console.log(downloadFolderUUID);
-                console.log(result.uri);
-                console.log(modalFilename);
+                //console.log(result.uri);
+                //console.log(modalFilename);
 
+                if (folderuuid.current != undefined) {
+                    const newUUID = uuid.v4()
+                    
+                    const tempAudio = new Audio.Sound()                         // #FIXME
+                    await tempAudio.loadAsync({uri:result.uri})               // Должен быть способ получать Duration из файла 
+                    const status = await tempAudio.getStatusAsync()     // без загрузки его в переменную
 
-                const newUUID = uuid.v4()
-                
-                const tempAudio = new Audio.Sound()                         // #FIXME
-                await tempAudio.loadAsync({uri:result.uri})               // Должен быть способ получать Duration из файла 
-                const status = await tempAudio.getStatusAsync()     // без загрузки его в переменную
-
-                await storeStorageFiles({
-                    name:modalFilename,
-                    uri:result.uri,
-                    uuid:`${newUUID}`,
-                    duration: status.durationMillis
-                })
+                    await storeStorageFiles({
+                        name:modalFilename,
+                        category:"загадка",
+                        uri:result.uri,
+                        uuid:`${newUUID}`,
+                        duration: status.durationMillis
+                    })
             
-                await tempAudio.unloadAsync() // Выгрузка из переменной для очистки памяти
+                    await tempAudio.unloadAsync() // Выгрузка из переменной для очистки памяти
+                }
+
+
+                
                 
             }
         }
@@ -204,7 +204,7 @@ export default function Riddles({ route }) {
     const handleDownload = async (uri) => {
         const cutName = modalUri.replace("https://mishka-l3tq.onrender.com/uploads/","")
         const toUri = FileSystem.documentDirectory + cutName
-        console.log(cutName);
+        console.log("cutname: ", cutName);
 
         const downloadResumable = FileSystem.createDownloadResumable(
             uri,

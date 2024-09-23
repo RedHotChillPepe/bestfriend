@@ -20,6 +20,8 @@ import AlarmPage from './Sound/alarmpage';
 import UserRecords from './Sound/UserRecords';
 import CustomDrawerComponent from '../components/CustomDrawerComponent.js';
 import AssitancePage from './AssitancePage';
+import FileStorage from './Sound/FileStorage.js';
+import DynamicFileStoragePage from './Sound/DynamicFileStoragePage.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -100,6 +102,30 @@ function ReadySoundsStack() {
         ) 
         }} />
         <Stack.Screen name='AlarmPage' component={AlarmPage} options={{
+          title:"",
+          headerTintColor:"#FFF",
+          headerStyle:{
+            backgroundColor:"#3C62DD",
+          },
+          headerLeft:()=>(
+            <Pressable onPress={()=>navigation.toggleDrawer()}>
+              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:"4%", paddingTop:5}}/>
+            </Pressable>
+          ) 
+        }}/>
+        <Stack.Screen name='StoragePage' component={FileStorage} options={{
+          title:"",
+          headerTintColor:"#FFF",
+          headerStyle:{
+            backgroundColor:"#3C62DD",
+          },
+          headerLeft:()=>(
+            <Pressable onPress={()=>navigation.toggleDrawer()}>
+              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:"4%", paddingTop:5}}/>
+            </Pressable>
+          ) 
+        }}/>
+        <Stack.Screen name='DynamicStorage' component={DynamicFileStoragePage} options={{
           title:"",
           headerTintColor:"#FFF",
           headerStyle:{

@@ -41,13 +41,9 @@ export default function ReadySoundsScreen() {
         try {
             
             const jsonValue = JSON.stringify(value);
-            
-            console.log("jsonValue: " + jsonValue)
-            console.log(await getFolderData() != null)
             if (await getFolderData() != null) {
 
                 const replacedFolderData =  JSON.stringify(await getFolderData()).replace("[","").replace("]","")
-                console.log("replacedFolderData: " + replacedFolderData)
 
                 const combinedString = "[" + replacedFolderData + ',' + jsonValue + "]"
                 await AsyncStorage.setItem('userFolder', combinedString)
@@ -56,7 +52,6 @@ export default function ReadySoundsScreen() {
                 console.log("Combined string:" +  combinedString)
             } else {
                 await AsyncStorage.setItem('userFolder',  "[" + jsonValue + "]");
-                console.log("storeFolderData 1: " + "[" + jsonValue + "]")
             }
             
                     
@@ -100,17 +95,23 @@ export default function ReadySoundsScreen() {
     }
 
     useEffect(() => {
+
+        
+        
+        
         const initialFillup = async () =>{
             if (await getFolderData() != null) { // проверка на пустоту localstorage
                 setUserFolders([...await getFolderData()])// изначальное заполненеие State с Local Storage папками
                 
             } 
           //console.log("initilafillup:" + JSON.stringify(await getFolderData()) )
+          
+          
         }
           initialFillup();
         return () => {
         }
-    }, [userFolders, isFocused])
+    }, [isFocused])
 
     useEffect(() => {
         const fetchmedata = async () => {
@@ -171,14 +172,14 @@ export default function ReadySoundsScreen() {
             ) : (
                 <ScrollView  contentContainerStyle={{ alignItems: 'center' }}>
                     <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingTop:115}}>
-                        <Pressable onPress={()=> clearAll()}>
+                        <Pressable style={{paddingRight:50}} onPress={()=> clearAll()}>
                             <Text style={styles.subtitleText}>
                                 Библиотека
                             </Text>
                         </Pressable>
                         
                         <Pressable onPress={()=>setModalPlusVisible(true)}>
-                            <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
+                            <MaterialCommunityIcons name='plus-circle-outline' color="#646463" size={30}/>
                         </Pressable>
                     </View>
                     <View style={styles.userFoldersBumper}>
@@ -199,7 +200,7 @@ export default function ReadySoundsScreen() {
                             </TouchableOpacity>
                         ))}
 
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => navigation.navigate('AlarmPage')}
                             onPressIn={() => handlePressIn(cards.length)}
                             onPressOut={handlePressOut}
@@ -210,15 +211,15 @@ export default function ReadySoundsScreen() {
                                     Расписание
                                 </Text>
                             <FontAwesome5 name="plus-square" size={120} color="#FFFFFF"  style={styles.cardIcon}/>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
 
                         <TouchableOpacity
                             onPress={() => navigation.navigate('MyRecording')}
-                            onPressIn={() => handlePressIn(cards.length+1)}
+                            onPressIn={() => handlePressIn(cards.length)}
                             onPressOut={handlePressOut}
                             activeOpacity={1}
-                            style={[styles.card3, pressedCard === cards.length+1 && styles.card3Pressed]}
+                            style={[styles.card3, pressedCard === cards.length && styles.card3Pressed]}
                         >
                                 <Text style={styles.card3Text}>
                                     Мои Записи
@@ -230,11 +231,11 @@ export default function ReadySoundsScreen() {
                                 <TouchableOpacity
                                     key={index}
                                     onPress={() => navigation.navigate(card.onPressDestination, handlePayload(card.onPressPayload))}
-                                    onPressIn={() => handlePressIn(index + cards.length+2)}
+                                    onPressIn={() => handlePressIn(index + cards.length+1)}
                                     onPressOut={handlePressOut}
                                     activeOpacity={1}
                                     
-                                    style={[styles[card.name] , pressedCard === (index + cards.length+2)  && styles[card.cardTextPressedStyle]]}
+                                    style={[styles[card.name] , pressedCard === (index + cards.length+1)  && styles[card.cardTextPressedStyle]]}
                                     >
                                         <Text style={styles[card.cardTextStyle]}>
                                             {card.text}
