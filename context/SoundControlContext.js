@@ -6,7 +6,8 @@ import { useSound } from './SoundProvider.js';
 import { Audio } from "expo-av";
 import Animated from 'react-native-reanimated';
 import { useSharedValue } from 'react-native-reanimated';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, FontAwesome6 , MaterialIcons, Ionicons } from '@expo/vector-icons';
+import Slider from "@react-native-community/slider";
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,6 +23,8 @@ export const SoundControlProvider = ({children}) => {
     const flingDown = Gesture.Fling().direction(Directions.DOWN).onEnd(()=>{animDown()}).runOnJS(true);
 
 
+
+    
 
     function animUp() {
         console.log('fling up');
@@ -41,6 +44,11 @@ export const SoundControlProvider = ({children}) => {
         }
     }
 
+    const handleSliding = async (value) => {
+        console.log(value);
+        
+    }
+
     function SoundControlPanel (){
 
        
@@ -54,36 +62,50 @@ export const SoundControlProvider = ({children}) => {
                                 <Animated.View style={[styles.soundPlayerBase, {height:animHight}]} >
 
                                     {isRaised
-                                    ? <View>
+                                    ? <View style={[styles.raised, {paddingTop:"4%"}]}>
                                             <View style={styles.viewTopRow}>
                                                 <Pressable>
-
+                                                    <FontAwesome6 name="repeat" size={20} color="#FFF" />
                                                 </Pressable>
                                                 <View>
-                                                    <Text>
-                                                        
-                                                    </Text>
-                                                    <Text>
-                                                    
+                                                    <Text style={[styles.raisedText, {fontSize:20}]}>
+                                                        {soundName}
                                                     </Text>
                                                 </View>
                                                 <Pressable>
-
+                                                    <MaterialIcons name="playlist-play" size={25} color="#FFF" />
                                                 </Pressable>
                                             </View>
                                             <View style={styles.viewMiddleRow}>
-                                                <Text>
-                                                    
+                                                <Text style={[styles.raisedText, {fontSize:16}]}>
+                                                    {
+                                                        isPlaying 
+                                                        ? formatTime(positionMillis || 0)
+                                                        : formatTime( pausedPosition || 0)
+                                                    }
                                                 </Text>
-                                                <Pressable>
 
-                                                </Pressable>
-                                                <Text>
 
+                                                <Slider onSlidingComplete={(value) => {handleSliding(value)}} 
+                                                style={{width: 200, height: 40}} 
+                                                minimumValue={0} 
+                                                maximumValue={soundDuration}
+                                                value={ positionMillis }
+                                                thumbTintColor="#F7F7FF"
+                                                minimumTrackTintColor="#F7F7FF"
+                                                maximumTrackTintColor="#dcdce6"/>
+
+
+                                                <Text style={[styles.raisedText, {fontSize:16}]}>
+                                                    {formatTime(soundDuration)}
                                                 </Text>
                                             </View>
                                             <View style={styles.viewBottomRow}>
-
+                                                <Ionicons name="play-skip-back" size={35} color="#FFF" />
+                                                <Pressable style={{marginHorizontal:'5%'}} onPress={() => isPlaying ? pauseAudio() : playAudio(soundUri, currentIndex, soundName)}>
+                                                    <AntDesign name={(isPlaying) ? "pausecircle" : "play"} size={30} color="#FFF" />
+                                                </Pressable>
+                                                <Ionicons name="play-skip-forward" size={35} color="#FFF" />
                                             </View>
                                         </View>
                                     :   <View style={[styles.unRaised, {paddingTop:'2%'}]}>
@@ -140,13 +162,18 @@ const styles = StyleSheet.create({
         height:70, 
     },
     viewTopRow:{
-
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        width:330
     },
     viewMiddleRow:{
-
+        flexDirection:'row',
+        alignItems:'center'
     },
     viewBottomRow:{
-        
+        flexDirection:'row',
+        alignItems:'center'
     },
     unRaised:{
         display:'flex',
@@ -154,6 +181,15 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     unRaisedText:{
+        fontFamily:'SF Pro Rounded Regular',
+        color:'#FFF'
+    },
+    raised:{
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center'
+    },
+    raisedText:{
         fontFamily:'SF Pro Rounded Regular',
         color:'#FFF'
     }

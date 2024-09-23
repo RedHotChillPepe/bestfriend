@@ -38,7 +38,7 @@ export const SoundProvider = ({children}) => {
             sound.current.setOnPlaybackStatusUpdate((status) => {
                 handleSoundStatus(status)
             })
-
+            await sound.current.setProgressUpdateIntervalAsync(1000)
         }
 
         const status = await sound.current.getStatusAsync()
@@ -71,6 +71,7 @@ export const SoundProvider = ({children}) => {
                 sound.current.setOnPlaybackStatusUpdate((status) => {
                     handleSoundStatus(status)
                 })
+                await sound.current.setProgressUpdateIntervalAsync(1000)
         }
         
         
@@ -99,9 +100,12 @@ export const SoundProvider = ({children}) => {
                 setCurrentIndex(index)
                 await sound.current.playAsync()
 
+                
+
                 sound.current.setOnPlaybackStatusUpdate((status) => {
                     handleSoundStatus(status)
                 })
+                await sound.current.setProgressUpdateIntervalAsync(1000)
         }
     };
 
@@ -114,7 +118,7 @@ export const SoundProvider = ({children}) => {
 
 
     const handleSoundStatus = async (status) => {
-        setSoundDuration(status.durationMillis) 
+        setSoundDuration(status.durationMillis)
        
         setPositionMillis(status.positionMillis)
         if (status.shouldPlay != true) {
