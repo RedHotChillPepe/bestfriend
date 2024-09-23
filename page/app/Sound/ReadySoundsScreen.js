@@ -5,7 +5,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
 
 const { width, height } = Dimensions.get('window');
@@ -18,6 +18,8 @@ export default function ReadySoundsScreen() {
 
     const [userFolders, setUserFolders] = useState([])// изменяется после рендера чтобы отображать новые папки
     const [userFolderName, setUserFolderName] = useState('')
+
+    const isFocused = useIsFocused()
     
     const navigation = useNavigation();
 
@@ -108,7 +110,7 @@ export default function ReadySoundsScreen() {
           initialFillup();
         return () => {
         }
-    }, [userFolders])
+    }, [userFolders, isFocused])
 
     useEffect(() => {
         const fetchmedata = async () => {
@@ -187,6 +189,7 @@ export default function ReadySoundsScreen() {
                                 onPressIn={() => handlePressIn(index)}
                                 onPressOut={handlePressOut}
                                 activeOpacity={1}
+                                setUserFolders={setUserFolders}
                                 style={[styles[card.name] , pressedCard === index && styles[card.cardTextPressedStyle]]}
                             >
                                 <Text style={styles[card.cardTextStyle]}>
@@ -230,6 +233,7 @@ export default function ReadySoundsScreen() {
                                     onPressIn={() => handlePressIn(index + cards.length+2)}
                                     onPressOut={handlePressOut}
                                     activeOpacity={1}
+                                    
                                     style={[styles[card.name] , pressedCard === (index + cards.length+2)  && styles[card.cardTextPressedStyle]]}
                                     >
                                         <Text style={styles[card.cardTextStyle]}>

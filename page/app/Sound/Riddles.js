@@ -28,7 +28,7 @@ export default function Riddles({ route }) {
     const [modalUri, setModalUri] = useState('')
     const [downloadPercent, setDownloadPercent] = useState(0)
 
-    const [fileuuid, setFileuuid] = useState("")
+    const fileuuid = useRef()
 
     /// AsyncStorage локальное хранилище на телефоне
     const getFolderData = async () => {
@@ -42,7 +42,7 @@ export default function Riddles({ route }) {
 
     const fetchStorageFiles = async () => {
         try {
-          const jsonValue = await AsyncStorage.getItem(fileuuid);
+          const jsonValue = await AsyncStorage.getItem(fileuuid.current);
           return jsonValue != null ? JSON.parse(jsonValue) : null;
         } catch (e) {
           // error reading value
@@ -87,11 +87,11 @@ export default function Riddles({ route }) {
             if (await fetchStorageFiles() != null) {
                 const replacedFileData =  JSON.stringify(await fetchStorageFiles()).replace("[","").replace("]","")
                 const combinedString = "[" + replacedFileData + ',' + jsonValue + "]"
-                await AsyncStorage.setItem(fileuuid, combinedString)
+                await AsyncStorage.setItem(fileuuid.current, combinedString)
             } else {
-                await AsyncStorage.setItem(fileuuid,  "[" + jsonValue + "]");
+                await AsyncStorage.setItem(fileuuid.current,  "[" + jsonValue + "]");
             }
-            console.log("fileuuid: ",fileuuid);
+            console.log("fileuuid: ",fileuuid.current);
                     
         } catch (e) {
           // saving error
@@ -122,7 +122,7 @@ export default function Riddles({ route }) {
             "onPressDestination": "DynamicFolder", 
             "onPressPayload":`{"text": "Скачанные Файлы", "Fileuuid":"${newUUID}"}`
         }) // темплейт для JSON файла пользовательской папки
-        setFileuuid(newUUID)
+        fileuuid.current=newUUID
     }
 
 
@@ -143,14 +143,27 @@ export default function Riddles({ route }) {
                 if (element == 'Скачанные Файлы') {
                     isThereDownloadFolder = true
                     downloadFolderUUID = folderData[index].Fileuuid
-                    setFileuuid(downloadFolderUUID)
+                    fileuuid.current = downloadFolderUUID
                     console.log(typeof(downloadFolderUUID));
                 }
             }
         }
 
         if (folderData == null || isThereDownloadFolder != true) {
-            await createUserFolder()
+            await createUserFolder().then(async ()=>{
+                const newFolderData = await getFolderData()
+                for (let index = 0; index < newFolderData.length; index++) {
+                    const element = newFolderData[index].text;
+                    if (element == 'Скачанные Файлы') {
+                        isThereDownloadFolder = true
+                        downloadFolderUUID = newFolderData[index].Fileuuid
+                        fileuuid.current = downloadFolderUUID
+                        console.log(typeof(downloadFolderUUID));
+                    }
+                }
+            })
+            
+
         }
 
         
@@ -164,8 +177,8 @@ export default function Riddles({ route }) {
                 const newUUID = uuid.v4()
                 
                 const tempAudio = new Audio.Sound()                         // #FIXME
-                await tempAudio.loadAsync({uri:result.uri})         // Должен быть способ получать Duration из файла 
-                const status = await tempAudio.getStatusAsync()             // без загрузки его в переменную
+                await tempAudio.loadAsync({uri:result.uri})               // Должен быть способ получать Duration из файла 
+                const status = await tempAudio.getStatusAsync()     // без загрузки его в переменную
 
                 await storeStorageFiles({
                     name:modalFilename,
@@ -174,7 +187,8 @@ export default function Riddles({ route }) {
                     duration: status.durationMillis
                 })
             
-                await tempAudio.unloadAsync() // Выгрузка из переменной для очистки памяти  
+                await tempAudio.unloadAsync() // Выгрузка из переменной для очистки памяти
+                
             }
         }
 
