@@ -8,7 +8,7 @@ const { width, height } = Dimensions.get('window');
 
 export default function DynamicFileStoragePage({route}) {
     const {audioData} = route.params
-    const {playAudio, pauseAudio, isPlaying, currentIndex, positionMillis, pausedPosition, formatTime} = useSound()
+    const {playAudio, pauseAudio, isPlaying, currentIndex, positionMillis, pausedPosition, formatTime,  handlePlaylistAdd} = useSound()
 
     const navigation = useNavigation();
     
@@ -43,7 +43,7 @@ export default function DynamicFileStoragePage({route}) {
                                             } / {formatTime(file.duration)}
                                         </Text>
                                     </View>
-                                    <Pressable onPress={() => isPlaying && currentIndex == file.uuid ? pauseAudio() : playAudio(file.uri, file.uuid, file.name)}>
+                                    <Pressable onLongPress={() => {handlePlaylistAdd({uri:file.uri, index: file.uuid, name: file.name})}} onPress={() => isPlaying && currentIndex == file.uuid ? pauseAudio() : playAudio(file.uri, file.uuid, file.name)}>
                                         <AntDesign name={(isPlaying && currentIndex === file.uuid) ? "pausecircle" : "play"} size={30} color="#3C62DD" />
                                     </Pressable>
                                 </View>

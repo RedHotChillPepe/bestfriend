@@ -17,6 +17,10 @@ export const SoundProvider = ({children}) => {
     const [soundDuration, setSoundDuration] = useState(0) // проигрывателя
     const [soundUri, setSoundUri] = useState('')                    // (SoundControlContext)
 
+    const playlist = useRef([])
+    const [isRepeat, setIsRepeat] = useState(false)
+    const [isRepeatOne, setIsRepeatOne] = useState(false)
+    const currentPlaylistIndex = useRef(null)
 
 
     const playAudio = async (uri, index, name) => {
@@ -124,6 +128,75 @@ export const SoundProvider = ({children}) => {
         if (status.shouldPlay != true) {
             setPausedPosition(status.positionMillis)
         }
+        if (status.didJustFinish) {
+            handleSoundEnd()
+        }
+    }
+
+    const handlePlaylistAdd = async (sound) => {
+        console.log("sound added: ", sound);
+        
+        console.log(playlist);
+        
+        /* if (Object.keys(playlist.current).length != 0) {
+            playlist.current[playlist.current.length] = sound
+        } */
+        console.log("object keys equal 0",Object.keys(playlist.current).length == 0);
+        
+        if (Object.keys(playlist.current).length == 0) {
+            
+            
+            playlist.current[0] = sound
+            currentPlaylistIndex.current = 0
+            console.log("succ if curr eqls 0 : ", playlist);
+        }
+    }
+
+    const handlePlaylistRemove = async (index) => {
+
+    }
+
+    const handlePlaylistSkip = async (number) => {
+
+    }
+
+    const handleSoundEnd = async () => {
+        console.log("sound end, full playlist:", playlist.current);
+        
+        await sound.current.unloadAsync()
+
+        if (Object.keys(playlist.current).length == 0) {
+            setIsPlaying(false)
+        }
+        if (Object.keys(playlist.current).length != 0) {
+            if (Object.keys(playlist.current).length == 1) {
+                if (currentPlaylistIndex.current != null) {
+                    console.log(playlist);
+                    console.log(currentPlaylistIndex);
+                    console.log(playlist.current[currentPlaylistIndex.current]);
+                
+                    try {
+                        await playAudio(playlist.current[currentPlaylistIndex.current].uri, playlist.current[currentPlaylistIndex.current].index, playlist.current[currentPlaylistIndex.current].name)
+                    } catch (error) {
+                        console.error(error);
+                    }
+                    
+                } 
+
+            } else {
+
+                    try {
+                        currentPlaylistIndex.current = currentPlaylistIndex.current + 1
+                        await playAudio(playlist.current[currentPlaylistIndex.current].uri, playlist.current[currentPlaylistIndex.current].index, playlist.current[currentPlaylistIndex.current].name)
+                    } catch (error) {
+                        console.error(error);
+                        
+                    }
+                
+                
+                }
+
+        }
     }
     
 
@@ -143,7 +216,7 @@ export const SoundProvider = ({children}) => {
         <SoundContext.Provider value={
             {
                 sound, isPlaying, isLoaded, currentIndex, positionMillis, pausedPosition, soundName, soundDuration, soundUri,
-                setIsPlaying, playAudio, pauseAudio, formatTime
+                setIsPlaying, playAudio, pauseAudio, formatTime, handlePlaylistAdd
             }
         }>
             {children}

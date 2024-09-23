@@ -65,7 +65,7 @@ export const SoundControlProvider = ({children}) => {
                                     ? <View style={[styles.raised, {paddingTop:"4%"}]}>
                                             <View style={styles.viewTopRow}>
                                                 <Pressable>
-                                                    <FontAwesome6 name="repeat" size={20} color="#FFF" />
+                                                    <MaterialIcons name="repeat" size={30} color="#FFF" />
                                                 </Pressable>
                                                 <View>
                                                     <Text style={[styles.raisedText, {fontSize:20}]}>
@@ -73,7 +73,7 @@ export const SoundControlProvider = ({children}) => {
                                                     </Text>
                                                 </View>
                                                 <Pressable>
-                                                    <MaterialIcons name="playlist-play" size={25} color="#FFF" />
+                                                    <MaterialIcons name="playlist-play" size={35} color="#FFF" />
                                                 </Pressable>
                                             </View>
                                             <View style={styles.viewMiddleRow}>
@@ -87,7 +87,7 @@ export const SoundControlProvider = ({children}) => {
 
 
                                                 <Slider onSlidingComplete={(value) => {handleSliding(value)}} 
-                                                style={{width: 200, height: 40}} 
+                                                style={{width: 290, height: 40}} 
                                                 minimumValue={0} 
                                                 maximumValue={soundDuration}
                                                 value={ positionMillis }
@@ -103,7 +103,7 @@ export const SoundControlProvider = ({children}) => {
                                             <View style={styles.viewBottomRow}>
                                                 <Ionicons name="play-skip-back" size={35} color="#FFF" />
                                                 <Pressable style={{marginHorizontal:'5%'}} onPress={() => isPlaying ? pauseAudio() : playAudio(soundUri, currentIndex, soundName)}>
-                                                    <AntDesign name={(isPlaying) ? "pausecircle" : "play"} size={30} color="#FFF" />
+                                                    <AntDesign name={(isPlaying) ? "pausecircle" : "play"} size={40} color="#FFF" />
                                                 </Pressable>
                                                 <Ionicons name="play-skip-forward" size={35} color="#FFF" />
                                             </View>
