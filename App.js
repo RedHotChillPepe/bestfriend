@@ -65,7 +65,7 @@ const AppContent = () => {
     initialize();
   }, []);
 
-  SplashScreen.preventAutoHideAsync();
+ 
 
   let [fontsLoaded, error] = useFonts({
     Comfortaa_300Light,
@@ -79,11 +79,6 @@ const AppContent = () => {
     'SF Pro Rounded Regular':require('./assets/fonts/SFProRoundedRegular.otf')
   });
 
-  useEffect(() => {
-    if (fontsLoaded || error) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, error]);
   
 
   useEffect(() => {
