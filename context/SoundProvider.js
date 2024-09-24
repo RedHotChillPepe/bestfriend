@@ -129,76 +129,133 @@ export const SoundProvider = ({children}) => {
             setPausedPosition(status.positionMillis)
         }
         if (status.didJustFinish) {
-            handleSoundEnd()
+            handleSoundEnd(status)
         }
+    }
+
+    const handleSoundPan = async (position) => {
+        await sound.current.setPositionAsync(position)
     }
 
     const handlePlaylistAdd = async (sound) => {
         console.log("sound added: ", sound);
         
-        console.log(playlist);
         
-        /* if (Object.keys(playlist.current).length != 0) {
-            playlist.current[playlist.current.length] = sound
-        } */
+        
+        if (Object.keys(playlist.current).length != 0) {
+            const modifiedString = playlist.current.replace("[","").replace("]","")
+            playlist.current = "[" + modifiedString + "," + JSON.stringify(sound) + "]"
+            console.log(playlist);
+            console.log(typeof(playlist.current));
+            
+        } 
         console.log("object keys equal 0",Object.keys(playlist.current).length == 0);
         
         if (Object.keys(playlist.current).length == 0) {
             
             
-            playlist.current[0] = sound
+            playlist.current = "[" + JSON.stringify(sound) + "]"
             currentPlaylistIndex.current = 0
             console.log("succ if curr eqls 0 : ", playlist);
         }
+        console.log(JSON.parse(playlist.current));
+        
     }
 
     const handlePlaylistRemove = async (index) => {
 
     }
 
-    const handlePlaylistSkip = async (number) => {
+    const handlePlaylistSkip = async (string) => {
+        // await sound.current.unloadAsync()
+        if (Object.keys(playlist.current).length != 0) {
+            const JsonPlaylist = JSON.parse(playlist.current)
+            const playlistIndex = currentPlaylistIndex.current
 
+            if (currentPlaylistIndex.current != null) {
+                if (string == "forward") {
+                    await sound.current.unloadAsync()
+
+                    if ((currentPlaylistIndex.current + 1) == Object.keys(JsonPlaylist).length) {
+                        currentPlaylistIndex.current = 0
+                        await playAudio(JsonPlaylist[playlistIndex].uri, JsonPlaylist[playlistIndex].index, JsonPlaylist[playlistIndex].name)
+                    } else {
+                        currentPlaylistIndex.current += 1
+                        await playAudio(JsonPlaylist[playlistIndex].uri, JsonPlaylist[playlistIndex].index, JsonPlaylist[playlistIndex].name)
+                    }
+                }
+
+                if (string == "backward") {
+                    await sound.current.unloadAsync()
+
+                    if ((currentPlaylistIndex.current - 1) < 0) {
+                        currentPlaylistIndex.current = 0
+                        await playAudio(JsonPlaylist[playlistIndex].uri, JsonPlaylist[playlistIndex].index, JsonPlaylist[playlistIndex].name)
+                    } else {
+                        currentPlaylistIndex.current -= 1
+                        await playAudio(JsonPlaylist[playlistIndex].uri, JsonPlaylist[playlistIndex].index, JsonPlaylist[playlistIndex].name)
+                    }
+                }
+            }                
+            
+        }        
+        
+         
     }
 
-    const handleSoundEnd = async () => {
+    const handleSoundEnd = async (status) => {
         console.log("sound end, full playlist:", playlist.current);
+        const JsonPlaylist = JSON.parse(playlist.current)
         
-        await sound.current.unloadAsync()
+        
 
-        if (Object.keys(playlist.current).length == 0) {
+        if (Object.keys(JsonPlaylist).length == 0) {
+            await sound.current.unloadAsync()
             setIsPlaying(false)
         }
-        if (Object.keys(playlist.current).length != 0) {
-            if (Object.keys(playlist.current).length == 1) {
+        if (Object.keys(JsonPlaylist).length != 0) {
+            console.log("status uri: ", status.uri);
+            console.log("playlist.current uri: ", JsonPlaylist[currentPlaylistIndex.current]);
+            
+            
+            if (status.uri == JsonPlaylist[currentPlaylistIndex.current].uri && (!isRepeat || !isRepeatOne)) {
+                await sound.current.unloadAsync()
+                setIsPlaying(false)
+            } else if (Object.keys(JsonPlaylist).length == 1) {
                 if (currentPlaylistIndex.current != null) {
                     console.log(playlist);
                     console.log(currentPlaylistIndex);
-                    console.log(playlist.current[currentPlaylistIndex.current]);
+                    console.log(JsonPlaylist[currentPlaylistIndex.current]);
                 
                     try {
-                        await playAudio(playlist.current[currentPlaylistIndex.current].uri, playlist.current[currentPlaylistIndex.current].index, playlist.current[currentPlaylistIndex.current].name)
+                        await playAudio(JsonPlaylist[currentPlaylistIndex.current].uri, JsonPlaylist[currentPlaylistIndex.current].index, JsonPlaylist[currentPlaylistIndex.current].name)
                     } catch (error) {
                         console.error(error);
                     }
                     
                 } 
 
-            } else {
+            } else if ((currentPlaylistIndex.current + 1) != JsonPlaylist.length) {
 
-                    try {
-                        currentPlaylistIndex.current = currentPlaylistIndex.current + 1
-                        await playAudio(playlist.current[currentPlaylistIndex.current].uri, playlist.current[currentPlaylistIndex.current].index, playlist.current[currentPlaylistIndex.current].name)
-                    } catch (error) {
-                        console.error(error);
+                try {
+                    currentPlaylistIndex.current = currentPlaylistIndex.current + 1
+                    await playAudio(JsonPlaylist[currentPlaylistIndex.current].uri, JsonPlaylist[currentPlaylistIndex.current].index, JsonPlaylist[currentPlaylistIndex.current].name)
+                } catch (error) {
+                    console.error(error);
                         
-                    }
-                
-                
                 }
-
+            } else if (!isRepeat && !isRepeatOne) {
+                await sound.current.unloadAsync()
+                setIsPlaying(false)
+            } else if (isRepeat) {
+                currentPlaylistIndex.current = 0
+                await playAudio(JsonPlaylist[currentPlaylistIndex.current].uri, JsonPlaylist[currentPlaylistIndex.current].index, JsonPlaylist[currentPlaylistIndex.current].name)
+            } else if (isRepeatOne) {
+                await playAudio(JsonPlaylist[currentPlaylistIndex.current].uri, JsonPlaylist[currentPlaylistIndex.current].index, JsonPlaylist[currentPlaylistIndex.current].name)
+            }
+           
         }
     }
-    
 
 
     const formatTime = (millis) => {
@@ -216,7 +273,7 @@ export const SoundProvider = ({children}) => {
         <SoundContext.Provider value={
             {
                 sound, isPlaying, isLoaded, currentIndex, positionMillis, pausedPosition, soundName, soundDuration, soundUri,
-                setIsPlaying, playAudio, pauseAudio, formatTime, handlePlaylistAdd
+                setIsPlaying, playAudio, pauseAudio, formatTime, handlePlaylistAdd, handlePlaylistSkip, handleSoundPan
             }
         }>
             {children}

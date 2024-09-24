@@ -16,13 +16,16 @@ const SoundControlContext = createContext();
 
 export const SoundControlProvider = ({children}) => {
 
-    const {sound, soundName, soundDuration, soundUri, isPlaying, isLoaded, currentIndex, positionMillis, pausedPosition, formatTime, pauseAudio, playAudio} = useSound()
+    const {sound, soundName, soundDuration, soundUri, isPlaying, isLoaded, currentIndex, positionMillis, pausedPosition, 
+        formatTime, pauseAudio, playAudio, handleSoundPan, handlePlaylistSkip} = useSound()
     const animHight = useSharedValue(70)
     const [isRaised, setIsRaised] = useState(false)
     const flingUp = Gesture.Fling().direction(Directions.UP).onEnd(()=>{animUp()}).runOnJS(true);
     const flingDown = Gesture.Fling().direction(Directions.DOWN).onEnd(()=>{animDown()}).runOnJS(true);
 
 
+    
+    
 
     
 
@@ -45,7 +48,7 @@ export const SoundControlProvider = ({children}) => {
     }
 
     const handleSliding = async (value) => {
-        console.log(value);
+        handleSoundPan(value)
         
     }
 
@@ -86,10 +89,10 @@ export const SoundControlProvider = ({children}) => {
                                                 </Text>
 
 
-                                                <Slider onSlidingComplete={(value) => {handleSliding(value)}} 
+                                                <Slider onSlidingComplete={(value) => {handleSliding(value)}}
                                                 style={{width: 290, height: 40}} 
                                                 minimumValue={0} 
-                                                maximumValue={soundDuration}
+                                                maximumValue={soundDuration }
                                                 value={ positionMillis }
                                                 thumbTintColor="#F7F7FF"
                                                 minimumTrackTintColor="#F7F7FF"
@@ -101,11 +104,17 @@ export const SoundControlProvider = ({children}) => {
                                                 </Text>
                                             </View>
                                             <View style={styles.viewBottomRow}>
-                                                <Ionicons name="play-skip-back" size={35} color="#FFF" />
+                                                <Pressable onPress={() => {handlePlaylistSkip("backward")}}>
+                                                    <Ionicons name="play-skip-back" size={35} color="#FFF" />
+                                                </Pressable>
+                                                
                                                 <Pressable style={{marginHorizontal:'5%'}} onPress={() => isPlaying ? pauseAudio() : playAudio(soundUri, currentIndex, soundName)}>
                                                     <AntDesign name={(isPlaying) ? "pausecircle" : "play"} size={40} color="#FFF" />
                                                 </Pressable>
-                                                <Ionicons name="play-skip-forward" size={35} color="#FFF" />
+
+                                                <Pressable onPress={() => {handlePlaylistSkip("forward")}}>
+                                                    <Ionicons name="play-skip-forward" size={35} color="#FFF" />
+                                                </Pressable>                                                
                                             </View>
                                         </View>
                                     :   <View style={[styles.unRaised, {paddingTop:'2%'}]}>
