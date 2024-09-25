@@ -1,6 +1,6 @@
 // App.js
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, StatusBar } from 'react-native';
+import { Text, StyleSheet, StatusBar} from 'react-native';
 import { useFonts } from 'expo-font';
 import { Comfortaa_300Light, Comfortaa_400Regular, Comfortaa_500Medium, Comfortaa_600SemiBold, Comfortaa_700Bold } from '@expo-google-fonts/comfortaa';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
@@ -23,6 +23,7 @@ import { SoundProvider } from './context/SoundProvider';
 import { SoundControlProvider } from './context/SoundControlContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as Calendar from 'expo-calendar';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
@@ -160,6 +161,7 @@ const AppContent = () => {
 
 export default function App() {
   return (
+    <SafeAreaView style={{flex:1}}>
       <GestureHandlerRootView style={{flex:1}}>
         <SoundProvider>
           <SoundControlProvider>
@@ -170,6 +172,8 @@ export default function App() {
           </SoundControlProvider> 
         </SoundProvider>  
       </GestureHandlerRootView>
+    </SafeAreaView>
+      
         
    
     

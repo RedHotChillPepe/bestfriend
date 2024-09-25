@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View, Dimensions, Pressable } from "react-native";
+import { StyleSheet, Text, View, Dimensions, Pressable, ScrollView, FlatList } from "react-native";
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { Directions } from 'react-native-gesture-handler';
 import { useSound } from './SoundProvider.js';
@@ -16,16 +16,14 @@ const SoundControlContext = createContext();
 
 export const SoundControlProvider = ({children}) => {
 
-    const {sound, soundName, soundDuration, soundUri, isPlaying, isLoaded, currentIndex, positionMillis, pausedPosition, 
-        formatTime, pauseAudio, playAudio, handleSoundPan, handlePlaylistSkip} = useSound()
+    const {sound, playlist, soundName, soundDuration, soundUri, isPlaying, isLoaded, isRepeat, isRepeatOne, currentIndex, positionMillis, pausedPosition, 
+        formatTime, pauseAudio, playAudio, handleSoundPan, handlePlaylistSkip, handleRepeat} = useSound()
     const animHight = useSharedValue(70)
     const [isRaised, setIsRaised] = useState(false)
+    const [isPlaylist, setIsPlaylist] = useState(false)
     const flingUp = Gesture.Fling().direction(Directions.UP).onEnd(()=>{animUp()}).runOnJS(true);
     const flingDown = Gesture.Fling().direction(Directions.DOWN).onEnd(()=>{animDown()}).runOnJS(true);
 
-
-    
-    
 
     
 
@@ -44,12 +42,17 @@ export const SoundControlProvider = ({children}) => {
         if (animHight.value == 140) {
                 animHight.value = animHight.value - 70
                 setIsRaised(false)
+                setIsPlaylist(false)
         }
     }
 
     const handleSliding = async (value) => {
         handleSoundPan(value)
         
+    }
+
+    const togglePlaylist = () => {
+        setIsPlaylist(!isPlaylist)
     }
 
     function SoundControlPanel (){
@@ -59,23 +62,73 @@ export const SoundControlProvider = ({children}) => {
 
         return (
             <View style={styles.container}>
-                {isLoaded
-                ?   <GestureDetector gesture={flingUp}>
+                
+                <GestureDetector gesture={flingUp}>
                             <GestureDetector gesture={flingDown}>
-                                <Animated.View style={[styles.soundPlayerBase, {height:animHight}]} >
+                                <Animated.View style={[styles.soundPlayerBase, isPlaylist ? {height:600} : {height:animHight}]} >
 
                                     {isRaised
                                     ? <View style={[styles.raised, {paddingTop:"4%"}]}>
+                                        
+                                            {isPlaylist
+                                            &&  <View style={styles.playlist}>
+                                                    <Text style={styles.playlistTitle}>
+                                                        Плейлист
+                                                    </Text>
+                                                    {
+                                                        Object.keys(playlist.current).length != 0
+                                                        ?   <FlatList 
+                                                                data={JSON.parse(playlist.current)}
+                                                                renderItem={({item, index}) => (
+                                                                    <View style={{paddingHorizontal:16}} key={item.index}>
+                                                                        <View style={styles.playlistCard}>
+                                                                            <Text style={styles.playlistSoundName}>
+                                                                            {item.name}
+                                                                            </Text>
+                                                                            <Text style={styles.playlistSoundDuration}>
+                                                                                {formatTime(item.duration)}
+                                                                            </Text>
+                                                                        </View>
+                                                                        
+                                                                    </View>
+                                                                )}
+                                                            />
+                                                        : <Text style={styles.playlistTitle}>В плейлисте ничего нет!</Text>
+                                                    }
+
+                                                    
+                                                </View>
+                                            }
+                                        
                                             <View style={styles.viewTopRow}>
-                                                <Pressable>
-                                                    <MaterialIcons name="repeat" size={30} color="#FFF" />
-                                                </Pressable>
+                                                {
+                                                    !isRepeat && !isRepeatOne
+                                                    ?   <Pressable onPress={() => {handleRepeat("repeat")}}>
+                                                            <MaterialIcons name="repeat" size={30} color="#FFF" />
+                                                        </Pressable>
+                                                    :   
+                                                        isRepeat && !isRepeatOne
+                                                        ? <Pressable onPress={() => {handleRepeat("repeat one")}}>
+                                                                <MaterialIcons name="repeat-on" size={30} color="#FFF" />
+                                                            </Pressable>
+                                                        : 
+                                                            !isRepeat && isRepeatOne
+                                                            &&<Pressable onPress={() => {handleRepeat("no repeat")}}>
+                                                                    <MaterialIcons name="repeat-one" size={30} color="#FFF" />
+                                                                </Pressable>
+
+                                                }
+                                                
                                                 <View>
                                                     <Text style={[styles.raisedText, {fontSize:20}]}>
-                                                        {soundName}
+                                                        {
+                                                            isLoaded
+                                                            ? soundName
+                                                            :   "Звук не загружен"
+                                                        }
                                                     </Text>
                                                 </View>
-                                                <Pressable>
+                                                <Pressable onPress={() => {togglePlaylist()}}>
                                                     <MaterialIcons name="playlist-play" size={35} color="#FFF" />
                                                 </Pressable>
                                             </View>
@@ -123,7 +176,11 @@ export const SoundControlProvider = ({children}) => {
                                             </Pressable>
                                             <View style={{paddingLeft:'5%'}}>
                                                 <Text style={[styles.unRaisedText, {fontSize:16}]}>
-                                                    {soundName}
+                                                    {
+                                                        isLoaded
+                                                        ? soundName
+                                                        : "Звук не загружен"
+                                                    }
                                                 </Text>
                                                 <Text style={[styles.unRaisedText, {fontSize:12}]}>
                                                     {
@@ -140,9 +197,7 @@ export const SoundControlProvider = ({children}) => {
                                 </Animated.View>                        
                             </GestureDetector>
                         </GestureDetector>
-                : <></> 
-                }
-                
+                              
             </View>
         )
     }
@@ -201,6 +256,34 @@ const styles = StyleSheet.create({
     raisedText:{
         fontFamily:'SF Pro Rounded Regular',
         color:'#FFF'
+    },
+    playlist:{
+        flexDirection:'column',
+        alignItems:'center',
+        height:'78%'
+    },
+    playlistTitle:{
+        color:"#FFF",
+        fontSize:20,
+        fontFamily:"SF Pro Rounded Regular",
+    },
+    playlistSoundName:{
+        color:"#FFF",
+        fontSize:14,
+        fontFamily:"SF Pro Rounded Regular",
+    },
+    playlistSoundDuration:{
+        color:"#FFF",
+        fontSize:12,
+        fontFamily:"SF Pro Rounded Regular",
+    },
+    playlistCard:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        width:'100%',
+
+        borderBottomWidth:1, 
+        borderBottomColor:"#99ACEE"
     }
 })
 
