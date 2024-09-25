@@ -14,7 +14,7 @@ function CustomDrawerComponent(props) {
         <DrawerContentScrollView style={{marginTop:'15%'}} {...props}>
             <View style={{backgroundColor:'#3C62DD', height:"100%", borderBottomRightRadius:25, flexDirection:'column', justifyContent:'space-between'}}>
                 <View>
-                    <DrawerItem  icon={() => <FontAwesome name='user' size={24} color={"#FFF"}/>} label={"Профиль"} labelStyle={styles.styledLabel}/>
+                    {/* <DrawerItem  icon={() => <FontAwesome name='user' size={24} color={"#FFF"}/>} label={"Профиль"} labelStyle={styles.styledLabel}/> */}
                     <DrawerItem  icon={() => <FontAwesome name='book' size={24} color={"#FFF"}/>} label={"Библиотека"} labelStyle={styles.styledLabel} onPress={() => {navigation.navigate("ЛУЧШИЙ ДРУГ")}}/>
                     <DrawerItem  icon={() => <FontAwesome name='question' size={40} color={"#FFF"}/>} label={"Помощь"} labelStyle={styles.styledLabel} onPress={() => {navigation.navigate("HelpPage")}}/>
                     <DrawerItem  icon={() => <FontAwesome name='info' size={40} color={"#FFF"}/>} label={"О приложении"} labelStyle={styles.styledLabel} onPress={() => {navigation.navigate("AboutUs")}} />

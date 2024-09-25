@@ -166,7 +166,17 @@ export const SoundProvider = ({children}) => {
     }
 
     const handlePlaylistRemove = async (index) => {
+        const tempPlaylist = JSON.parse(playlist.current)
 
+        for (let indexFor = 0; indexFor < tempPlaylist.length; indexFor++) {
+
+            if (indexFor == index) {
+                const newJson = tempPlaylist.toSpliced(indexFor, 1)
+
+                playlist.current = JSON.stringify(newJson).replace("[", "").replace("]", "")
+            }
+            
+        }
     }
 
     const handlePlaylistSkip = async (string) => {
@@ -291,7 +301,7 @@ export const SoundProvider = ({children}) => {
         <SoundContext.Provider value={
             {
                 sound, playlist, isPlaying, isLoaded, currentIndex, positionMillis, pausedPosition, soundName, soundDuration, soundUri, isRepeat, isRepeatOne,
-                setIsPlaying, playAudio, pauseAudio, formatTime, handlePlaylistAdd, handlePlaylistSkip, handleSoundPan, handleRepeat
+                setIsPlaying, playAudio, pauseAudio, formatTime, handlePlaylistAdd, handlePlaylistSkip, handleSoundPan, handleRepeat, handlePlaylistRemove
             }
         }>
             {children}

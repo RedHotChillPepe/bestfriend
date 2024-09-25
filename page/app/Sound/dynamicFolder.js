@@ -139,6 +139,8 @@ export default function DynamicFolder({route, navigation}) {
                     await AsyncStorage.removeItem(Fileuuid)
                     await storeStorageFiles(newJsonObject)
                     setStorageFiles(await fetchStorageFiles())
+                    setIsRename(false)
+                    setIsModalFile(false)
                 }
                 
             }

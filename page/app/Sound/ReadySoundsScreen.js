@@ -1,5 +1,5 @@
 import { Text, View, TouchableOpacity, StyleSheet, ScrollView, Dimensions, ActivityIndicator, Modal, Linking, Alert, Pressable, TextInput, TouchableWithoutFeedback } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -25,6 +25,10 @@ export default function ReadySoundsScreen() {
     
     const navigation = useNavigation();
 
+    const refFolder = useRef(null)
+    const [isRename, setIsRename] = useState(false)
+    const [folderName, setFolderName] = useState('')
+
     
 
     /// AsyncStorage локальное хранилище на телефоне
@@ -42,7 +46,7 @@ export default function ReadySoundsScreen() {
     const storeFolderData = async (value) => {
         try {
             
-            const jsonValue = JSON.stringify(value);
+            const jsonValue = JSON.stringify(value).replace("[","").replace("]","");
             if (await getFolderData() != null) {
 
                 const replacedFolderData =  JSON.stringify(await getFolderData()).replace("[","").replace("]","")
@@ -159,6 +163,65 @@ export default function ReadySoundsScreen() {
 
     const handleModalFolder = async (folder) => {
         setIsModalFolder(true)
+        refFolder.current = folder
+    }
+
+    const handleFolderDelete = async () => {
+        if (refFolder.current != null) {
+            const tempStorageFiles = await getFolderData()
+
+            for (let index = 0; index < tempStorageFiles.length; index++) {
+                const element = tempStorageFiles[index].uuid
+
+                if (element == refFolder.current.uuid) {
+                    const newJsonObject = tempStorageFiles.toSpliced(index, 1)
+                    console.log(newJsonObject);
+                    await AsyncStorage.removeItem("userFolder")
+                    await storeFolderData(newJsonObject)
+                    setUserFolders([...await getFolderData()])
+                    setIsRename(false)
+                    setIsModalFolder(false)
+                }
+                
+            }
+        }
+    }
+
+    const toggleRenameButton = () => {
+        setIsRename(!isRename)
+    }
+
+    const handleFolderRename = async () => {
+        if (folderName == "") {
+            alert("Введите Имя")
+        } else if (refFolder.current != null) {
+            const tempStorageFiles = await getFolderData()
+            console.log("getFolderData", tempStorageFiles);
+            
+
+            for (let index = 0; index < tempStorageFiles.length; index++) {
+                const element = tempStorageFiles[index].Fileuuid
+                
+                if (element == refFolder.current.Fileuuid) {
+                    const newJsonObject = tempStorageFiles.toSpliced(index, 1, {
+                        "text":`${folderName}`,
+                        "Fileuuid":`${tempStorageFiles[index].Fileuuid}`, 
+                        "name": "card3", 
+                        "cardTextStyle":"card3Text" , 
+                        "cardTextPressedStyle":"card3Pressed",
+                        "onPressDestination": "DynamicFolder", 
+                        "onPressPayload":`{"text": "${folderName}", "Fileuuid":"${tempStorageFiles[index].Fileuuid}"}`
+                    })
+                    await AsyncStorage.removeItem("userFolder")
+                    await storeFolderData(newJsonObject)
+                    setUserFolders(await getFolderData())
+                    
+                    setIsRename(false)
+                    setIsModalFolder(false)
+                }
+            }
+        }
+        
     }
 
    
@@ -177,12 +240,12 @@ export default function ReadySoundsScreen() {
                 <ActivityIndicator size="large" color="#a4ca79" />
             ) : (
                 <ScrollView  contentContainerStyle={{ alignItems: 'center'}}>
-                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingTop:115, paddingBottom: 24}}>
-                        <Pressable style={{paddingRight:50}} onPress={()=> clearAll()}>
-                            <Text style={styles.subtitleText}>
+                    <View style={{flex:1, paddingHorizontal:"4%", justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingTop:115, paddingBottom: 24}}>
+                        
+                            <Text style={[styles.subtitleText]}>
                                 Библиотека
                             </Text>
-                        </Pressable>
+                        
                         
                         <Pressable onPress={()=>setModalPlusVisible(true)}>
                             <MaterialCommunityIcons name='plus-circle-outline' color="#646463" size={30}/>
@@ -282,13 +345,30 @@ export default function ReadySoundsScreen() {
                     <View>
                     <TouchableWithoutFeedback>
                             <View style={styles.modalView}>
-                                <View>
-                                    <Button style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Переименовать</Button>
-                                </View>
+                                {
+                                    isRename 
+                                    ?   <View>
+                                            <View style={{marginBottom:'10%', marginTop:'10%', backgroundColor:'#FFF', borderRadius:16}}>
+                                                <TextInput placeholderTextColor={"#848484"} onChangeText={setFolderName} style={{fontSize:20, height:48, width:240, fontFamily:'SF Pro Rounded Regular', paddingLeft:15}} autoFocus={true} placeholder='Название'></TextInput>
+                                            </View>
+                                            <View>
+                                                <Button onPress={() => handleFolderRename()} style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Сменить имя</Button>
+                                            </View>
+                                            <View>
+                                                <Button onPress={()=> toggleRenameButton()} style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Отмена</Button>
+                                            </View>
+                                        </View>
+                                    :   <View>
+                                            <View>
+                                                <Button onPress={() => toggleRenameButton()} style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Переименовать</Button>
+                                            </View>
+                                        
+                                            <View>
+                                                <Button onPress={() => handleFolderDelete()} style={{borderRadius:8, width:220, fontSize:20}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Удалить</Button>
+                                            </View>
+                                    </View>
+                                }
                                 
-                                <View>
-                                    <Button style={{borderRadius:8, width:220, fontSize:20}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Удалить</Button>
-                                </View>
                             </View>
                         </TouchableWithoutFeedback>
                     </View>

@@ -14,7 +14,7 @@ const { width, height } = Dimensions.get('window');
 
 function UserRecords({navigation}) {
 
-    const {playAudio, pauseAudio, isPlaying, currentIndex, positionMillis, pausedPosition, formatTime} = useSound()
+    const {playAudio, pauseAudio, isPlaying, currentIndex, positionMillis, pausedPosition, formatTime, handlePlaylistAdd} = useSound()
 
     const [storageFiles, setStorageFiles] = useState([]);
     const [isModalShown, setIsModalShown] = useState(false)
@@ -26,6 +26,14 @@ function UserRecords({navigation}) {
     const [isPaused, setIsPaused] = useState(false)                                                               // в рендере модального окна записи
 
     const recording = useRef(new Audio.Recording)
+
+    const [isModalFile, setIsModalFile] = useState(false)
+    const [isRename, setIsRename] = useState(false)
+    const [pressedIn, setPressedIn] = useState(null)
+
+    const [fileName, setFileName] = useState('')
+
+    const refModalFile = useRef(null)
 
     /// AsyncStorage локальное хранилище на телефоне
     const fetchStorageFiles = async () => {
@@ -40,7 +48,7 @@ function UserRecords({navigation}) {
     const storeStorageFiles = async (value) => {
         try {
             
-            const jsonValue = JSON.stringify(value);
+            const jsonValue = JSON.stringify(value).replace("[","").replace("]","");
             if (await fetchStorageFiles() != null) {
                 const replacedFileData =  JSON.stringify(await fetchStorageFiles()).replace("[","").replace("]","")
                 const combinedString = "[" + replacedFileData + ',' + jsonValue + "]"
@@ -73,6 +81,8 @@ function UserRecords({navigation}) {
             
             if (await fetchStorageFiles() != null) {
                 setStorageFiles(await fetchStorageFiles())
+                console.log(await fetchStorageFiles());
+                
             }
         }
         initialfillup()
@@ -187,6 +197,78 @@ function UserRecords({navigation}) {
         
     }
     ///
+
+    const handleModalFile = async (file) => {
+        setIsModalFile(true)
+        refModalFile.current = file
+    }
+
+    const handleFileDelete = async () => {
+        if (refModalFile.current != null) {
+            const tempStorageFiles = await fetchStorageFiles()
+
+            for (let index = 0; index < tempStorageFiles.length; index++) {
+                const element = tempStorageFiles[index].uuid
+
+                if (element == refModalFile.current.uuid) {
+                    const newJsonObject = tempStorageFiles.toSpliced(index, 1)
+                    console.log(newJsonObject);
+                    await AsyncStorage.removeItem("userRecords")
+                    await storeStorageFiles(newJsonObject)
+                    setStorageFiles(await fetchStorageFiles())
+                    setIsRename(false)
+                    setIsModalFile(false)
+                }
+                
+            }
+        }
+    }
+
+    const toggleRenameButton = () => {
+        setIsRename(!isRename)
+    }
+
+    const handleFileRename = async () => {
+        if (fileName == "") {
+            alert("Введите Имя")
+        } else if (refModalFile.current != null) {
+            const tempStorageFiles = await fetchStorageFiles()
+
+            for (let index = 0; index < tempStorageFiles.length; index++) {
+                const element = tempStorageFiles[index].uuid
+                
+                if (element == refModalFile.current.uuid) {
+                    const newJsonObject = tempStorageFiles.toSpliced(index, 1, {name:fileName, duration:tempStorageFiles[index].duration, uri:tempStorageFiles[index].uri, uuid:tempStorageFiles[index].uuid})
+                    await AsyncStorage.removeItem("userRecords")
+                    await storeStorageFiles(newJsonObject)
+                    setStorageFiles(await fetchStorageFiles())
+                    
+                    setIsRename(false)
+                    setIsModalFile(false)
+                }
+            }
+        }
+        
+    }
+    
+    const localHandlePlalistAdd = () => {
+        if (refModalFile.current != null) {
+            handlePlaylistAdd({
+                uri:refModalFile.current.uri,
+                index:refModalFile.current.uuid,
+                name:refModalFile.current.name,
+                duration:refModalFile.current.duration
+            })
+        }
+       
+    }
+
+    const handlePressIn = (index) => {
+        setPressedIn(index)
+    }
+    const handlePressOut = () => {
+        setPressedIn(null)
+    }
     
   return (
     <View>
@@ -213,24 +295,30 @@ function UserRecords({navigation}) {
                 <View style={{ width: '100%', alignItems: 'center' }}>
                     <View style={{  width: '90%' }}>
                         {
-                            storageFiles.map((file) => (
-                                <View key={file.uuid} style={styles.card}>
-                                    <View style={styles.cardText}>
-                                        <Text style={styles.cardTextTitle}>
-                                            {file.name}
-                                        </Text>
-                                        <Text style={styles.cardTime}>
-                                            {
-                                                isPlaying 
-                                                ? formatTime( currentIndex === file.uuid ? positionMillis : 0)
-                                                : formatTime(currentIndex === file.uuid ? pausedPosition : 0)
-                                            } / {formatTime(file.duration)}
-                                        </Text>
+                            storageFiles.map((file, index) => (
+                                <Pressable
+                                onPressIn={()=> handlePressIn(index)}
+                                onPressOut={() => handlePressOut()}
+                                onLongPress={() => handleModalFile(file)}>
+                                    <View key={file.uuid} style={[styles.card, pressedIn == index && {backgroundColor:"#dedede"}]}>
+                                        <View style={styles.cardText}>
+                                            <Text style={styles.cardTextTitle}>
+                                                {file.name}
+                                            </Text>
+                                            <Text style={styles.cardTime}>
+                                                {
+                                                    isPlaying 
+                                                    ? formatTime( currentIndex === file.uuid ? positionMillis : 0)
+                                                    : formatTime(currentIndex === file.uuid ? pausedPosition : 0)
+                                                } / {formatTime(file.duration)}
+                                            </Text>
+                                        </View>
+                                        <Pressable onPress={() => isPlaying && currentIndex == file.uuid ? pauseAudio() : playAudio(`${file.uri}`, file.uuid, file.name)}>
+                                            <AntDesign name={(isPlaying && currentIndex === file.uuid) ? "pausecircle" : "play"} size={30} color="#3C62DD" />
+                                        </Pressable>
                                     </View>
-                                    <Pressable onPress={() => isPlaying && currentIndex == file.uuid ? pauseAudio() : playAudio(`${file.uri}`, file.uuid, file.name)}>
-                                        <AntDesign name={(isPlaying && currentIndex === file.uuid) ? "pausecircle" : "play"} size={30} color="#3C62DD" />
-                                    </Pressable>
-                                </View>
+                                </Pressable>
+                                
                             ))
                         }
                     </View>
@@ -278,7 +366,46 @@ function UserRecords({navigation}) {
                     </TouchableWithoutFeedback>
                 </View>
             </Pressable>
-                
+            </Modal>
+            <Modal  transparent={true} animationType="slide" visible={isModalFile}  onRequestClose={()=>setIsModalFile(false)} onDismiss={()=>setIsModalFile(false)}>
+                <Pressable style={styles.centeredView} onPress={()=> setIsModalFile(false)}>
+                    <View>
+                    <TouchableWithoutFeedback>
+                        
+                            <View style={styles.modalView}>
+                                {
+                                    isRename 
+                                    ? <View>
+                                            <View style={{marginBottom:'10%', marginTop:'10%', backgroundColor:'#FFF', borderRadius:16}}>
+                                                <TextInput placeholderTextColor={"#848484"} onChangeText={setFileName} style={{fontSize:20, height:48, width:240, fontFamily:'SF Pro Rounded Regular', paddingLeft:15}} autoFocus={true} placeholder='Название'></TextInput>
+                                            </View>
+                                            <View>
+                                                <Button onPress={() => handleFileRename()} style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Сменить имя</Button>
+                                            </View>
+                                            <View>
+                                                <Button onPress={()=> toggleRenameButton()} style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Отмена</Button>
+                                            </View>
+                                        </View>
+                                    : <View>
+                                    <View>
+                                        <Button onPress={() => localHandlePlalistAdd()} style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Добавить в плейлист</Button>
+                                    </View>
+
+                                    <View>
+                                        <Button onPress={() => toggleRenameButton()} style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Переименовать</Button>
+                                    </View>
+                                    
+                                    <View>
+                                        <Button onPress={() => handleFileDelete()} style={{borderRadius:8, width:220, fontSize:20}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Удалить</Button>
+                                    </View>
+                                </View>
+                               
+                                }
+                                
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+                </Pressable>
             </Modal>
             
     </View>

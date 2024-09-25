@@ -67,7 +67,7 @@ export default function FileStorage({route}) {
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{width:'100%'}}>
                 <View style={{paddingHorizontal:'4%', alignItems:'center'}} >
-                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', gap:268}}>
+                    <View style={{ width:"100%", flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center'}}>
                         <Pressable style={{paddingLeft:'4%'}} onPress={()=> navigation.goBack()}>
                             <Text style={styles.subtitleText}>
                                 Назад

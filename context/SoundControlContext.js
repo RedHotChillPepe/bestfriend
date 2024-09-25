@@ -17,14 +17,14 @@ const SoundControlContext = createContext();
 export const SoundControlProvider = ({children}) => {
 
     const {sound, playlist, soundName, soundDuration, soundUri, isPlaying, isLoaded, isRepeat, isRepeatOne, currentIndex, positionMillis, pausedPosition, 
-        formatTime, pauseAudio, playAudio, handleSoundPan, handlePlaylistSkip, handleRepeat} = useSound()
+        formatTime, pauseAudio, playAudio, handleSoundPan, handlePlaylistSkip, handleRepeat, handlePlaylistRemove} = useSound()
     const animHight = useSharedValue(70)
     const [isRaised, setIsRaised] = useState(false)
     const [isPlaylist, setIsPlaylist] = useState(false)
     const flingUp = Gesture.Fling().direction(Directions.UP).onEnd(()=>{animUp()}).runOnJS(true);
     const flingDown = Gesture.Fling().direction(Directions.DOWN).onEnd(()=>{animDown()}).runOnJS(true);
 
-
+    
     
 
     function animUp() {
@@ -55,6 +55,12 @@ export const SoundControlProvider = ({children}) => {
         setIsPlaylist(!isPlaylist)
     }
 
+    const localHandlePlaylistRemove = (index) => {
+        togglePlaylist()
+        handlePlaylistRemove(index)
+    }
+
+
     function SoundControlPanel (){
 
        
@@ -81,15 +87,16 @@ export const SoundControlProvider = ({children}) => {
                                                                 data={JSON.parse(playlist.current)}
                                                                 renderItem={({item, index}) => (
                                                                     <View style={{paddingHorizontal:16}} key={item.index}>
+                                                                        <Pressable onLongPress={() => localHandlePlaylistRemove(index)}>
                                                                         <View style={styles.playlistCard}>
                                                                             <Text style={styles.playlistSoundName}>
-                                                                            {item.name}
+                                                                                {item.name}
                                                                             </Text>
                                                                             <Text style={styles.playlistSoundDuration}>
                                                                                 {formatTime(item.duration)}
                                                                             </Text>
                                                                         </View>
-                                                                        
+                                                                        </Pressable>
                                                                     </View>
                                                                 )}
                                                             />

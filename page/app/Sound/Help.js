@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, TouchableOpacity,ScrollView, Pressable, Dimensions, Modal } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity,ScrollView, Pressable, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -18,7 +18,7 @@ export default function Training({ route }) {
    
     const {isPlaying, positionMillis, pausedPosition, 
         currentIndex, setIsPlaying, setPositionMillis, setPausedPosition, 
-    playAudio, pauseAudio, formatTime} = useSound()
+    playAudio, pauseAudio, formatTime, handlePlaylistAdd} = useSound()
 
     const navigation = useNavigation();
 
@@ -27,8 +27,10 @@ export default function Training({ route }) {
     const [modalFilename, setModalFilename] = useState('')
     const [modalUri, setModalUri] = useState('')
     const [downloadPercent, setDownloadPercent] = useState(0)
+    const [isDownload, setIsDownload] = useState(false)
 
     const folderuuid = useRef("")
+    const refModalFile = useRef(null)
 
     /// AsyncStorage локальное хранилище на телефоне
     const getFolderData = async () => {
@@ -215,10 +217,11 @@ export default function Training({ route }) {
 
     }
 
-    const handleModalOpen = async (uri, name) => {
+    const handleModalOpen = async (uri, name, file) => {
         setModalDownloadVisible(true)
         setModalFilename(name)
         setModalUri(uri)
+        refModalFile.current = file
     }
 
     const handleModalClose = async() => {
@@ -226,6 +229,24 @@ export default function Training({ route }) {
         setDownloadPercent(0)
         setModalFilename("")
         setModalUri("")
+        setIsDownload(false)
+        refModalFile.current = null
+    }
+
+    const toggleDownload = () => {
+        setIsDownload(!isDownload)
+    }
+
+    const localHandlePlalistAdd = () => {
+        if (refModalFile.current != null) {
+            handlePlaylistAdd({
+                uri:refModalFile.current.audioFile,
+                index:refModalFile.current._id,
+                name:refModalFile.current.name,
+                duration:refModalFile.current.duration
+            })
+        }
+       
     }
 
 
@@ -269,7 +290,7 @@ export default function Training({ route }) {
                             onPressIn={() => handlePressIn(index)}
                             onPressOut={() => handlePressOut()}
                             key={index}
-                            onLongPress={()=>handleModalOpen(item.audioFile, item.name)}  
+                            onLongPress={()=>handleModalOpen(item.audioFile, item.name, item)} 
                             style={[styles.card, pressedIn === index && styles.pressedCard]}>
                                 <View style={styles.cardText}>
                                     <Text style={styles.cardTextTitle}>
@@ -292,32 +313,47 @@ export default function Training({ route }) {
                 </View>
             </ScrollView>
             <Modal  transparent={true} animationType="slide" visible={modalDownloadVisible}  onRequestClose={()=>{handleModalClose()}} onDismiss={()=>{handleModalClose()}}>
-                <View style={styles.centeredView}>
+            <Pressable onPress={() => handleModalClose()} style={styles.centeredView}>
+                <View >
+                    <TouchableWithoutFeedback>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalFolderText}>
-                            Скачать {modalFilename}?
-                        </Text>
-                        <Text style={styles.modalFolderText}>
-                            {
-                                downloadPercent == 0
-                                ? ""
-                                : downloadPercent == 100
-                                    ? "Скачивание Завершено!"
-                                    : downloadPercent+"%"
-                            }
-                        </Text>
-                        <View>
-                            {
-                                downloadPercent != 100
-                                ? downloadPercent > 0 
-                                    ? <></>
-                                    : <Button style={{borderRadius:8, width:115, fontSize:20}} textColor='#3C62DD' onPress={()=>handleDownload(modalUri)} buttonColor='#FFF' mode='contained'>Скачать</Button>
-                                : <Button style={{borderRadius:8, width:115, fontSize:20}} textColor='#3C62DD' onPress={()=>handleModalClose()} buttonColor='#FFF' mode='contained'>Закрыть</Button>
-                            }
-                            
-                        </View>
+                        {
+                            !isDownload
+                            ?  <View >
+                                    <Button onPress={() => localHandlePlalistAdd()} style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Добавить в плейлист</Button>
+                                    <Button onPress={() => toggleDownload()} style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Скачать</Button>
+                                </View>
+                            :   <View style={{alignItems:'center', flexDirection:"column"}}>
+                                    <Text style={styles.modalFolderText}>
+                                        Скачать {modalFilename}?
+                                    </Text>
+                                    <Text style={styles.modalFolderText}>
+                                        {
+                                            downloadPercent == 0
+                                            ? ""
+                                            : downloadPercent == 100
+                                                ? "Скачивание Завершено!"
+                                                : downloadPercent+"%"
+                                        }
+                                    </Text>
+                                    <View>
+                                        {
+                                            downloadPercent != 100
+                                            ? downloadPercent > 0 
+                                                ? <></>
+                                                : <Button style={{borderRadius:8, width:115, fontSize:20}} textColor='#3C62DD' onPress={()=>handleDownload(modalUri)} buttonColor='#FFF' mode='contained'>Скачать</Button>
+                                            : <Button style={{borderRadius:8, width:115, fontSize:20}} textColor='#3C62DD' onPress={()=>handleModalClose()} buttonColor='#FFF' mode='contained'>Закрыть</Button>
+                                        }
+                                        
+                                    </View>
+                            </View>
+                        }
+                        
+                        
                     </View>
-                </View>
+                    </TouchableWithoutFeedback>
+                </View> 
+                </Pressable>
             </Modal>
         </View>
     );
