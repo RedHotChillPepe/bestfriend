@@ -8,7 +8,7 @@ export default function LoadingPage({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-evenly' }}>
       <Image
-        source={require('../assets/Loading.png')}
+        source={require('../assets/LoadingBear.png')}
         style={{ width: 200, height: 200, resizeMode: 'cover', marginBottom: 50 }}
       />
       <Spinner

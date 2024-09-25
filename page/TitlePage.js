@@ -6,36 +6,36 @@ export default function TitlePage({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={{ alignItems: 'center' }}>
-       {/*  <Image
-          source={require('../assets/mishka.png')}
-          style={{ width: 250, height: 250, resizeMode: 'contain' }}
+        <Image
+          source={require('../assets/Bear.png')}
+          style={{ marginTop: 20, width: 250, height: 250, resizeMode: 'contain' }}
         />
-        <Text style={{ fontFamily: 'Comfortaa_700Bold', fontSize: 35, color: "#6f9c3d", marginBottom: '1%' }}>
+        <Text style={{ fontFamily: 'SF Pro Rounded Bold', fontSize: 35, color: "#3C62DD"}}>
           ЛУЧШИЙ ДРУГ
         </Text>
-        <Text style={{ fontFamily: 'Comfortaa_500Medium', fontSize: 14, color: "#5c5c5c", textAlign: 'center' }}>
+        <Text style={{ fontFamily: 'SF Pro Rounded Bold', fontSize: 14, color: "#5c5c5c", textAlign: 'center' }}>
           Создай новую учётную запись или войди в существующую,чтобы использовать Лучшего друга
-        </Text> */}
+        </Text>
       </View>
-      <View style={{ width: '100%', alignItems: 'center', marginTop: '30%' }}>
-       {/* <View style={{ marginBottom: '5%', width: '90%' }}>
+      <View style={{ width: '100%', alignItems: 'center' }}>
+       <View style={{ marginBottom: '5%', width: '90%' }}>
           <TouchableOpacity onPress={() => navigation.navigate('User')} style={{ height: 60, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', borderBottomColor: '#888', borderBottomWidth: 1 }}>
-            <Text style={{ fontFamily: 'Comfortaa_700Bold', fontSize: 14, color: "#888" }}>
+            <Text style={{ fontFamily: 'SF Pro Rounded Bold', fontSize: 14, color: "#888" }}>
               Пользовательское соглашение
             </Text>
             <FontAwesome5 name="arrow-right" size={16} color="#888" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Confidentiality')} style={{ height: 60, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', borderBottomColor: '#888', borderBottomWidth: 1 }}>
-            <Text style={{ fontFamily: 'Comfortaa_700Bold', fontSize: 14, color: "#888" }}>
+            <Text style={{ fontFamily: 'SF Pro Rounded Bold', fontSize: 14, color: "#888" }}>
               Палитика конфеденциальности
             </Text>
             <FontAwesome5 name="arrow-right" size={16} color="#888" />
           </TouchableOpacity>
-        </View>  */}
+        </View> 
         <PaperButton
           mode="outlined"
-          style={[styles.button, { backgroundColor: "#6f9c3d", borderWidth: 0, marginBottom: '15%' }]}
-          labelStyle={{ color: '#ffff', fontSize: 18, fontFamily: 'Comfortaa_400Regular' }}
+          style={[styles.button, { backgroundColor: "#3C62DD", borderWidth: 0, marginBottom: '15%' }]}
+          labelStyle={{ color: '#ffff', fontSize: 18, fontFamily: 'SF Pro Rounded Regular' }}
           onPress={() => navigation.navigate('Email')}
         >
           Войти по почте
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    paddingTop: '40%',
     paddingHorizontal: '3%'
   },
   button: {

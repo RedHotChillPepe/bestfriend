@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, StyleSheet, ScrollView, Dimensions, ActivityIndicator, Modal, Linking, Alert, Pressable, TextInput } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, ScrollView, Dimensions, ActivityIndicator, Modal, Linking, Alert, Pressable, TextInput, TouchableWithoutFeedback } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -16,6 +16,7 @@ export default function ReadySoundsScreen() {
     const [audioData, setAudioData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [modalPlusVisible, setModalPlusVisible] = useState(false);
+    const [isModalFolder, setIsModalFolder] = useState(false)
 
     const [userFolders, setUserFolders] = useState([])// изменяется после рендера чтобы отображать новые папки
     const [userFolderName, setUserFolderName] = useState('')
@@ -156,6 +157,10 @@ export default function ReadySoundsScreen() {
         }
     }
 
+    const handleModalFolder = async (folder) => {
+        setIsModalFolder(true)
+    }
+
    
 
 
@@ -167,7 +172,7 @@ export default function ReadySoundsScreen() {
 
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             {loading ? (
                 <ActivityIndicator size="large" color="#a4ca79" />
             ) : (
@@ -219,6 +224,7 @@ export default function ReadySoundsScreen() {
                             onPress={() => navigation.navigate('MyRecording')}
                             onPressIn={() => handlePressIn(cards.length)}
                             onPressOut={handlePressOut}
+                            
                             activeOpacity={1}
                             style={[styles.card3, pressedCard === cards.length && styles.card3Pressed]}
                         >
@@ -234,6 +240,7 @@ export default function ReadySoundsScreen() {
                                     onPress={() => navigation.navigate(card.onPressDestination, handlePayload(card.onPressPayload))}
                                     onPressIn={() => handlePressIn(index + cards.length+1)}
                                     onPressOut={handlePressOut}
+                                    onLongPress={()=>handleModalFolder(card)}
                                     activeOpacity={1}
                                     
                                     style={[styles[card.name] , pressedCard === (index + cards.length+1)  && styles[card.cardTextPressedStyle]]}
@@ -250,23 +257,45 @@ export default function ReadySoundsScreen() {
                 </ScrollView>
             )}
 
-            <Modal  transparent={true} animationType="slide" visible={modalPlusVisible}  onRequestClose={()=>{setModalPlusVisible(false)}} onDismiss={()=>{setModalPlusVisible(false)}}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalFolderText}>
-                            Введите название папки:
-                        </Text>
-                        <View style={{marginBottom:'10%', marginTop:'10%', backgroundColor:'#FFF', borderRadius:16}}>
-                            <TextInput placeholderTextColor={"#848484"} onChangeText={setUserFolderName} style={{fontSize:20, height:48, width:240, fontFamily:'SF Pro Rounded Regular', paddingLeft:15}} autoFocus={true} placeholder='Название'></TextInput>
-                        </View>
-                        <View>
-                            <Button style={{borderRadius:8, width:115, fontSize:20}} textColor='#3C62DD' onPress={()=>createUserFolder()} buttonColor='#FFF' mode='contained'>Создать</Button>
-                        </View>
+            <Modal  transparent={true} animationType="slide" visible={modalPlusVisible}  onRequestClose={()=>setModalPlusVisible(false)} onDismiss={()=>setModalPlusVisible(false)}>
+                <Pressable onPress={() => setModalPlusVisible(false)} style={styles.centeredView}>
+                    <View >
+                        <TouchableWithoutFeedback>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalFolderText}>
+                                    Введите название папки:
+                                </Text>
+                                <View style={{marginBottom:'10%', marginTop:'10%', backgroundColor:'#FFF', borderRadius:16}}>
+                                    <TextInput placeholderTextColor={"#848484"} onChangeText={setUserFolderName} style={{fontSize:20, height:48, width:240, fontFamily:'SF Pro Rounded Regular', paddingLeft:15}} autoFocus={true} placeholder='Название'></TextInput>
+                                </View>
+                                <View>
+                                    <Button style={{borderRadius:8, width:115, fontSize:20}} textColor='#3C62DD' onPress={()=>createUserFolder()} buttonColor='#FFF' mode='contained'>Создать</Button>
+                                </View>
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
-                </View>
+                </Pressable>
+            </Modal>
+
+            <Modal  transparent={true} animationType="slide" visible={isModalFolder}  onRequestClose={()=>setIsModalFolder(false)} onDismiss={()=>setIsModalFolder(false)}>
+                <Pressable style={styles.centeredView} onPress={()=> setIsModalFolder(false)}>
+                    <View>
+                    <TouchableWithoutFeedback>
+                            <View style={styles.modalView}>
+                                <View>
+                                    <Button style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Переименовать</Button>
+                                </View>
+                                
+                                <View>
+                                    <Button style={{borderRadius:8, width:220, fontSize:20}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Удалить</Button>
+                                </View>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+                </Pressable>
             </Modal>
             
-        </SafeAreaView>
+        </View>
     )
 }
 
@@ -355,8 +384,8 @@ const styles = StyleSheet.create({
         fontSize: 28,
         color: "#fff",
         // width: '80%',
-        left: '2%',
-        top: '65%'
+        left: 8,
+        top: 50
     },
     subtitleText:{
         fontFamily:"SF Pro Rounded Semibold",
@@ -372,8 +401,8 @@ const styles = StyleSheet.create({
         fontSize: 28,
         color: "#656463",
         // width: '80%',
-        left: '2%',
-        top: '65%'
+        left: 8,
+        top: 50
     },
     cardTextBot: {
         fontFamily: 'Comfortaa_500Medium',

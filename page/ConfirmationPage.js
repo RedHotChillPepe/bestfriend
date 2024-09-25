@@ -96,7 +96,7 @@ export default function ConfirmationPage({ navigation, route }) {
         />
         <Appbar.Content
           title="Введите код подтверждения"
-          titleStyle={{ color: '#5c5c5c', fontFamily: 'Comfortaa_500Medium', fontSize: 18 }}
+          titleStyle={{ color: '#5c5c5c', fontFamily: 'SF Pro Rounded Regular', fontSize: 18 }}
         />
       </Appbar.Header>
       <KeyboardAwareScrollView
@@ -105,7 +105,7 @@ export default function ConfirmationPage({ navigation, route }) {
         keyboardShouldPersistTaps="handled"
       >
         <View style={{ alignItems: 'center' }}>
-          <Text style={{ fontFamily: 'Comfortaa_700Bold', fontSize: 35, color: "#6f9c3d", marginBottom: '1%', textAlign: 'center' }}>
+          <Text style={{ fontFamily: 'SF Pro Rounded Bold', fontSize: 35, color: "#3C62DD", marginBottom: '1%', textAlign: 'center' }}>
             Введите код подтверждения
           </Text>
           <Text style={styles.subtitle}>
@@ -135,10 +135,10 @@ export default function ConfirmationPage({ navigation, route }) {
             mode="outlined"
             style={[
               styles.button,
-              { backgroundColor: "#6f9c3d", borderWidth: 0 }, !isCodeComplete && { backgroundColor: '#d3d3d3' }
+              { backgroundColor: "#3C62DD", borderWidth: 0 }, !isCodeComplete && { backgroundColor: '#d3d3d3' }
             ]}
             labelStyle={[
-              { color: '#ffff', fontSize: 18, fontFamily: 'Comfortaa_500Medium' },
+              { color: '#ffff', fontSize: 18, fontFamily: 'SF Pro Rounded Regular' },
             ]}
             onPress={verifyCode}
             disabled={!isCodeComplete}
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   }, subtitle: {
-    fontFamily: 'Comfortaa_500Medium',
+    fontFamily: 'SF Pro Rounded Regular',
     fontSize: 14,
     color: "#5c5c5c",
     textAlign:'center'
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   inputFocused: {
-    borderColor: '#6f9c3d',
+    borderColor: '#3C62DD',
   },
   button: {
     marginBottom: '2%',

@@ -22,7 +22,7 @@ export default function AboutUs({ navigation }) {
             </Appbar.Header>
             <View style={styles.container}>
                 <Image
-                    source={require('../../../assets/Loading.png')}
+                    source={require('../../../assets/LoadingBear.png')}
                     style={{ width: 300, height: 300, resizeMode: 'contain' }}
                 />
             </View>

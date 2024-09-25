@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   appbarTitle: {
-    color: '#5c5c5c',
-    fontFamily: 'Comfortaa_500Medium',
+    color: '#3C62DD',
+    fontFamily: 'SF Pro Rounded Semibold',
     fontSize: 18,
     marginLeft: '9%',
   },
@@ -162,14 +162,14 @@ const styles = StyleSheet.create({
     marginBottom: '20%'
   },
   title: {
-    fontFamily: 'Comfortaa_700Bold',
+    fontFamily: 'SF Pro Rounded Bold',
     fontSize: 35,
-    color: "#6f9c3d",
+    color: "#3C62DD",
     marginBottom: 5,
     textAlign: 'center',
   },
   subtitle: {
-    fontFamily: 'Comfortaa_500Medium',
+    fontFamily: 'SF Pro Rounded Regular',
     fontSize: 14,
     color: "#5c5c5c",
   },
@@ -187,15 +187,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#5c5c5c',
     borderBottomWidth: 1,
-    borderColor: '#d3d3d3',
+    borderColor: '#3C62DD',
     marginBottom: '10%'
   },
   inputFocused: {
-    borderColor: '#6f9c3d',
+    borderColor: '#3C62DD',
   },
   button: {
     width: '90%',
-    backgroundColor: '#6f9c3d',
+    backgroundColor: '#3C62DD',
     borderWidth: 0,
     borderRadius: 10,
   },
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   buttonLabel: {
     color: '#ffff',
     fontSize: 18,
-    fontFamily: 'Comfortaa_500Medium',
+    fontFamily: 'SF Pro Rounded Regular',
   },
   spinnerTextStyle: {
     color: '#FFF'

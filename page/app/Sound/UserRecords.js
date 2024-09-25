@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
@@ -200,7 +200,7 @@ function UserRecords({navigation}) {
                     </Pressable>
                         
                     <Pressable onPress={()=>setIsModalShown(true)}>
-                        <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
+                        <MaterialCommunityIcons name='plus-circle-outline' color="#646463" size={30}/>
                     </Pressable>
                 </View>
                 <View style={{alignContent:"center"}}>
@@ -238,13 +238,15 @@ function UserRecords({navigation}) {
             </View>
         </ScrollView>
         <Modal  transparent={true} animationType="slide" visible={isModalShown}  onRequestClose={()=>{setIsModalShown(false)}} onDismiss={()=>{setIsModalShown(false)}}>
-                <View style={styles.centeredView}>
+            <Pressable onPress={()=> setIsModalShown(false) } style={styles.centeredView}>
+                <View >
+                    <TouchableWithoutFeedback>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalFolderText}>
+                        <Text style={[styles.modalFolderText]}>
                             Создание Новой Записи
                         </Text>
-                        <View style={{marginBottom:'10%', marginTop:'10%', borderWidth:1,}}>
-                            <Text style={styles.cardTime}>
+                        <View style={{marginBottom:'10%', marginTop:'10%' ,alignItems:'center'}}>
+                            <Text style={[styles.cardTime, {color:"#FFF", fontSize:14}]}>
                                 {
                                     isRecording
                                     ? formatTime(recordingPositionMillis || 0)
@@ -253,13 +255,13 @@ function UserRecords({navigation}) {
                             </Text>
 
                             {
-                            isPaused ? <TextInput style={{padding:'200px'}} placeholder='Название Записи' onChangeText={setRecordingTitle}></TextInput>
+                            isPaused ? <TextInput style={{borderRadius:16 ,width:240, height:48, backgroundColor:"#FFF", fontFamily:"SF Pro Rounded Bold", paddingLeft:16}} placeholder='Название Записи' onChangeText={setRecordingTitle}></TextInput>
                             : <></>
                             }
                             
                         </View>
                         <View>
-                            <Button onPress={() => isRecording ? recordPause() : recordStart() } buttonColor='#00B232'  mode='contained'>
+                            <Button style={{marginBottom:16}} labelStyle={{fontFamily:'SF Pro Rounded Bold', color:"#3C62DD"}} onPress={() => isRecording ? recordPause() : recordStart() } buttonColor='#FFF'  mode='contained'>
                                 {
                                     isRecording ? "Пауза" : 
                                         isPaused ? "Продолжить Запись" : "Начать Запись"
@@ -267,13 +269,16 @@ function UserRecords({navigation}) {
                                 }
                             </Button>
                             {
-                                isPaused ? <Button onPress={() => {recordStop()}}  buttonColor='#00B232'  mode='contained'>
+                                isPaused ? <Button labelStyle={{fontFamily:'SF Pro Rounded Bold', color:"#3C62DD"}} onPress={() => {recordStop()}}  buttonColor='#FFF'  mode='contained'>
                                     Сохранить Запись
                                 </Button> : <></>
                             }
                         </View>
                     </View>
+                    </TouchableWithoutFeedback>
                 </View>
+            </Pressable>
+                
             </Modal>
             
     </View>
@@ -332,7 +337,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
         margin: 20,
-        backgroundColor: "white",
+        backgroundColor: "#3C62DD",
         borderRadius: 20,
         padding: 35,
         alignItems: "center",
@@ -346,18 +351,17 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     modalFolderText: {
-        color: "#5c5c5c",
-        fontSize: 14,
+        color: "#FFF",
+        fontSize: 20,
         textAlign: "center",
-        fontFamily: 'Comfortaa_500Medium',
-        borderBottomWidth:1,
+        fontFamily: 'SF Pro Rounded Regular',
 
     },
     cardText: {
         gap: 6
     },
     cardTextTitle: {
-        fontFamily: 'Comfortaa_700Bold',
+        fontFamily: 'SF Pro Rounded Bold',
         fontSize: 16,
         color: "#5c5c5c"
     },
@@ -374,7 +378,7 @@ const styles = StyleSheet.create({
         borderRadius:16
     },
     cardTime: {
-        fontFamily: 'Comfortaa_700Bold',
+        fontFamily: 'SF Pro Rounded Regular',
         fontSize: 12,
         color: "#656463"
     }
