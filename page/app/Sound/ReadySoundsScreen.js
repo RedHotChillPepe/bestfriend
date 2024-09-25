@@ -7,6 +7,7 @@ import { Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
@@ -166,12 +167,12 @@ export default function ReadySoundsScreen() {
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {loading ? (
                 <ActivityIndicator size="large" color="#a4ca79" />
             ) : (
-                <ScrollView  contentContainerStyle={{ alignItems: 'center' }}>
-                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingTop:115}}>
+                <ScrollView  contentContainerStyle={{ alignItems: 'center'}}>
+                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingTop:115, paddingBottom: 24}}>
                         <Pressable style={{paddingRight:50}} onPress={()=> clearAll()}>
                             <Text style={styles.subtitleText}>
                                 Библиотека
@@ -265,7 +266,7 @@ export default function ReadySoundsScreen() {
                 </View>
             </Modal>
             
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -277,11 +278,11 @@ const styles = StyleSheet.create({
     },
     card0: {
         backgroundColor: '#FEC513',
-        width: width * 0.90,
+        width: width * 0.9,
         height: height * 0.15,
-        marginBottom: '2%',
-        borderRadius: 15,
-        paddingTop: '5%',
+        marginBottom: 8,
+        borderRadius: 24,
+        paddingBottom: 0,
         paddingLeft: '6%',
         position: 'relative',
         overflow: 'hidden',
@@ -292,8 +293,8 @@ const styles = StyleSheet.create({
         backgroundColor:'#FF7427',
         width: width * 0.90,
         height: height * 0.15,
-        marginBottom: '2%',
-        borderRadius: 15,
+        marginBottom: 8,
+        borderRadius: 24,
         paddingTop: '5%',
         paddingLeft: '6%',
         position: 'relative',
@@ -305,8 +306,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#3C62DD',
         width: width * 0.90,
         height: height * 0.15,
-        marginBottom: '2%',
-        borderRadius: 15,
+        marginBottom: 8,
+        borderRadius: 24,
         paddingTop: '5%',
         paddingLeft: '6%',
         position: 'relative',
@@ -334,7 +335,7 @@ const styles = StyleSheet.create({
         width: width * 0.90,
         height: height * 0.15,
         marginBottom: '2%',
-        borderRadius: 15,
+        borderRadius: 24,
         paddingTop: '5%',
         paddingLeft: '6%',
         position: 'relative',
