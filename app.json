@@ -37,7 +37,7 @@
         "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS"
       ],
-      "package": "com.ner7yn.native_mishka"
+      "package": "com.basit.mishka"
     },
     "web": {
       "favicon": "./assets/icon.png"
