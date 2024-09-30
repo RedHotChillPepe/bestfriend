@@ -263,15 +263,15 @@ export default function Training({ route }) {
             <ScrollView contentContainerStyle={{ width:"100%" }}>
                 <View style={{paddingHorizontal:'4%', alignItems:'center'}}>
                     <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', gap:80}}>
-                        <Pressable onPress={()=> navigation.goBack()}>
+                        <Pressable style={{marginRight:180}} onPress={()=> navigation.goBack()}>
                             <Text style={styles.subtitleText}>
                                 Назад
                             </Text>
                         </Pressable>
                         
-                        <Pressable>
+                        {/* <Pressable>
                             <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
-                        </Pressable>
+                        </Pressable> */}
                     </View>
                     <View style={{alignContent:"center"}}>
                         <View style={[styles.card2]}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
+import { Alert, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
@@ -184,7 +184,7 @@ function UserRecords({navigation}) {
 
         // Проверка на то, что юзер дал имя записи
         if (recordingTitle == '') {
-            alert("Введите название записи")
+            Alert.alert("Ошибка", "Не введено название записи")
         } else {
             setIsPaused(false)
             setIsRecording(false)
