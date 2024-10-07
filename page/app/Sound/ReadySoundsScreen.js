@@ -235,22 +235,23 @@ export default function ReadySoundsScreen() {
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {loading ? (
                 <ActivityIndicator size="large" color="#a4ca79" />
             ) : (
-                <ScrollView  contentContainerStyle={{ alignItems: 'center'}}>
-                    <View style={{flex:1, paddingHorizontal:"4%", justifyContent:'space-between', flexDirection:"row", alignItems:'center', paddingTop:115, paddingBottom: 24}}>
-                        
+                <View>
+                     <View style={{flexDirection:'row', width: '100%', justifyContent:'space-between', paddingHorizontal: 16, paddingBottom: 16 }}>
+                            <View style={{flexDirection: 'row'}}>
                             <Text style={[styles.subtitleText]}>
                                 Библиотека
                             </Text>
-                        
-                        
+                            </View>
                         <Pressable onPress={()=>setModalPlusVisible(true)}>
-                            <MaterialCommunityIcons name='plus-circle-outline' color="#646463" size={30}/>
+                            <MaterialCommunityIcons name='plus-circle-outline' color="#646463" size={32}/>
                         </Pressable>
                     </View>
+
+                <ScrollView contentContainerStyle={{alignItems:'center'}}>
                     <View style={styles.userFoldersBumper}>
                         {cards.map((card, index) => (
                             <TouchableOpacity
@@ -318,6 +319,7 @@ export default function ReadySoundsScreen() {
                         
                     </View>
                 </ScrollView>
+                </View>
             )}
 
             <Modal  transparent={true} animationType="slide" visible={modalPlusVisible}  onRequestClose={()=>setModalPlusVisible(false)} onDismiss={()=>setModalPlusVisible(false)}>
@@ -375,24 +377,27 @@ export default function ReadySoundsScreen() {
                 </Pressable>
             </Modal>
             
-        </View>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#fff',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
+        paddingTop: 116,
+        
+
+    
     },
     card0: {
         backgroundColor: '#FEC513',
-        width: width * 0.9,
-        height: height * 0.15,
-        marginBottom: 8,
+        width: width-32,
+        height: 132,
+        marginBottom: 12,
         borderRadius: 24,
         paddingBottom: 0,
-        paddingLeft: '6%',
+        paddingLeft: 16,
         position: 'relative',
         overflow: 'hidden',
         flexDirection: 'row',
@@ -400,9 +405,9 @@ const styles = StyleSheet.create({
     },
     card1: {
         backgroundColor:'#FF7427',
-        width: width * 0.90,
-        height: height * 0.15,
-        marginBottom: 8,
+        width: width-32,
+        height: 132,
+        marginBottom: 12,
         borderRadius: 24,
         paddingTop: '5%',
         paddingLeft: '6%',
@@ -413,9 +418,9 @@ const styles = StyleSheet.create({
     },
     card2: {
         backgroundColor: '#3C62DD',
-        width: width * 0.90,
-        height: height * 0.15,
-        marginBottom: 8,
+        width: width-32,
+        height: 132,
+        marginBottom: 12,
         borderRadius: 24,
         paddingTop: '5%',
         paddingLeft: '6%',
@@ -426,10 +431,10 @@ const styles = StyleSheet.create({
     },
     card3: {
         backgroundColor: '#FFF',
-        width: width * 0.90,
-        height: height * 0.15,
+        width: width-32,
+        height: 132,
         marginBottom: '2%',
-        borderRadius: 15,
+        borderRadius: 24,
         paddingTop: '5%',
         paddingLeft: '6%',
         position: 'relative',
@@ -442,7 +447,7 @@ const styles = StyleSheet.create({
     card4: {
         backgroundColor: '#00B232',
         width: width * 0.90,
-        height: height * 0.15,
+        height: 132,
         marginBottom: '2%',
         borderRadius: 24,
         paddingTop: '5%',
@@ -464,8 +469,8 @@ const styles = StyleSheet.create({
         fontSize: 28,
         color: "#fff",
         // width: '80%',
-        left: 8,
-        top: 50
+        left: 12,
+        top: 12
     },
     subtitleText:{
         fontFamily:"SF Pro Rounded Semibold",
@@ -473,7 +478,6 @@ const styles = StyleSheet.create({
         color:"#070600",
         opacity:0.61,
         textAlign:'left',
-        marginRight:"43%"
     },
     card3Text: {
         position: 'absolute',
@@ -481,8 +485,8 @@ const styles = StyleSheet.create({
         fontSize: 28,
         color: "#656463",
         // width: '80%',
-        left: 8,
-        top: 50
+        left: 12,
+        top: 12
     },
     cardTextBot: {
         fontFamily: 'Comfortaa_500Medium',
@@ -540,9 +544,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: "center",
         fontFamily: 'Comfortaa_700Bold'
-    },
-    userFoldersBumper:{
-        
     },
     modalText: {
         color: "#5c5c5c",

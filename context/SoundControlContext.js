@@ -31,7 +31,7 @@ export const SoundControlProvider = ({children}) => {
         console.log('fling up');
             
         if (animHight.value == 70) {
-                animHight.value = animHight.value + 70
+                animHight.value = animHight.value + 120
                 setIsRaised(true)
         }
     }
@@ -40,7 +40,7 @@ export const SoundControlProvider = ({children}) => {
         console.log('fling down');
             
         if (animHight.value == 140) {
-                animHight.value = animHight.value - 70
+                animHight.value = animHight.value - 120
                 setIsRaised(false)
                 setIsPlaylist(false)
         }
@@ -111,17 +111,17 @@ export const SoundControlProvider = ({children}) => {
                                                 {
                                                     !isRepeat && !isRepeatOne
                                                     ?   <Pressable onPress={() => {handleRepeat("repeat")}}>
-                                                            <MaterialIcons name="repeat" size={30} color="#FFF" />
+                                                            <MaterialIcons name="repeat" size={32} color="#FFF" />
                                                         </Pressable>
                                                     :   
                                                         isRepeat && !isRepeatOne
                                                         ? <Pressable onPress={() => {handleRepeat("repeat one")}}>
-                                                                <MaterialIcons name="repeat-on" size={30} color="#FFF" />
+                                                                <MaterialIcons name="repeat-on" size={32} color="#FFF" />
                                                             </Pressable>
                                                         : 
                                                             !isRepeat && isRepeatOne
                                                             &&<Pressable onPress={() => {handleRepeat("no repeat")}}>
-                                                                    <MaterialIcons name="repeat-one" size={30} color="#FFF" />
+                                                                    <MaterialIcons name="repeat-one" size={32} color="#FFF" />
                                                                 </Pressable>
 
                                                 }
@@ -150,7 +150,7 @@ export const SoundControlProvider = ({children}) => {
 
 
                                                 <Slider onSlidingComplete={(value) => {handleSliding(value)}}
-                                                style={{width: 290, height: 40}} 
+                                                style={{width: '75%', height: 32}} 
                                                 minimumValue={0} 
                                                 maximumValue={soundDuration }
                                                 value={ positionMillis }
@@ -236,11 +236,16 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-between',
         alignItems:'center',
-        width:330
+        width: '100%',
+        paddingHorizontal: 24,
+        paddingBottom: 16
     },
     viewMiddleRow:{
         flexDirection:'row',
-        alignItems:'center'
+        alignItems:'center',
+        width:'100%',
+        justifyContent:'space-between',
+        paddingHorizontal: 12
     },
     viewBottomRow:{
         flexDirection:'row',
