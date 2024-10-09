@@ -156,7 +156,7 @@ const AppContent = () => {
 
 export default function App() {
   return (
-    <SafeAreaView style={{flex:1}}>
+    
       <GestureHandlerRootView style={{flex:1}}>
         <SoundProvider>
           <SoundControlProvider>
@@ -167,7 +167,7 @@ export default function App() {
           </SoundControlProvider> 
         </SoundProvider>  
       </GestureHandlerRootView>
-    </SafeAreaView>
+    
       
         
    
