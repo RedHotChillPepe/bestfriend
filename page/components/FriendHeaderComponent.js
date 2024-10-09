@@ -2,19 +2,23 @@ import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function FriendHeaderComponent() {
     const navigation = useNavigation();
 
   return (
-    <View style={styles.headerBase}>
+    <View style={{ backgroundColor:'#3C62DD'}}>
+        <View style={styles.headerBase}>
         <View style={styles.headerInsides}>
-            <Pressable style={styles.headerModalButton} onPress={()=>navigation.toggleDrawer()}>
-                <MaterialCommunityIcons name="menu" color="#FFF" size={35} style={{paddingLeft:25, paddingTop:5}}/>
+            <Pressable onPress={()=>navigation.toggleDrawer()}>
+                <MaterialCommunityIcons name="menu" color="#FFF" size={36}/>
             </Pressable>
-            <View style={styles.headerTextView}>
+            
                 <Text style={styles.headerText}>ЛУЧШИЙ{'\n'}ДРУГ</Text>
-            </View>
+
+            <View style={{width:36, height:36, backgroundColor: '#3C62DD'}} />
+        </View>
         </View>
     </View>
   )
@@ -22,22 +26,25 @@ function FriendHeaderComponent() {
 
 const styles = StyleSheet.create({
     headerBase:{
-        backgroundColor:'#3C62DD'
+        backgroundColor:'#3C62DD',
+        alignItems:'flex-end',
+        width:'100%',
+        marginTop: 64,
+        marginBottom: 12
+        
     },
     headerInsides:{
-        display:'flex',
-        flexDirection:'row'
+        width:'100%',
+        flexDirection:'row',
+        justifyContent: 'space-between',
+        alignItems:'flex-end',
+        paddingHorizontal: 16
     },
-    headerModalButton:{
-        paddingTop:8
-    },
-    headerTextView:{
-        width:'100%'
-    },
+
     headerText:{
-        paddingRight:'27%',
+    
         textAlign:'center',
-        fontSize:32,
+        fontSize:28,
         fontFamily:'SF Pro Rounded Black',
         color:'#FFF',
     }
