@@ -7,7 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
+  
     const checkStoredUser = async () => {
       try {
         console.log('Checking stored user...');
@@ -22,9 +22,6 @@ export const AuthProvider = ({ children }) => {
         console.error('Error retrieving user from SecureStore', error);
       }
     };
-
-    checkStoredUser();
-  }, []);
 
   const login = async (userData) => {
     try {
@@ -45,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, checkStoredUser }}>
       {children}
     </AuthContext.Provider>
   );

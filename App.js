@@ -45,8 +45,10 @@ const navTheme = {
 };
 
 
+
+
 const AppContent = () => {
-  const { user } = useAuth();
+  const { user, checkStoredUser } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
   const [calendarStatus, requestCalendarPermission] = Calendar.useCalendarPermissions();
@@ -57,6 +59,10 @@ const AppContent = () => {
     const initialize = async () => {
       // Initialize other app settings if needed
       setIsLoading(false);
+      if (!user) {
+        checkStoredUser()
+      }
+      
       MediaLibrary.requestPermissionsAsync()
       if (!calendarStatus.granted) {
         requestCalendarPermission()
