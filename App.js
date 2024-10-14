@@ -18,11 +18,11 @@ import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
 import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import * as MediaLibrary from 'expo-media-library';
+//import * as MediaLibrary from 'expo-media-library';
 import { SoundProvider } from './context/SoundProvider';
 import { SoundControlProvider } from './context/SoundControlContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import * as Calendar from 'expo-calendar';
+//import * as Calendar from 'expo-calendar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
@@ -51,7 +51,7 @@ const AppContent = () => {
   const { user, checkStoredUser } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
-  const [calendarStatus, requestCalendarPermission] = Calendar.useCalendarPermissions();
+  //const [calendarStatus, requestCalendarPermission] = Calendar.useCalendarPermissions();
 
    
 
@@ -63,10 +63,10 @@ const AppContent = () => {
         checkStoredUser()
       }
       
-      MediaLibrary.requestPermissionsAsync()
-      if (!calendarStatus.granted) {
+      //MediaLibrary.requestPermissionsAsync()
+      /* if (!calendarStatus.granted) {
         requestCalendarPermission()
-      }
+      } */
     };
 
     initialize();
