@@ -204,7 +204,7 @@ export default function Riddles({ route }) {
     }
 
     const handleDownload = async (uri) => {
-        const cutName = modalUri.replace("https://mishka-l3tq.onrender.com/uploads/","")
+        const cutName = modalUri.replace("https://bestfriend-back.onrender.com/uploads/","")
         const toUri = FileSystem.documentDirectory + cutName
         console.log("cutname: ", cutName);
 
@@ -259,17 +259,14 @@ export default function Riddles({ route }) {
 
     return (
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={{ width:"100%" }}>
-                <View style={{paddingHorizontal:'4%', alignItems:'center'}}>
-                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', gap:80}}>
-                        <Pressable style={{marginRight:180}} onPress={()=> navigation.goBack()}>
+            <View style={{paddingHorizontal:16, alignItems:'center'}}>
+                <View style={{flexDirection: 'row', width: '100%', justifyContent:'space-between', marginBottom: 16}}>
+                     <Pressable onPress={()=> navigation.goBack()}>
                             <Text style={styles.subtitleText}>
                                 Назад
                             </Text>
                         </Pressable>
-                        {/* <Pressable>
-                            <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
-                        </Pressable> */}
+                        <View style={{width: 6, height: 6}} />
                     </View>
                     <View style={{alignContent:"center"}}>
                         <View style={[styles.card1]}>
@@ -281,8 +278,10 @@ export default function Riddles({ route }) {
                     </View>
                 
                 </View>
+            <ScrollView contentContainerStyle={{ width:"100%" }}>
+
                 <View style={{ width: '100%', alignItems: 'center' }}>
-                    <View style={{ width: '90%' }}>
+                    <View style={{  width: width - 32 }}>
                         {audioData.map((item, index) => (
                             <Pressable
                             onPressIn={() => handlePressIn(index)}
@@ -360,11 +359,12 @@ export default function Riddles({ route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#F7F7FF',
+        paddingTop: 32,
     },
     card: {
         height: 60,
-        paddingHorizontal: '4%',
+        paddingHorizontal: 8,
         marginTop:8,
         
         justifyContent: 'space-between',
@@ -379,12 +379,10 @@ const styles = StyleSheet.create({
     },
     card1: {
         backgroundColor:'#FF7427',
-        width: width * 0.90,
-        height: height * 0.15,
-        marginBottom: '2%',
-        borderRadius: 15,
-        paddingTop: '5%',
-        paddingLeft: '6%',
+        width: width - 32,
+        height: 96,
+        borderRadius: 16,
+        paddingTop: 16,
         position: 'relative',
         overflow: 'hidden',
         flexDirection: 'row',
@@ -423,8 +421,6 @@ const styles = StyleSheet.create({
         fontSize:24,
         color:"#070600",
         opacity:0.61,
-        textAlign:'left',
-        marginRight:"43%"
     },
     centeredView: {
         flex: 1,

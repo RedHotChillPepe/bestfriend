@@ -7,21 +7,20 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  
-    const checkStoredUser = async () => {
-      try {
-        console.log('Checking stored user...');
-        const storedUser = await SecureStore.getItemAsync('user');
-        if (storedUser) {
-          console.log('User found in SecureStore:', storedUser);
-          setUser(JSON.parse(storedUser));
-        } else {
-          console.log('No user found in SecureStore');
-        }
-      } catch (error) {
-        console.error('Error retrieving user from SecureStore', error);
+  const checkStoredUser = async () => {
+    try {
+      console.log('Checking stored user...');
+      const storedUser = await SecureStore.getItemAsync('user');
+      if (storedUser) {
+        console.log('User found in SecureStore:', storedUser);
+        setUser(JSON.parse(storedUser));
+      } else {
+        console.log('No user found in SecureStore');
       }
-    };
+    } catch (error) {
+      console.error('Error retrieving user from SecureStore', error);
+    }
+  };
 
   const login = async (userData) => {
     try {

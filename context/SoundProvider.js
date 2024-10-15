@@ -50,7 +50,7 @@ export const SoundProvider = ({children}) => {
         const status = await sound.current.getStatusAsync()
 
         // приведение uri к одному виду для сравнения
-        const replacedUri = uri.replace("https://mishka-l3tq.onrender.com", "").replace("file://", "") 
+        const replacedUri = uri.replace("https://bestfriend-back.onrender.com", "").replace("file://", "") 
 
         setSoundDuration(status.durationMillis); // присваивание значений 
         setSoundName(name);                                // для панели 

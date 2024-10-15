@@ -252,7 +252,7 @@ export default function ReadySoundsScreen() {
                     </View>
 
                 <ScrollView contentContainerStyle={{alignItems:'center'}}>
-                    <View style={styles.userFoldersBumper}>
+                    <View style={{marginBottom:'16%'}}>
                         {cards.map((card, index) => (
                             <TouchableOpacity
                                 key={index}
@@ -383,7 +383,7 @@ export default function ReadySoundsScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
+        backgroundColor: '#F7F7FF',
         justifyContent: 'flex-start',
         paddingTop: 116,
         
