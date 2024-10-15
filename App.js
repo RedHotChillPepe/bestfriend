@@ -62,7 +62,7 @@ const AppContent = () => {
       if (!user) {
         checkStoredUser()
       }
-      
+
       //MediaLibrary.requestPermissionsAsync()
       /* if (!calendarStatus.granted) {
         requestCalendarPermission()

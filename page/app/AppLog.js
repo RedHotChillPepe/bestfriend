@@ -52,7 +52,7 @@ function ReadySoundsStack() {
         },
         headerLeft:()=>(
           <Pressable onPress={()=>navigation.toggleDrawer()}>
-            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:"4%", paddingTop:5}}/>
+            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
           </Pressable>
         )
       }} />
@@ -63,7 +63,7 @@ function ReadySoundsStack() {
         },
         headerLeft:()=>(
           <Pressable onPress={()=>navigation.toggleDrawer()}>
-            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:"4%", paddingTop:5}}/>
+            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
           </Pressable>
         )
       }} />
@@ -74,7 +74,7 @@ function ReadySoundsStack() {
         },
         headerLeft:()=>(
           <Pressable onPress={()=>navigation.toggleDrawer()}>
-            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:"4%", paddingTop:5}}/>
+            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
           </Pressable>
         )
       }} />
@@ -85,7 +85,7 @@ function ReadySoundsStack() {
         },
         headerLeft:()=>(
           <Pressable onPress={()=>navigation.toggleDrawer()}>
-            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:"4%", paddingTop:5}}/>
+            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
           </Pressable>
         )
       }}/>
@@ -97,7 +97,7 @@ function ReadySoundsStack() {
         },
         headerLeft:()=>(
           <Pressable onPress={()=>navigation.toggleDrawer()}>
-            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:"4%", paddingTop:5}}/>
+            <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
           </Pressable>
         ) 
         }} />
@@ -109,7 +109,7 @@ function ReadySoundsStack() {
           },
           headerLeft:()=>(
             <Pressable onPress={()=>navigation.toggleDrawer()}>
-              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:"4%", paddingTop:5}}/>
+              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
             </Pressable>
           ) 
         }}/>
@@ -121,7 +121,7 @@ function ReadySoundsStack() {
           },
           headerLeft:()=>(
             <Pressable onPress={()=>navigation.toggleDrawer()}>
-              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:"4%", paddingTop:5}}/>
+              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
             </Pressable>
           ) 
         }}/>
@@ -133,7 +133,7 @@ function ReadySoundsStack() {
           },
           headerLeft:()=>(
             <Pressable onPress={()=>navigation.toggleDrawer()}>
-              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:"4%", paddingTop:5}}/>
+              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:8, paddingBottom:8}}/>
             </Pressable>
           ) 
         }}/>
