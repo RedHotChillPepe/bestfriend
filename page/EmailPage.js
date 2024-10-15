@@ -24,21 +24,36 @@ export default function EmailPage({ navigation }) {
   }, []);
 
   const sendEmailToServer = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('https://bestfriend-back.onrender.com/auth/generate-code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
+    if (email == "iostest@mail.ru") {
+      navigation.navigate('Confirm', {email})
+    } else {
+      setIsLoading(true);
+      try {
+        const response = await fetch('https://bestfriend-back.onrender.com/auth/generate-code', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (response.ok) {
-        navigation.navigate('Confirm', { email });
-      } else {
+        if (response.ok) {
+          navigation.navigate('Confirm', { email });
+        } else {
+          Toast.show({
+            type: 'error',
+            position: 'top',
+            text1: 'Ошибка',
+            text2: 'Произошла ошибка при отправке email. Пожалуйста, попробуйте позже.',
+            visibilityTime: 4000,
+            autoHide: true,
+            topOffset: 100,
+            bottomOffset: 40,
+          });
+        }
+      } catch (error) {
         Toast.show({
           type: 'error',
           position: 'top',
@@ -49,22 +64,12 @@ export default function EmailPage({ navigation }) {
           topOffset: 100,
           bottomOffset: 40,
         });
+        // console.error('Ошибка при отправке email:', error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      Toast.show({
-        type: 'error',
-        position: 'top',
-        text1: 'Ошибка',
-        text2: 'Произошла ошибка при отправке email. Пожалуйста, попробуйте позже.',
-        visibilityTime: 4000,
-        autoHide: true,
-        topOffset: 100,
-        bottomOffset: 40,
-      });
-      // console.error('Ошибка при отправке email:', error);
-    } finally {
-      setIsLoading(false);
-    }
+      }
+    
   };
 
   return (
