@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
         backgroundColor:'#3C62DD',
         alignItems:'flex-end',
         width:'100%',
-        marginTop: 64,
         marginBottom: 12
         
     },
