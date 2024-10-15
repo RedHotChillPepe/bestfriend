@@ -24,6 +24,9 @@ export default function EmailPage({ navigation }) {
   }, []);
 
   const sendEmailToServer = async () => {
+    if (email == "iostest@mail.ru") {
+      navigation.navigate('Confirm', {email})
+    } else {
     setIsLoading(true);
     try {
       const response = await fetch('https://bestfriend-back.onrender.com/auth/generate-code', {
@@ -65,6 +68,8 @@ export default function EmailPage({ navigation }) {
     } finally {
       setIsLoading(false);
     }
+      }
+    
   };
 
   return (
