@@ -196,7 +196,7 @@ export default function FairyTales({ route }) {
     }
 
     const handleDownload = async (uri) => {
-        const cutName = modalUri.replace("https://mishka-l3tq.onrender.com/uploads/","")
+        const cutName = modalUri.replace("https://bestfriend-back.onrender.com/uploads/","")
         const toUri = FileSystem.documentDirectory + cutName
         console.log("cutname: ", cutName);
 
@@ -261,18 +261,15 @@ export default function FairyTales({ route }) {
 
     return (
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={{ width:"100%" }}>
-                <View style={{paddingHorizontal:'4%', alignItems:'center'}}>
-                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center'}}>
-                        <Pressable style={{marginRight:180}} onPress={()=> navigation.goBack()}>
+                <View style={{paddingHorizontal:16, alignItems:'center'}}>
+                    <View style={{flexDirection: 'row', width: '100%', justifyContent:'space-between', marginBottom: 16}}>
+                        <Pressable onPress={()=> navigation.goBack()}>
                             <Text style={styles.subtitleText}>
                                 Назад
                             </Text>
                         </Pressable>
                         
-                        {/* <Pressable>
-                            <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
-                        </Pressable> */}
+                    
                     </View>
                     <View style={{alignContent:"center"}}>
                         <View style={[styles.card0]}>
@@ -284,9 +281,9 @@ export default function FairyTales({ route }) {
                     </View>
                 
                 </View>
-                
+            <ScrollView contentContainerStyle={{ width:"100%" }}>
                 <View style={{ width: '100%', alignItems: 'center' }}>
-                    <View style={{  width: '90%' }}>
+                    <View style={{  width: width - 32 }}>
                         {audioData.map((item, index) => (
                             <Pressable 
                             onPressIn={() => handlePressIn(index)}
@@ -321,7 +318,7 @@ export default function FairyTales({ route }) {
                     <View style={styles.modalView}>
                         {
                             !isDownload
-                            ?  <View >
+                            ?  <View>
                                     <Button onPress={() => localHandlePlalistAdd()} style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Добавить в плейлист</Button>
                                     <Button onPress={() => toggleDownload()} style={{borderRadius:8, width:220, fontSize:20, marginBottom:16}} textColor='#3C62DD'  buttonColor='#FFF' mode='contained'>Скачать</Button>
                                 </View>
@@ -365,13 +362,14 @@ export default function FairyTales({ route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#F7F7FF',
+        paddingTop: 32,
     },
     card: {
         height: 60,
-        paddingHorizontal: '4%',
+        paddingHorizontal: 8,
         marginTop:8,
-        
+       
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
@@ -384,10 +382,10 @@ const styles = StyleSheet.create({
     },
     card0: {
         backgroundColor: '#FEC513',
-        width: width * 0.90,
-        height: height * 0.15,
+        width: width - 32,
+        height: 96,
         borderRadius: 16,
-        paddingTop: '5%',
+        paddingTop: 16,
         position: 'relative',
         overflow: 'hidden',
         flexDirection: 'row',
@@ -425,8 +423,6 @@ const styles = StyleSheet.create({
         fontSize:24,
         color:"#070600",
         opacity:0.61,
-        textAlign:'left',
-        marginRight:"43%"
     },
     centeredView: {
         flex: 1,

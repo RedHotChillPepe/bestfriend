@@ -39,7 +39,7 @@ export const SoundControlProvider = ({children}) => {
     function animDown() {
         console.log('fling down');
             
-        if (animHight.value == 140) {
+        if (animHight.value == 190) {
                 animHight.value = animHight.value - 120
                 setIsRaised(false)
                 setIsPlaylist(false)
@@ -221,6 +221,7 @@ export const SoundControlProvider = ({children}) => {
 const styles = StyleSheet.create({
     container:{
         width:width,
+        paddingHorizontal:16,
         backgroundColor:'#3C62DD',
         borderRadius:24,
         justifyContent:'center',

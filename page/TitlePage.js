@@ -1,10 +1,10 @@
-import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { Button as PaperButton } from 'react-native-paper';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function TitlePage({ navigation }) {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={{ alignItems: 'center' }}>
         <Image
           source={require('../assets/Bear.png')}
@@ -41,7 +41,7 @@ export default function TitlePage({ navigation }) {
           Войти по почте
         </PaperButton>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    paddingHorizontal: '3%'
+    paddingHorizontal: '3%',
   },
   button: {
     marginBottom: '2%',
