@@ -48,7 +48,7 @@ const navTheme = {
 
 
 const AppContent = () => {
-  const { user, checkStoredUser } = useAuth();
+  //const { user, checkStoredUser } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
   //const [calendarStatus, requestCalendarPermission] = Calendar.useCalendarPermissions();
@@ -59,9 +59,9 @@ const AppContent = () => {
     const initialize = async () => {
       // Initialize other app settings if needed
       setIsLoading(false);
-      if (!user) {
+      /* if (!user) {
         checkStoredUser()
-      }
+      } */
       
       //MediaLibrary.requestPermissionsAsync()
       /* if (!calendarStatus.granted) {
@@ -147,12 +147,12 @@ const AppContent = () => {
 
   return (
     <NavigationContainer theme={navTheme}>
-      <Stack.Navigator screenOptions={{ detachPreviousScreen: true, presentation: 'transparentModal' }} initialRouteName={user ? "AppLog" : "Title"}>
-        <Stack.Screen name="Title" component={TitlePage} options={{ headerShown: false }} />
+      <Stack.Navigator screenOptions={{ detachPreviousScreen: true, presentation: 'transparentModal' }} initialRouteName={"AppLog"}>
+        {/* <Stack.Screen name="Title" component={TitlePage} options={{ headerShown: false }} />
         <Stack.Screen name="Email" component={EmailPage} options={{ headerShown: false }} />
         <Stack.Screen name="Confirm" component={ConfirmationPage} options={{ headerShown: false }} />
         <Stack.Screen name="User" component={User} options={{ headerShown: false }} />
-        <Stack.Screen name="Confidentiality" component={Confidentiality} options={{ headerShown: false }} />
+        <Stack.Screen name="Confidentiality" component={Confidentiality} options={{ headerShown: false }} /> */}
         <Stack.Screen name="AppLog" component={AppLog} options={{ headerShown: false }} />
         <Stack.Screen name="AboutUs" component={AboutUs} options={{ headerShown: false }} />
       </Stack.Navigator>
@@ -166,10 +166,10 @@ export default function App() {
       <GestureHandlerRootView style={{flex:1}}>
         <SoundProvider>
           <SoundControlProvider>
-            <AuthProvider>
+            
               <StatusBar backgroundColor="#3C62DD" hidden={false} barStyle={'light-content'}/>
               <AppContent />
-            </AuthProvider>
+            
           </SoundControlProvider> 
         </SoundProvider>  
       </GestureHandlerRootView>
