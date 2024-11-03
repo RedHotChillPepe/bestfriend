@@ -8,6 +8,7 @@ export default function Confidentiality({ navigation }) {
     <View style={styles.container}>
       <Appbar.Header theme={{ colors: { background: 'transparent' } }}>
         <Appbar.Action
+          style={{height:50, width:50}}
           icon="arrow-left"
           onPress={() => navigation.goBack()}
           color="#5c5c5c"

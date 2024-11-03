@@ -60,5 +60,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderStyle: 'solid',
     borderRadius: 10,
+    height:50,
+    alignContent:"center",
+    alignItems:'center',
+    flexDirection:"column"
   }
 });

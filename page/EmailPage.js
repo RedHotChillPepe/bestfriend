@@ -193,7 +193,8 @@ const styles = StyleSheet.create({
     color: '#5c5c5c',
     borderBottomWidth: 1,
     borderColor: '#3C62DD',
-    marginBottom: '10%'
+    marginBottom: '10%',
+    height:50
   },
   inputFocused: {
     borderColor: '#3C62DD',
@@ -203,6 +204,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3C62DD',
     borderWidth: 0,
     borderRadius: 10,
+    height:50
   },
   buttonInvalid: {
     backgroundColor: '#d3d3d3',
