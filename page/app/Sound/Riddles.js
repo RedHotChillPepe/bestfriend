@@ -259,7 +259,7 @@ export default function Riddles({ route }) {
 
     return (
         <View style={styles.container}>
-            <View style={{paddingHorizontal:16, alignItems:'center'}}>
+            {/* <View style={{paddingHorizontal:16, alignItems:'center'}}>
                 <View style={{flexDirection: 'row', width: '100%', justifyContent:'space-between', marginBottom: 16}}>
                      <Pressable onPress={()=> navigation.goBack()}>
                             <Text style={styles.subtitleText}>
@@ -277,7 +277,7 @@ export default function Riddles({ route }) {
                         </View>
                     </View>
                 
-                </View>
+                </View> */}
             <ScrollView contentContainerStyle={{ width:"100%" }}>
 
                 <View style={{ width: '100%', alignItems: 'center' }}>

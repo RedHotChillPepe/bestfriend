@@ -10,6 +10,7 @@ import { Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
 import { Audio } from "expo-av";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const { width, height } = Dimensions.get('window');
 
@@ -261,7 +262,7 @@ export default function FairyTales({ route }) {
 
     return (
         <View style={styles.container}>
-                <View style={{paddingHorizontal:16, alignItems:'center'}}>
+                {/* <View style={{paddingHorizontal:16, alignItems:'center'}}>
                     <View style={{flexDirection: 'row', width: '100%', justifyContent:'space-between', marginBottom: 16}}>
                         <Pressable onPress={()=> navigation.goBack()}>
                             <Text style={styles.subtitleText}>
@@ -280,7 +281,7 @@ export default function FairyTales({ route }) {
                         </View>
                     </View>
                 
-                </View>
+                </View> */}
             <ScrollView contentContainerStyle={{ width:"100%" }}>
                 <View style={{ width: '100%', alignItems: 'center' }}>
                     <View style={{  width: width - 32 }}>

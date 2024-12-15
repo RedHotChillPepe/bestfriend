@@ -273,25 +273,24 @@ function UserRecords({navigation}) {
   return (
     <View>
         <ScrollView>
-            <View style={{paddingHorizontal:'4%', alignItems:'center'}}>
-                <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', gap:80}}>
-                    <Pressable onPress={()=> navigation.goBack()}>
+            <View style={{paddingHorizontal: 16, alignItems:'center'}}>
+                <Pressable 
+                    onPress={()=>setIsModalShown(true)} 
+                    style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', }}>
+               
                         <Text style={styles.subtitleText}>
-                            Назад
+                            Добавить запись
                         </Text>
+                        <MaterialCommunityIcons name='plus-circle-outline' color="#646463" size={32}/>
                     </Pressable>
-                        
-                    <Pressable onPress={()=>setIsModalShown(true)}>
-                        <MaterialCommunityIcons name='plus-circle-outline' color="#646463" size={30}/>
-                    </Pressable>
-                </View>
-                <View style={{alignContent:"center"}}>
+             
+                {/* <View style={{alignContent:"center"}}>
                     <View style={[styles.card3]}>
                         <Text style={styles.cardRecordsText}>
                             Мои Записи
                         </Text>             
                     </View>
-                </View>
+                </View> */}
                 <View style={{ width: '100%', alignItems: 'center' }}>
                     <View style={{  width: '90%' }}>
                         {

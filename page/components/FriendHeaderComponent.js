@@ -11,6 +11,7 @@ function FriendHeaderComponent() {
 
   return (
     <View style={{ backgroundColor:'#3C62DD', paddingTop: insets.top,}}>
+
         <View style={styles.headerBase}>
         <View style={styles.headerInsides}>
             <Pressable onPress={()=>navigation.toggleDrawer()}>
@@ -22,6 +23,7 @@ function FriendHeaderComponent() {
             <View style={{width:36, height:36, backgroundColor: '#3C62DD'}} />
         </View>
         </View>
+
     </View>
   )
 }
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#3C62DD',
         alignItems:'flex-end',
         width:'100%',
-        marginBottom: 12
+        marginBottom: 16
         
     },
     headerInsides:{

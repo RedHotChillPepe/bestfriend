@@ -240,15 +240,20 @@ export default function ReadySoundsScreen() {
                 <ActivityIndicator size="large" color="#a4ca79" />
             ) : (
                 <View>
-                     <View style={{flexDirection:'row', width: '100%', justifyContent:'space-between', paddingHorizontal: 16, paddingBottom: 16 }}>
-                            <View style={{flexDirection: 'row'}}>
-                            <Text style={[styles.subtitleText]}>
-                                Библиотека
+                    <View style={{flexDirection: 'row', 
+                                  width: width -32, 
+                                  justifyContent:'space-between', 
+                                  alignSelf:'center',
+                                  alignItems:'baseline'}}>
+                        <Text style={{fontSize: 24}}>
+                            Библиотека
+                        </Text>
+                    
+                     <Pressable onPress={()=>setModalPlusVisible(true)} style={{alignItems:'center', justifyContent:'center', paddingVertical: 4, paddingHorizontal:8, borderColor:'black', borderWidth: 2, marginBottom: 16, borderRadius: 12 }}>
+                            <Text style={{fontSize: 14}}>
+                                Создать папку
                             </Text>
-                            </View>
-                        <Pressable onPress={()=>setModalPlusVisible(true)}>
-                            <MaterialCommunityIcons name='plus-circle-outline' color="#646463" size={32}/>
-                        </Pressable>
+                    </Pressable>
                     </View>
 
                 <ScrollView contentContainerStyle={{alignItems:'center'}}>
@@ -292,10 +297,11 @@ export default function ReadySoundsScreen() {
                             activeOpacity={1}
                             style={[styles.card3, pressedCard === cards.length && styles.card3Pressed]}
                         >
-                                <Text style={styles.card3Text}>
-                                    Мои Записи
+                                <Text style={styles.cardText}>
+                                    Голосовые записи
                                 </Text>
                         </TouchableOpacity>
+
 
                         
                             {userFolders.map((card, index) => (
@@ -391,9 +397,9 @@ const styles = StyleSheet.create({
     
     },
     card0: {
-        backgroundColor: '#FEC513',
+        backgroundColor: '#D4B237',
         width: width-32,
-        height: 132,
+        height: width*0.25,
         marginBottom: 12,
         borderRadius: 24,
         paddingBottom: 0,
@@ -404,9 +410,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     card1: {
-        backgroundColor:'#FF7427',
+        backgroundColor:'#D95D5D',
         width: width-32,
-        height: 132,
+        height: width*0.25,
         marginBottom: 12,
         borderRadius: 24,
         paddingTop: '5%',
@@ -417,9 +423,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     card2: {
-        backgroundColor: '#3C62DD',
+        backgroundColor: '#5381F9',
         width: width-32,
-        height: 132,
+        height: width*0.25,
         marginBottom: 12,
         borderRadius: 24,
         paddingTop: '5%',
@@ -430,9 +436,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     card3: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#33BB8B',
         width: width-32,
-        height: 132,
+        height: width*0.25,
         marginBottom: '2%',
         borderRadius: 24,
         paddingTop: '5%',
@@ -441,13 +447,13 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        borderWidth:1,
+        borderWidth:2,
         borderColor:"#656463"
     },
     card4: {
-        backgroundColor: '#00B232',
-        width: width * 0.90,
-        height: 132,
+        backgroundColor: 'black',
+        width: width -32,
+        height: width*0.25,
         marginBottom: '2%',
         borderRadius: 24,
         paddingTop: '5%',
