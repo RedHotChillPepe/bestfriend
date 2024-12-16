@@ -245,12 +245,12 @@ export default function ReadySoundsScreen() {
                                   justifyContent:'space-between', 
                                   alignSelf:'center',
                                   alignItems:'baseline'}}>
-                        <Text style={{fontSize: 24}}>
+                        <Text style={{fontSize: 32, fontFamily:'SF Pro Rounded Bold', opacity: 0.61}}>
                             Библиотека
                         </Text>
                     
-                     <Pressable onPress={()=>setModalPlusVisible(true)} style={{alignItems:'center', justifyContent:'center', paddingVertical: 4, paddingHorizontal:8, borderColor:'black', borderWidth: 2, marginBottom: 16, borderRadius: 12 }}>
-                            <Text style={{fontSize: 14}}>
+                     <Pressable onPress={()=>setModalPlusVisible(true)} style={{backgroundColor: '#5381F9', alignItems:'center', justifyContent:'center', paddingVertical: 8, paddingHorizontal:16, marginBottom: 16, borderRadius: 12 }}>
+                            <Text style={{fontSize: 14, fontWeight:'bold', color: '#fff'}}>
                                 Создать папку
                             </Text>
                     </Pressable>
@@ -447,6 +447,19 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+    card31: {
+        backgroundColor: '#33BB8B',
+        width: width-32,
+        height: width*0.25,
+        marginBottom: '2%',
+        borderRadius: 24,
+        paddingTop: '5%',
+        paddingLeft: '6%',
+        position: 'relative',
+        overflow: 'hidden',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         borderWidth:2,
         borderColor:"#656463"
     },
@@ -474,7 +487,6 @@ const styles = StyleSheet.create({
         fontFamily: 'SF Pro Rounded Bold',
         fontSize: 28,
         color: "#fff",
-        // width: '80%',
         left: 12,
         top: 12
     },
@@ -489,7 +501,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         fontFamily: 'SF Pro Rounded Bold',
         fontSize: 28,
-        color: "#656463",
+        color: "#fff",
         // width: '80%',
         left: 12,
         top: 12

@@ -205,17 +205,17 @@ export default function DynamicFolder({route, navigation}) {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-                <View style={{ width:'100%'}} >
-                    <View style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center'}}>
-                        <Pressable style={{paddingLeft:'4%'}} onPress={()=> navigation.goBack()}>
-                            <Text style={styles.subtitleText}>
-                                Назад
-                            </Text>
-                        </Pressable >
-                        <Pressable onPress={()=>{handleUserPick()}}  style={{paddingRight:'4%'}}>
-                            <MaterialCommunityIcons name='plus-circle-outline' color="#000" size={30}/>
-                        </Pressable>
-                    </View>                
+                <View>
+                  <Pressable 
+                    onPress={()=>{handleUserPick()}} 
+                    style={{backgroundColor: '#3C62DD', paddingVertical: 8, paddingHorizontal: 16, borderRadius: 12 , marginTop: 32}}>
+               
+                    <Text style={styles.subtitleText}>
+                      Добавить запись
+                    </Text>
+                        {/* <MaterialCommunityIcons name='plus-circle-outline' color="#646463" size={32}/> */}
+                  </Pressable>
+                                 
                 </View>
                 <View style={{ width: '100%', alignItems: 'center' }}>
                     <View style={{  width: '90%' }}>
@@ -311,9 +311,9 @@ const styles = StyleSheet.create({
     },
     subtitleText:{
         fontFamily:"SF Pro Rounded Semibold",
-        fontSize:24,
-        color:"#070600",
-        opacity:0.61,
+        fontSize:18,
+        color:"#fff",
+
     },
     card: {
         height: 60,

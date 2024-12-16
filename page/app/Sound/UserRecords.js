@@ -274,14 +274,15 @@ function UserRecords({navigation}) {
     <View>
         <ScrollView>
             <View style={{paddingHorizontal: 16, alignItems:'center'}}>
+
                 <Pressable 
                     onPress={()=>setIsModalShown(true)} 
-                    style={{flex:1, justifyContent:'space-between', flexDirection:"row", alignItems:'center', }}>
+                    style={{backgroundColor: '#3C62DD', paddingVertical: 8, paddingHorizontal: 16, borderRadius: 12 , marginTop: 32}}>
                
                         <Text style={styles.subtitleText}>
                             Добавить запись
                         </Text>
-                        <MaterialCommunityIcons name='plus-circle-outline' color="#646463" size={32}/>
+                        {/* <MaterialCommunityIcons name='plus-circle-outline' color="#646463" size={32}/> */}
                     </Pressable>
              
                 {/* <View style={{alignContent:"center"}}>
@@ -418,11 +419,9 @@ const styles = StyleSheet.create({
     },
     subtitleText:{
         fontFamily:"SF Pro Rounded Semibold",
-        fontSize:24,
-        color:"#070600",
-        opacity:0.61,
+        fontSize:14,
+        color:"#fff",
         textAlign:'left',
-        marginRight:"43%"
     },
     card3: {
         backgroundColor: '#FFF',

@@ -109,7 +109,7 @@ function ReadySoundsStack() {
           backgroundColor:"#3C62DD",
         },
         headerLeft:()=>(
-          <Pressable onPress={()=>navigation.toggleDrawer()}>
+          <Pressable onPress={()=>navigation.goBack()}>
             {/* <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/> */}
             <Ionicons name="arrow-back-outline" size={32} color="white" style={{paddingLeft: 16}} />
           </Pressable>
@@ -122,7 +122,7 @@ function ReadySoundsStack() {
             backgroundColor:"#3C62DD",
           },
           headerLeft:()=>(
-            <Pressable onPress={()=>navigation.toggleDrawer()}>
+            <Pressable onPress={()=>navigation.goBack()}>
               <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
             </Pressable>
           ) 
@@ -134,7 +134,7 @@ function ReadySoundsStack() {
             backgroundColor:"#3C62DD",
           },
           headerLeft:()=>(
-            <Pressable onPress={()=>navigation.toggleDrawer()}>
+            <Pressable onPress={()=>navigation.goBack()}>
               <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
             </Pressable>
           ) 
@@ -146,7 +146,7 @@ function ReadySoundsStack() {
             backgroundColor:"#3C62DD",
           },
           headerLeft:()=>(
-            <Pressable onPress={()=>navigation.toggleDrawer()}>
+            <Pressable onPress={()=>navigation.goBack()}>
               <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:8, paddingBottom:8}}/>
             </Pressable>
           ) 
