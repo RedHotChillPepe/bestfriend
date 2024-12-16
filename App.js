@@ -1,9 +1,9 @@
 // App.js
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, StatusBar} from 'react-native';
+import { Text, StyleSheet, StatusBar, Pressable} from 'react-native';
 import { useFonts } from 'expo-font';
 import { Comfortaa_300Light, Comfortaa_400Regular, Comfortaa_500Medium, Comfortaa_600SemiBold, Comfortaa_700Bold } from '@expo-google-fonts/comfortaa';
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoadingPage from './page/LoadingPage';
 import TitlePage from './page/TitlePage';
@@ -24,10 +24,23 @@ import { SoundControlProvider } from './context/SoundControlContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 //import * as Calendar from 'expo-calendar';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import ReadySoundsScreen from './page/app/Sound/ReadySoundsScreen';
+import FairyTales from './page/app/Sound/fairyTales';
+import Riddles from './page/app/Sound/Riddles';
+import UserRecords from './page/app/Sound/UserRecords';
+import Help from './page/app/Sound/Help';
+import DynamicFolder from './page/app/Sound/dynamicFolder';
+import AlarmPage from './page/app/Sound/alarmpage';
+import FileStorage from './page/app/Sound/FileStorage';
+import DynamicFileStoragePage from './page/app/Sound/DynamicFileStoragePage';
+import FriendHeaderComponent from './page/components/FriendHeaderComponent';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 
 
 const Stack = createStackNavigator();
+const SecondStack = createStackNavigator()
 const BACKGROUND_FETCH_TASK = 'background-fetch';
 
 TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
@@ -44,12 +57,128 @@ const navTheme = {
   },
 };
 
+function AllPages() {
+  const navigation = useNavigation()
+
+   return (
+    <SecondStack.Navigator initialRouteName="AppLog">
+      <SecondStack.Screen name="AppLog" component={AppLog} options={{ headerShown: false }} />
+      <SecondStack.Screen name="fairyTales" component={FairyTales} options={{ 
+      title:"Сказки",
+      headerTitleStyle: { fontSize: 28, fontWeight: 'bold', color: '#FFF' },
+      headerStyle:{
+      backgroundColor:"#3C62DD",
+      },
+      headerTintColor: '#fff',
+      headerLeft:()=>(
+        <Pressable onPress={()=>navigation.goBack()}>
+          {/* <MaterialCommunityIcons name="menu" color="#FFF" size={32} style={{paddingLeft:16, }}/> */}
+          <Ionicons name="arrow-back-outline" size={32} color="white" style={{paddingLeft: 16}} />
+        </Pressable>
+      )
+      }} />
+      <SecondStack.Screen name="Riddles" component={Riddles} options={{ 
+        title:"Загадки",
+        headerTitleStyle: { fontSize: 28, fontWeight: 'bold', color: '#FFF' },
+        headerStyle:{
+          backgroundColor:"#3C62DD"
+        },
+        headerLeft:()=>(
+          <Pressable onPress={()=>navigation.goBack()}>
+            {/* <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/> */}
+            <Ionicons name="arrow-back-outline" size={32} color="white" style={{paddingLeft: 16}} />
+          </Pressable>
+        )
+      }} />
+      <SecondStack.Screen name="MyRecording" component={UserRecords} options={{ 
+        title:"Голосовые записи",
+        headerTitleStyle: { fontSize: 28, fontWeight: 'bold', color: '#FFF' },
+
+        headerStyle:{
+          backgroundColor:"#3C62DD"
+        },
+        headerLeft:()=>(
+          <Pressable onPress={()=>navigation.goBack()}>
+            {/* <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/> */}
+            <Ionicons name="arrow-back-outline" size={32} color="white" style={{paddingLeft: 16}} />
+          </Pressable>
+        )
+      }} />
+      <SecondStack.Screen name="Help" component={Help} options={{ 
+        title:"Фразы помощники",
+        headerTitleStyle: { fontSize: 28, fontWeight: 'bold', color: '#FFF' },
+
+        headerStyle:{
+          backgroundColor:"#3C62DD"
+        },
+        headerLeft:()=>(
+          <Pressable onPress={()=>navigation.goBack()}>
+            {/* <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/> */}
+            <Ionicons name="arrow-back-outline" size={32} color="white" style={{paddingLeft: 16}} />
+          </Pressable>
+        )
+      }}/>
+      <SecondStack.Screen name="DynamicFolder" component={DynamicFolder} options={{
+        title:"",
+        headerTintColor:"#FFF",
+        headerStyle:{
+          backgroundColor:"#3C62DD",
+        },
+        headerLeft:()=>(
+          <Pressable onPress={()=>navigation.goBack()}>
+            {/* <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/> */}
+            <Ionicons name="arrow-back-outline" size={32} color="white" style={{paddingLeft: 16}} />
+          </Pressable>
+        ) 
+        }} />
+        <SecondStack.Screen name='AlarmPage' component={AlarmPage} options={{
+          title:"",
+          headerTintColor:"#FFF",
+          headerStyle:{
+            backgroundColor:"#3C62DD",
+          },
+          headerLeft:()=>(
+            <Pressable onPress={()=>navigation.goBack()}>
+              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
+            </Pressable>
+          ) 
+        }}/>
+        <SecondStack.Screen name='StoragePage' component={FileStorage} options={{
+          title:"",
+          headerTintColor:"#FFF",
+          headerStyle:{
+            backgroundColor:"#3C62DD",
+          },
+          headerLeft:()=>(
+            <Pressable onPress={()=>navigation.goBack()}>
+              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
+            </Pressable>
+          ) 
+        }}/>
+        <SecondStack.Screen name='DynamicStorage' component={DynamicFileStoragePage} options={{
+          title:"",
+          headerTintColor:"#FFF",
+          headerStyle:{
+            backgroundColor:"#3C62DD",
+          },
+          headerLeft:()=>(
+            <Pressable onPress={()=>navigation.goBack()}>
+              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:8, paddingBottom:8}}/>
+            </Pressable>
+          ) 
+        }}/>
+    </SecondStack.Navigator>
+    
+   )
+}
+
 
 
 
 const AppContent = () => {
   /* const { user, checkStoredUser } = useAuth(); */
   const [isLoading, setIsLoading] = useState(true);
+  
 
   //const [calendarStatus, requestCalendarPermission] = Calendar.useCalendarPermissions();
 
@@ -143,24 +272,29 @@ const AppContent = () => {
   if (!fontsLoaded) {
     return <LoadingPage />;
   }
+  
 
   return (
     <NavigationContainer theme={navTheme}>
       <Stack.Navigator screenOptions={{ detachPreviousScreen: true, presentation: 'transparentModal' }} 
-      /* initialRouteName={"Title"} */ initialRouteName={"AppLog"}>
+      /* initialRouteName={"Title"} */ initialRouteName={"SecondStack"}>
         {/* <Stack.Screen name="Title" component={TitlePage} options={{ headerShown: false }} />
         <Stack.Screen name="Email" component={EmailPage} options={{ headerShown: false }} />
         <Stack.Screen name="Confirm" component={ConfirmationPage} options={{ headerShown: false }} />
         <Stack.Screen name="User" component={User} options={{ headerShown: false }} />
         <Stack.Screen name="Confidentiality" component={Confidentiality} options={{ headerShown: false }} /> */}
-        <Stack.Screen name="AppLog" component={AppLog} options={{ headerShown: false }} />
+        
         <Stack.Screen name="AboutUs" component={AboutUs} options={{ headerShown: false }} />
+        
+        <Stack.Screen name="SecondStack" component={AllPages} options={{ headerShown: false }}/>
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
 export default function App() {
+  
   return (
     
       <GestureHandlerRootView style={{flex:1}}>

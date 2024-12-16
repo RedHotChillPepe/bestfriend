@@ -30,138 +30,13 @@ const Drawer = createDrawerNavigator();
 const { width, height } = Dimensions.get('window');
 
 
-
-function ReadySoundsStack() {
-  const [modalVisible, setModalVisible] = useState(false);
-  const navigation = useNavigation()
-
-
-  return (
-    <Stack.Navigator screenOptions={{ detachPreviousScreen: true, presentation: 'transparentModal' }}>
-      <Stack.Screen name='ЛУЧШИЙ ДРУГ' component={ReadySoundsScreen} options={{
-        headerTransparent:true,
-        headerStyle:{
-          backgroundColor:'transparent'
-        },
-        header:()=>(
-          <FriendHeaderComponent/>
-        )
-      }}/>
-      <Stack.Screen name="fairyTales" component={FairyTales} options={{ 
-        title:"Сказки",
-        headerTitleStyle: { fontSize: 28, fontWeight: 'bold', color: '#FFF' },
-        headerStyle:{
-        backgroundColor:"#3C62DD",
-        },
-        headerTintColor: '#fff',
-        headerLeft:()=>(
-          <Pressable onPress={()=>navigation.goBack()}>
-            {/* <MaterialCommunityIcons name="menu" color="#FFF" size={32} style={{paddingLeft:16, }}/> */}
-            <Ionicons name="arrow-back-outline" size={32} color="white" style={{paddingLeft: 16}} />
-          </Pressable>
-        )
-      }} />
-      <Stack.Screen name="Riddles" component={Riddles} options={{ 
-        title:"Загадки",
-        headerTitleStyle: { fontSize: 28, fontWeight: 'bold', color: '#FFF' },
-        headerStyle:{
-          backgroundColor:"#3C62DD"
-        },
-        headerLeft:()=>(
-          <Pressable onPress={()=>navigation.goBack()}>
-            {/* <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/> */}
-            <Ionicons name="arrow-back-outline" size={32} color="white" style={{paddingLeft: 16}} />
-          </Pressable>
-        )
-      }} />
-      <Stack.Screen name="MyRecording" component={UserRecords} options={{ 
-        title:"Голосовые записи",
-        headerTitleStyle: { fontSize: 28, fontWeight: 'bold', color: '#FFF' },
-
-        headerStyle:{
-          backgroundColor:"#3C62DD"
-        },
-        headerLeft:()=>(
-          <Pressable onPress={()=>navigation.goBack()}>
-            {/* <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/> */}
-            <Ionicons name="arrow-back-outline" size={32} color="white" style={{paddingLeft: 16}} />
-          </Pressable>
-        )
-      }} />
-      <Stack.Screen name="Help" component={Help} options={{ 
-        title:"Фразы помощники",
-        headerTitleStyle: { fontSize: 28, fontWeight: 'bold', color: '#FFF' },
-
-        headerStyle:{
-          backgroundColor:"#3C62DD"
-        },
-        headerLeft:()=>(
-          <Pressable onPress={()=>navigation.goBack()}>
-            {/* <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/> */}
-            <Ionicons name="arrow-back-outline" size={32} color="white" style={{paddingLeft: 16}} />
-          </Pressable>
-        )
-      }}/>
-      <Stack.Screen name="DynamicFolder" component={DynamicFolder} options={{
-        title:"",
-        headerTintColor:"#FFF",
-        headerStyle:{
-          backgroundColor:"#3C62DD",
-        },
-        headerLeft:()=>(
-          <Pressable onPress={()=>navigation.goBack()}>
-            {/* <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/> */}
-            <Ionicons name="arrow-back-outline" size={32} color="white" style={{paddingLeft: 16}} />
-          </Pressable>
-        ) 
-        }} />
-        <Stack.Screen name='AlarmPage' component={AlarmPage} options={{
-          title:"",
-          headerTintColor:"#FFF",
-          headerStyle:{
-            backgroundColor:"#3C62DD",
-          },
-          headerLeft:()=>(
-            <Pressable onPress={()=>navigation.goBack()}>
-              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
-            </Pressable>
-          ) 
-        }}/>
-        <Stack.Screen name='StoragePage' component={FileStorage} options={{
-          title:"",
-          headerTintColor:"#FFF",
-          headerStyle:{
-            backgroundColor:"#3C62DD",
-          },
-          headerLeft:()=>(
-            <Pressable onPress={()=>navigation.goBack()}>
-              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:16, paddingBottom:8}}/>
-            </Pressable>
-          ) 
-        }}/>
-        <Stack.Screen name='DynamicStorage' component={DynamicFileStoragePage} options={{
-          title:"",
-          headerTintColor:"#FFF",
-          headerStyle:{
-            backgroundColor:"#3C62DD",
-          },
-          headerLeft:()=>(
-            <Pressable onPress={()=>navigation.goBack()}>
-              <MaterialCommunityIcons name="menu" color="#FFF" size={30} style={{paddingLeft:8, paddingBottom:8}}/>
-            </Pressable>
-          ) 
-        }}/>
-    </Stack.Navigator>
-  );
-} 
-
 export default function AppLog() {
   const navigation = useNavigation()
   const {SoundControlPanel} = useSoundPanel()
 
   return (
     <Provider style={{backgroundColor:'transparent'}}>
-      <Drawer.Navigator screenOptions={{
+      <Drawer.Navigator initialRouteName='Библиотека Звуков' screenOptions={{
         drawerType: 'front',
         drawerStyle:{
         backgroundColor:'transparent',
@@ -170,7 +45,15 @@ export default function AppLog() {
        },
        overlayColor:'transparent'
       }} drawerContent={props => <CustomDrawerComponent {...props} />}>
-        <Drawer.Screen name="Библиотека Звуков" component={ReadySoundsStack} options={{ headerShown: false }}/>
+        <Drawer.Screen name="Библиотека Звуков" component={ReadySoundsScreen} options={{
+        headerTransparent:true,
+        headerStyle:{
+          backgroundColor:'transparent'
+        },
+        header:()=>(
+          <FriendHeaderComponent/>
+        )
+      }}/>
         <Drawer.Screen name="Профиль" component={ProfileScreen} options={{
           headerLeft:()=>(
             <Pressable onPress={()=>navigation.dispatch(DrawerActions.toggleDrawer())}>
