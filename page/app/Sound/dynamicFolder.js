@@ -9,9 +9,12 @@ import { Audio } from "expo-av";
 import {useSound} from '../../../context/SoundProvider.js';
 import uuid from 'react-native-uuid';
 import { Button, TextInput } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
 
-export default function DynamicFolder({route, navigation}) {
+export default function DynamicFolder({route}) {
+
+    const navigation = useNavigation()
     
    const [storageFiles, setStorageFiles] = useState([]);
 
@@ -191,9 +194,11 @@ export default function DynamicFolder({route, navigation}) {
         const initialfillup = async () => {
             
             if (await fetchStorageFiles() != null) {
-                setStorageFiles(await fetchStorageFiles())
+                setStorageFiles(await fetchStorageFiles())               
             }
             console.log(await fetchStorageFiles());
+            navigation.setOptions({title:text})
+            console.log("text: ", text)
         }
         initialfillup()
         
