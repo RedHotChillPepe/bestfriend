@@ -24,6 +24,22 @@ export const SoundProvider = ({children}) => {
     const refIsRepeatOne = useRef(false)
     const currentPlaylistIndex = useRef(null)
 
+    useEffect(() => {
+      Audio.setAudioModeAsync({
+        staysActiveInBackground: true,
+        playsInSilentModeIOS: true,
+        interruptionModeIOS: 'DuckOthers', // Change as you like
+        interruptionModeAndroid: 'DuckOthers', // Change as you like
+        shouldDuckAndroid: true,
+        playThroughEarpieceAndroid: true,
+      })
+    
+      return () => {
+        
+      }
+    })
+    
+
 
     const playAudio = async (uri, index, name) => {
         const initialStatus = await sound.current.getStatusAsync()
@@ -48,9 +64,10 @@ export const SoundProvider = ({children}) => {
         }
 
         const status = await sound.current.getStatusAsync()
-
+        console.log(uri);
+        
         // приведение uri к одному виду для сравнения
-        const replacedUri = uri.replace("https://bestfriend-back.onrender.com", "").replace("file://", "") 
+        const replacedUri = uri.replace("https://bestfriend-back.onrender.com", "").replace("file://", "").replace("https://mishka-l3tq.onrender.com","")
 
         setSoundDuration(status.durationMillis); // присваивание значений 
         setSoundName(name);                                // для панели 
