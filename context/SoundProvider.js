@@ -31,7 +31,7 @@ export const SoundProvider = ({children}) => {
         interruptionModeIOS: 'DuckOthers', // Change as you like
         interruptionModeAndroid: 'DuckOthers', // Change as you like
         shouldDuckAndroid: true,
-        playThroughEarpieceAndroid: true,
+        // playThroughEarpieceAndroid: true,
       })
     
       return () => {

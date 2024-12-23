@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Лучший друг",
-    "slug": "native_mishka",
-    "version": "1.0.0",
+    "slug": "bestfriend",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -22,9 +22,11 @@
           "audio"
         ]
       },
-      "bundleIdentifier": "com.basit.mishka"
+      "bundleIdentifier": "com.basit.mishka",
+      "buildNumber": "2"
     },
     "android": {
+      "versionCode": 14,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
@@ -58,9 +60,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "5634f530-0649-437e-8ed4-27aee6e9795f"
+        "projectId": "7a73e7ea-85cb-46f4-9138-7054ffda3d20"
       }
     },
-    "owner": "gatachan"
+    "owner": "bahamamama"
   }
 }
