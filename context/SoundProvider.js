@@ -141,9 +141,12 @@ export const SoundProvider = ({children}) => {
 
 
     const handleSoundStatus = async (status) => {
-        setSoundDuration(status.durationMillis)
+        if (status.durationMillis != soundDuration || soundDuration == 0) {
+          setSoundDuration(await status.durationMillis)  
+        }
+        
        
-        setPositionMillis(status.positionMillis)
+        setPositionMillis(await status.positionMillis)
         if (status.shouldPlay != true) {
             setPausedPosition(status.positionMillis)
         }

@@ -216,7 +216,7 @@ export default function DynamicFolder({route}) {
                     style={{backgroundColor: '#3C62DD', paddingVertical: 8, paddingHorizontal: 16, borderRadius: 12 , marginTop: 32}}>
                
                     <Text style={styles.subtitleText}>
-                      Добавить запись
+                      Добавить файл
                     </Text>
                         {/* <MaterialCommunityIcons name='plus-circle-outline' color="#646463" size={32}/> */}
                   </Pressable>

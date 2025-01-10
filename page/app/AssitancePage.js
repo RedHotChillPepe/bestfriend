@@ -10,7 +10,7 @@ export default function  AssitancePage () {
 
     const pressTelegram = async () => {
         const telegramUrl = 'https://t.me/';
-        const username = 'interactive_bear_bot'; // Замените на ваш username в Telegram
+        const username = 'bestfriendbear'; // Замените на ваш username в Telegram
 
         const url = `${telegramUrl}${username}`;
 
@@ -24,7 +24,7 @@ export default function  AssitancePage () {
     };
 
     const pressWhatsApp = async () => {
-        const whatsappUrl = 'https://chat.whatsapp.com/JLI5QLh1C5nD3g2rz8WW8T';
+        const whatsappUrl = 'https://wa.me/qr/VS6HRMNCEIMCK1';
         const phoneNumber = '';
         const url = `${whatsappUrl}${phoneNumber}`;
     
