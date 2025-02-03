@@ -197,7 +197,7 @@ export default function FairyTales({ route }) {
     }
 
     const handleDownload = async (uri) => {
-        const cutName = modalUri.replace("https://bestfriend-back.onrender.com/uploads/","").replace("https://mishka-l3tq.onrender.com/uploads/","")
+        const cutName = modalUri.replace("https://bestfriend-back-bastit.amvera.io/uploads/","").replace("https://mishka-l3tq.onrender.com/uploads/","")
         const toUri = FileSystem.documentDirectory + cutName
         console.log("cutname: ", cutName);
 

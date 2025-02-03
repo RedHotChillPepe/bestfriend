@@ -29,7 +29,7 @@ export default function EmailPage({ navigation }) {
     } else {
     setIsLoading(true);
     try {
-      const response = await fetch('https://bestfriend-back.onrender.com/auth/generate-code', {
+      const response = await fetch('https://bestfriend-back-bastit.amvera.io/auth/generate-code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

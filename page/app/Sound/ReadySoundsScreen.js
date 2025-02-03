@@ -121,7 +121,7 @@ export default function ReadySoundsScreen() {
 
     useEffect(() => {
         const fetchmedata = async () => {
-           await fetch('https://bestfriend-back.onrender.com/audio/all')
+           await fetch('https://bestfriend-back-bastit.amvera.io/audio/all')
             .then(response => response.json())
             .then (data => {
                 setAudioData(data);
